@@ -503,7 +503,7 @@
                         @if(auth()->user()->role === 'customer')
                           <li>
                             <a class="dropdown-item" href="{{ route('orders.index') }}">
-                              <i class="fas fa-shopping-bag me-2"></i>My Orders
+                              <i class="fas fa-shopping-bag me-2"></i>Pesanan Saya
                             </a>
                           </li>
                           <li>
@@ -513,7 +513,7 @@
                           </li>
                           <li>
                             <a class="dropdown-item" href="{{ route('addresses.index') }}">
-                              <i class="fas fa-map-marker-alt me-2"></i>My Addresses
+                              <i class="fas fa-map-marker-alt me-2"></i>Alamat Saya
                             </a>
                           </li>
                         @endif
@@ -522,7 +522,7 @@
                         </li>
                         <li>
                           <a class="dropdown-item" href="{{ route('profile.show') }}">
-                            <i class="fas fa-user me-2"></i>Profile
+                            <i class="fas fa-user me-2"></i>Profil
                           </a>
                         </li>
                         <li>
