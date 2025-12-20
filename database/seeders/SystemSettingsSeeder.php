@@ -13,84 +13,100 @@ class SystemSettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            // General Settings
+            // General Settings - FASHION SAAZZ
             [
                 'key' => 'app_name',
-                'value' => 'Fashion Marketplace',
+                'value' => 'FASHION SAAZZ',
                 'type' => 'text',
                 'group' => 'general',
-                'description' => 'Application name',
+                'description' => 'Nama aplikasi',
                 'is_public' => true,
             ],
             [
                 'key' => 'app_description',
-                'value' => 'Premium fashion marketplace for modern clothing',
+                'value' => 'Toko fashion online terpercaya - Saadah Azzahra Store',
                 'type' => 'text',
                 'group' => 'general',
-                'description' => 'Application description',
+                'description' => 'Deskripsi aplikasi',
                 'is_public' => true,
             ],
             [
                 'key' => 'contact_email',
-                'value' => 'support@fashionstore.com',
+                'value' => 'FashionSaazzz@gmail.com',
                 'type' => 'text',
                 'group' => 'general',
-                'description' => 'Contact email address',
+                'description' => 'Email kontak',
                 'is_public' => true,
             ],
             [
                 'key' => 'contact_phone',
-                'value' => '+62 812-3456-7890',
+                'value' => '+6287827683335',
                 'type' => 'text',
                 'group' => 'general',
-                'description' => 'Contact phone number',
+                'description' => 'Nomor telepon kontak',
+                'is_public' => true,
+            ],
+            [
+                'key' => 'contact_address',
+                'value' => 'Komplek Pesona Pondok Indah, RT 12/RW 06, Kec. Bati-Bati, Kab. Tanah Laut, Prov. Kalimantan Selatan',
+                'type' => 'text',
+                'group' => 'general',
+                'description' => 'Alamat toko',
+                'is_public' => true,
+            ],
+            [
+                'key' => 'contact_instagram',
+                'value' => '@Saaazz.id',
+                'type' => 'text',
+                'group' => 'general',
+                'description' => 'Akun Instagram',
                 'is_public' => true,
             ],
             [
                 'key' => 'business_hours',
-                'value' => "Monday - Friday: 09:00 - 18:00\nSaturday: 09:00 - 15:00\nSunday: Closed",
+                'value' => "Senin - Jumat: 09:00 - 18:00\nSabtu: 09:00 - 15:00\nMinggu: Tutup",
                 'type' => 'text',
                 'group' => 'general',
-                'description' => 'Business operating hours',
+                'description' => 'Jam operasional',
                 'is_public' => true,
             ],
 
-            // Shipping Settings (RajaOngkir)
+            // Shipping Settings (RajaOngkir) - Lokasi Tanah Laut
             [
                 'key' => 'shipping_origin_province_id',
-                'value' => '6', // DKI Jakarta (example)
+                'value' => '22', // Kalimantan Selatan
                 'type' => 'number',
                 'group' => 'shipping',
-                'description' => 'Shipping origin province ID (wilayah.id)',
+                'description' => 'ID provinsi asal pengiriman',
                 'is_public' => false,
             ],
             [
                 'key' => 'shipping_origin_city_id',
-                'value' => '151', // Jakarta Pusat (example)
+                'value' => '343', // Kabupaten Tanah Laut
                 'type' => 'number',
                 'group' => 'shipping',
-                'description' => 'Shipping origin city ID (wilayah.id)',
+                'description' => 'ID kota asal pengiriman',
                 'is_public' => false,
             ],
             [
                 'key' => 'shipping_origin_district_id',
-                'value' => '1871', // Menteng (example)
+                'value' => '4905', // Bati-Bati
                 'type' => 'number',
                 'group' => 'shipping',
-                'description' => 'Shipping origin district ID (wilayah.id)',
+                'description' => 'ID kecamatan asal pengiriman',
                 'is_public' => false,
             ],
             [
                 'key' => 'shipping_origin_address',
-                'value' => 'Jl. MH Thamrin No. 10, Jakarta Pusat',
+                'value' => 'Komplek Pesona Pondok Indah, RT 12/RW 06, Kec. Bati-Bati',
                 'type' => 'text',
                 'group' => 'shipping',
-                'description' => 'Complete shipping origin address',
+                'description' => 'Alamat lengkap asal pengiriman',
                 'is_public' => false,
             ],
             [
                 'key' => 'rajaongkir_api_key',
-                'value' => env('RAJAONGKIR_API_KEY', '8c8add072dfe923147fdfdbf3a8fd448'), // Auto-fill from env or default
+                'value' => env('RAJAONGKIR_API_KEY', '8c8add072dfe923147fdfdbf3a8fd448'),
                 'type' => 'text',
                 'group' => 'shipping',
                 'description' => 'RajaOngkir API Key',
@@ -98,10 +114,10 @@ class SystemSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'rajaongkir_origin_city_id',
-                'value' => '151', // Jakarta Pusat RajaOngkir ID
+                'value' => '42', // Tanah Laut RajaOngkir ID
                 'type' => 'number',
                 'group' => 'shipping',
-                'description' => 'RajaOngkir origin city ID for shipping calculation',
+                'description' => 'ID kota RajaOngkir untuk kalkulasi ongkir',
                 'is_public' => false,
             ],
             [
@@ -109,7 +125,7 @@ class SystemSettingsSeeder extends Seeder
                 'value' => json_encode(['jne', 'jnt']),
                 'type' => 'json',
                 'group' => 'shipping',
-                'description' => 'Supported shipping couriers',
+                'description' => 'Kurir yang didukung (JNE & J&T)',
                 'is_public' => true,
             ],
 
@@ -173,9 +189,9 @@ class SystemSettingsSeeder extends Seeder
 
         DB::table('system_settings')->insert($settings);
 
-        $this->command->info('✅ System settings seeded successfully!');
-        $this->command->info('📍 Default shipping origin: Jakarta Pusat');
-        $this->command->info('💳 Payment gateways: Midtrans (needs configuration)');
-        $this->command->info('🚚 Shipping: RajaOngkir (needs API key)');
+        $this->command->info('✅ Pengaturan sistem berhasil disimpan!');
+        $this->command->info('📍 Lokasi asal pengiriman: Tanah Laut, Kalimantan Selatan');
+        $this->command->info('💳 Pembayaran: QRIS, GoPay, ShopeePay via Midtrans');
+        $this->command->info('🚚 Kurir: JNE & J&T via RajaOngkir');
     }
 }

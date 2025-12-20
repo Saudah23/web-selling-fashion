@@ -26,15 +26,20 @@ class SystemSetting extends Model
      */
     public static function get(string $key, $default = null)
     {
-        return Cache::remember("setting.{$key}", 3600, function () use ($key, $default) {
-            $setting = static::where('key', $key)->first();
+        try {
+            return Cache::remember("setting.{$key}", 3600, function () use ($key, $default) {
+                $setting = static::where('key', $key)->first();
 
-            if (!$setting) {
-                return $default;
-            }
+                if (!$setting) {
+                    return $default;
+                }
 
-            return static::castValue($setting->value, $setting->type);
-        });
+                return static::castValue($setting->value, $setting->type);
+            });
+        } catch (\Exception $e) {
+            // Return default if database/cache is not available (e.g., during migration)
+            return $default;
+        }
     }
 
     /**

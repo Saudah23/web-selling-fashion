@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -42,6 +43,7 @@
       font-size: 1.6rem;
       letter-spacing: -0.5px;
     }
+
     .custom-navbar .navbar-brand span {
       color: #ff6b6b !important;
     }
@@ -167,7 +169,7 @@
     /* Dropdown Styling */
     .custom-navbar .dropdown-menu {
       border: 1px solid #e0e0e0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
       background: white;
       border-radius: 6px;
       padding: 4px 0;
@@ -285,7 +287,7 @@
       align-items: center;
       justify-content: center;
       line-height: 1;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     /* Back to Top Button */
@@ -331,6 +333,7 @@
 
     /* Mobile Navigation Responsive Styles */
     @media (max-width: 991px) {
+
       /* Mobile dropdown container */
       .custom-navbar .dropdown-menu {
         position: static !important;
@@ -423,44 +426,44 @@
     }
   </style>
 
-  <title>@yield('title', 'Marketplace - Modern Furniture Store')</title>
+  <title>@yield('title', 'FASHION SAAZZ - Toko Fashion Online Terpercaya')</title>
 </head>
 
 <body>
 
   <!-- Start Header/Navigation -->
-  <nav class="custom-navbar navbar navbar navbar-expand-md navbar-light bg-white border-bottom" arial-label="Furni navigation bar">
+  <nav class="custom-navbar navbar navbar navbar-expand-md navbar-light bg-white border-bottom"
+    arial-label="Furni navigation bar">
     <div class="container">
-      <a class="navbar-brand" href="{{ route('home') }}">{{ $systemSettings['app_name'] ?? 'Marketplace' }}<span>.</span></a>
+      <a class="navbar-brand"
+        href="{{ route('home') }}">{{ $systemSettings['app_name'] ?? 'Marketplace' }}<span>.</span></a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+        aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsFurni">
         <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
           <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('home') }}">Home</a>
+            <a class="nav-link" href="{{ route('home') }}">Beranda</a>
           </li>
           <li class="nav-item {{ request()->routeIs('shop') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('shop') }}">Shop</a>
+            <a class="nav-link" href="{{ route('shop') }}">Katalog</a>
           </li>
           @if(isset($globalCategories))
             @foreach($globalCategories as $parentCategory)
-              <li class="nav-item dropdown {{ collect($parentCategory->children)->pluck('id')->contains(request('category')) ? 'active' : '' }}">
+              <li
+                class="nav-item dropdown {{ collect($parentCategory->children)->pluck('id')->contains(request('category')) ? 'active' : '' }}">
                 @if($parentCategory->children->count() > 0)
-                  <a class="nav-link dropdown-toggle"
-                     href="#"
-                     role="button"
-                     data-bs-toggle="dropdown"
-                     aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ $parentCategory->name }}
                   </a>
                   <ul class="dropdown-menu">
                     @foreach($parentCategory->children as $subCategory)
                       <li>
                         <a class="dropdown-item {{ request('category') == $subCategory->id ? 'active' : '' }}"
-                           href="{{ route('shop', ['category' => $subCategory->id]) }}">
+                          href="{{ route('shop', ['category' => $subCategory->id]) }}">
                           {{ $subCategory->name }}
                         </a>
                       </li>
@@ -474,60 +477,64 @@
               </li>
             @endforeach
           @endif
-          <li><a class="nav-link" href="{{ request()->routeIs('home') ? '#contact' : route('home') . '#contact' }}">Contact Us</a></li>
+          <li><a class="nav-link"
+              href="{{ request()->routeIs('home') ? '#contact' : route('home') . '#contact' }}">Hubungi Kami</a></li>
         </ul>
 
         <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
           @auth
-            <!-- User menu for authenticated users -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{ asset('furni-1.0.0/images/user.svg') }}">
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="{{ match(auth()->user()->role) {
-                    'owner' => route('owner.dashboard'),
-                    'admin' => route('admin.dashboard'),
-                    'customer' => route('customer.dashboard'),
-                    default => route('customer.dashboard')
-                  } }}">
-                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                  </a>
-                </li>
-                @if(auth()->user()->role === 'customer')
-                  <li>
-                    <a class="dropdown-item" href="{{ route('orders.index') }}">
-                      <i class="fas fa-shopping-bag me-2"></i>My Orders
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="{{ route('shop') }}?wishlist=1">
-                      <i class="fas fa-heart me-2"></i>Wishlist
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="{{ route('addresses.index') }}">
-                      <i class="fas fa-map-marker-alt me-2"></i>My Addresses
-                    </a>
-                  </li>
-                @endif
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                  <a class="dropdown-item" href="{{ route('profile.show') }}">
-                    <i class="fas fa-user me-2"></i>Profile
-                  </a>
-                </li>
-                <li>
-                  <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item">
-                      <i class="fas fa-sign-out-alt me-2"></i>Logout
-                    </button>
-                  </form>
-                </li>
-              </ul>
-            </li>
+                    <!-- User menu for authenticated users -->
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('furni-1.0.0/images/user.svg') }}">
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" href="{{ match (auth()->user()->role) {
+              'owner' => route('owner.dashboard'),
+              'admin' => route('admin.dashboard'),
+              'customer' => route('customer.dashboard'),
+              default => route('customer.dashboard')
+            } }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                          </a>
+                        </li>
+                        @if(auth()->user()->role === 'customer')
+                          <li>
+                            <a class="dropdown-item" href="{{ route('orders.index') }}">
+                              <i class="fas fa-shopping-bag me-2"></i>My Orders
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="{{ route('shop') }}?wishlist=1">
+                              <i class="fas fa-heart me-2"></i>Wishlist
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="{{ route('addresses.index') }}">
+                              <i class="fas fa-map-marker-alt me-2"></i>My Addresses
+                            </a>
+                          </li>
+                        @endif
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="{{ route('profile.show') }}">
+                            <i class="fas fa-user me-2"></i>Profile
+                          </a>
+                        </li>
+                        <li>
+                          <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                              <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </button>
+                          </form>
+                        </li>
+                      </ul>
+                    </li>
           @else
             <!-- Login/Register for guests -->
             <li>
@@ -577,17 +584,23 @@
           </p>
 
           @if(isset($systemSettings) && ($systemSettings['contact_phone'] || $systemSettings['contact_email'] || isset($shippingAddress)))
-          <div class="mb-4">
-            @if($systemSettings['contact_phone'])
-            <p class="mb-2"><i class="fab fa-whatsapp me-2 text-primary"></i> {{ $systemSettings['contact_phone'] }}</p>
-            @endif
-            @if($systemSettings['contact_email'])
-            <p class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i> {{ $systemSettings['contact_email'] }}</p>
-            @endif
-            @if(isset($shippingAddress))
-            <p class="mb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i> {{ $shippingAddress['full_address'] }}</p>
-            @endif
-          </div>
+            <div class="mb-4">
+              @if($systemSettings['contact_phone'])
+                <p class="mb-2"><i class="fab fa-whatsapp me-2 text-primary"></i> {{ $systemSettings['contact_phone'] }}</p>
+              @endif
+              @if($systemSettings['contact_email'])
+                <p class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i> {{ $systemSettings['contact_email'] }}</p>
+              @endif
+              @if(isset($systemSettings['contact_instagram']))
+                <p class="mb-2"><a href="https://instagram.com/{{ ltrim($systemSettings['contact_instagram'], '@') }}"
+                    target="_blank" class="text-decoration-none"><i class="fab fa-instagram me-2 text-primary"></i>
+                    {{ $systemSettings['contact_instagram'] }}</a></p>
+              @endif
+              @if(isset($systemSettings['contact_address']))
+                <p class="mb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                  {{ $systemSettings['contact_address'] }}</p>
+              @endif
+            </div>
           @endif
 
         </div>
@@ -603,57 +616,58 @@
             </div>
 
             @auth
-            <div class="col-6 col-sm-6 col-md-4">
-              <ul class="list-unstyled">
-                <li><a href="{{ route('customer.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('addresses.index') }}">Alamat Saya</a></li>
-                <li><a href="{{ route('wishlist.index') }}">Wishlist</a></li>
-              </ul>
-            </div>
+              <div class="col-6 col-sm-6 col-md-4">
+                <ul class="list-unstyled">
+                  <li><a href="{{ route('customer.dashboard') }}">Dashboard</a></li>
+                  <li><a href="{{ route('addresses.index') }}">Alamat Saya</a></li>
+                  <li><a href="{{ route('wishlist.index') }}">Wishlist</a></li>
+                </ul>
+              </div>
 
-            <div class="col-6 col-sm-6 col-md-4">
-              <ul class="list-unstyled">
-                <li><a href="{{ route('profile.show') }}">Profil</a></li>
-                <li><a href="{{ route('checkout.index') }}">Checkout</a></li>
-                <li>
-                  <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                    @csrf
-                    <button type="submit" style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">
-                      Logout
-                    </button>
-                  </form>
-                </li>
-              </ul>
-            </div>
+              <div class="col-6 col-sm-6 col-md-4">
+                <ul class="list-unstyled">
+                  <li><a href="{{ route('profile.show') }}">Profil</a></li>
+                  <li><a href="{{ route('checkout.index') }}">Checkout</a></li>
+                  <li>
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                      @csrf
+                      <button type="submit"
+                        style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">
+                        Logout
+                      </button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
             @else
-            <div class="col-6 col-sm-6 col-md-4">
-              <ul class="list-unstyled">
-                <li><a href="{{ route('login') }}">Masuk</a></li>
-                <li><a href="{{ route('register') }}">Daftar</a></li>
-                <li><a href="{{ route('password.request') }}">Lupa Password</a></li>
-              </ul>
-            </div>
+              <div class="col-6 col-sm-6 col-md-4">
+                <ul class="list-unstyled">
+                  <li><a href="{{ route('login') }}">Masuk</a></li>
+                  <li><a href="{{ route('register') }}">Daftar</a></li>
+                  <li><a href="{{ route('password.request') }}">Lupa Password</a></li>
+                </ul>
+              </div>
             @endauth
           </div>
 
           @if(isset($systemSettings) && $systemSettings['business_hours'])
-          <div class="business-hours mt-4 p-3 bg-light rounded">
-            <h6 class="text-primary mb-3"><i class="fas fa-clock me-2"></i>Jam Operasional</h6>
-            <div class="row">
-              @php
-                $businessHours = is_string($systemSettings['business_hours'])
-                  ? json_decode($systemSettings['business_hours'], true)
-                  : $systemSettings['business_hours'];
-              @endphp
-              @if($businessHours)
-                <div class="col-md-6">
-                  <small class="d-block">Senin - Jumat: {{ $businessHours['monday'] ?? '09:00-18:00' }}</small>
-                  <small class="d-block">Sabtu: {{ $businessHours['saturday'] ?? '09:00-15:00' }}</small>
-                  <small class="d-block">Minggu: {{ $businessHours['sunday'] ?? 'Tutup' }}</small>
-                </div>
-              @endif
+            <div class="business-hours mt-4 p-3 bg-light rounded">
+              <h6 class="text-primary mb-3"><i class="fas fa-clock me-2"></i>Jam Operasional</h6>
+              <div class="row">
+                @php
+                  $businessHours = is_string($systemSettings['business_hours'])
+                    ? json_decode($systemSettings['business_hours'], true)
+                    : $systemSettings['business_hours'];
+                @endphp
+                @if($businessHours)
+                  <div class="col-md-6">
+                    <small class="d-block">Senin - Jumat: {{ $businessHours['monday'] ?? '09:00-18:00' }}</small>
+                    <small class="d-block">Sabtu: {{ $businessHours['saturday'] ?? '09:00-15:00' }}</small>
+                    <small class="d-block">Minggu: {{ $businessHours['sunday'] ?? 'Tutup' }}</small>
+                  </div>
+                @endif
+              </div>
             </div>
-          </div>
           @endif
         </div>
       </div>
@@ -697,45 +711,45 @@
 
   <!-- Cart Counter Script -->
   @auth
-  <script>
-    $(document).ready(function() {
-      // Load cart count on page load
-      loadCartCount();
-    });
-
-    function loadCartCount() {
-      $.ajax({
-        url: '{{ route("cart.count") }}',
-        method: 'GET',
-        success: function(response) {
-          if (response.success) {
-            updateCartCounter(response.count);
-          }
-        },
-        error: function(xhr) {
-          console.error('Error loading cart count:', xhr.responseText);
-        }
+    <script>
+      $(document).ready(function () {
+        // Load cart count on page load
+        loadCartCount();
       });
-    }
 
-    function updateCartCounter(count) {
-      const cartCounter = document.getElementById('cartCounter');
-      if (cartCounter) {
-        cartCounter.textContent = count;
-        cartCounter.style.display = count > 0 ? 'flex' : 'none';
+      function loadCartCount() {
+        $.ajax({
+          url: '{{ route("cart.count") }}',
+          method: 'GET',
+          success: function (response) {
+            if (response.success) {
+              updateCartCounter(response.count);
+            }
+          },
+          error: function (xhr) {
+            console.error('Error loading cart count:', xhr.responseText);
+          }
+        });
       }
-    }
 
-    // Make updateCartCounter globally available
-    window.updateCartCounter = updateCartCounter;
-  </script>
+      function updateCartCounter(count) {
+        const cartCounter = document.getElementById('cartCounter');
+        if (cartCounter) {
+          cartCounter.textContent = count;
+          cartCounter.style.display = count > 0 ? 'flex' : 'none';
+        }
+      }
+
+      // Make updateCartCounter globally available
+      window.updateCartCounter = updateCartCounter;
+    </script>
   @endauth
 
   <!-- Back to Top Script -->
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Show/hide back to top button
-      $(window).scroll(function() {
+      $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
           $('#backToTop').fadeIn();
         } else {
@@ -744,9 +758,9 @@
       });
 
       // Smooth scroll to top
-      $('#backToTop').click(function(e) {
+      $('#backToTop').click(function (e) {
         e.preventDefault();
-        $('html, body').animate({scrollTop: 0}, 600);
+        $('html, body').animate({ scrollTop: 0 }, 600);
         return false;
       });
     });
@@ -754,4 +768,5 @@
 
   @yield('scripts')
 </body>
+
 </html>

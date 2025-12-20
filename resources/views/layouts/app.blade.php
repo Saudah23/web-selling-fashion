@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>@yield('title', 'Fashion Marketplace Dashboard')</title>
+    <title>@yield('title', 'FASHION SAAZZ Dashboard')</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="{{ asset('kaiadmin-lite-1.2.0/assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
@@ -45,9 +46,21 @@
             padding: 0.25rem 0.5rem;
             border-radius: 0.375rem;
         }
-        .role-owner { background-color: #dc2626; color: white; }
-        .role-admin { background-color: #2563eb; color: white; }
-        .role-customer { background-color: #16a34a; color: white; }
+
+        .role-owner {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .role-admin {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .role-customer {
+            background-color: #16a34a;
+            color: white;
+        }
 
         /* JS Grid Global Styles */
         .jsgrid {
@@ -63,7 +76,9 @@
             margin-bottom: 0;
         }
 
-        .jsgrid-header-table, .jsgrid-filter-table, .jsgrid-table {
+        .jsgrid-header-table,
+        .jsgrid-filter-table,
+        .jsgrid-table {
             min-width: 100%;
         }
 
@@ -83,6 +98,7 @@
 
         /* Responsive JS Grid */
         @media (max-width: 992px) {
+
             .jsgrid-header-cell,
             .jsgrid-filter-cell,
             .jsgrid-cell {
@@ -92,6 +108,7 @@
         }
 
         @media (max-width: 768px) {
+
             .jsgrid-header-cell,
             .jsgrid-filter-cell,
             .jsgrid-cell {
@@ -114,6 +131,7 @@
         }
 
         @media (max-width: 576px) {
+
             .parent-column,
             .description-column {
                 display: none !important;
@@ -146,7 +164,8 @@
         }
 
         /* Button group improvements */
-        .btn-group-sm > .btn, .btn-sm {
+        .btn-group-sm>.btn,
+        .btn-sm {
             padding: 0.25rem 0.4rem;
             font-size: 0.75rem;
             border-radius: 0.2rem;
@@ -234,6 +253,7 @@
 
     @stack('styles')
 </head>
+
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
@@ -241,8 +261,7 @@
             <div class="sidebar-logo">
                 <div class="logo-header" data-background-color="dark">
                     <a href="{{ url('/') }}" class="logo">
-                        <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/kaiadmin/logo_light.svg') }}"
-                             alt="navbar brand" class="navbar-brand" height="20" />
+                        <span style="font-size: 1.25rem; font-weight: 700; color: #fff;">FASHION SAAZZ</span>
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -281,11 +300,10 @@
                 <div class="main-header-logo">
                     <div class="logo-header" data-background-color="dark">
                         <a href="{{ url('/') }}" class="logo">
-                            <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/kaiadmin/logo_light.svg') }}"
-                                 alt="navbar brand" class="navbar-brand" height="20" />
+                            <span style="font-size: 1.25rem; font-weight: 700; color: #fff;">FASHION SAAZZ</span>
                         </a>
-                        <button class="navbar-toggler sidenav-toggler ml-auto" type="button"
-                                data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
+                            data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon">
                                 <i class="icon-menu"></i>
                             </span>
@@ -303,16 +321,17 @@
                         <div class="navbar-brand d-flex align-items-center">
                             <a href="{{ route('home') }}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-home me-2"></i>
-                                Visit Homepage
+                                Ke Homepage
                             </a>
                         </div>
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                             <li class="nav-item topbar-user dropdown hidden-caret">
-                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                                    aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/profile.jpg') }}"
-                                             alt="..." class="avatar-img rounded-circle" />
+                                        <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/profile.jpg') }}" alt="..."
+                                            class="avatar-img rounded-circle" />
                                     </div>
                                     <span class="profile-username">
                                         <span class="fw-bold">{{ auth()->user()->name }}</span>
@@ -324,7 +343,7 @@
                                             <div class="user-box">
                                                 <div class="avatar-lg">
                                                     <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/profile.jpg') }}"
-                                                         alt="image profile" class="avatar-img rounded" />
+                                                        alt="image profile" class="avatar-img rounded" />
                                                 </div>
                                                 <div class="u-text">
                                                     <h4>{{ auth()->user()->name }}</h4>
@@ -339,16 +358,20 @@
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="{{ route('profile.show') }}">My Profile</a>
                                             @if(auth()->user()->role === 'customer')
-                                                <a class="dropdown-item" href="{{ route('addresses.index') }}">My Addresses</a>
+                                                <a class="dropdown-item" href="{{ route('addresses.index') }}">My
+                                                    Addresses</a>
                                             @elseif(auth()->user()->role === 'admin')
-                                                <a class="dropdown-item" href="{{ route('admin.settings.index') }}">System Settings</a>
+                                                <a class="dropdown-item" href="{{ route('admin.settings.index') }}">System
+                                                    Settings</a>
                                             @elseif(auth()->user()->role === 'owner')
-                                                <a class="dropdown-item" href="{{ route('owner.settings.index') }}">System Settings</a>
+                                                <a class="dropdown-item" href="{{ route('owner.settings.index') }}">System
+                                                    Settings</a>
                                             @endif
                                             <div class="dropdown-divider"></div>
                                             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                                 @csrf
-                                                <button type="button" class="dropdown-item" onclick="confirmLogout()">Logout</button>
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="confirmLogout()">Logout</button>
                                             </form>
                                         </li>
                                     </div>
@@ -514,14 +537,14 @@
 
         // Show welcome notification if user just logged in
         @if(session('login_success'))
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 Notiflix.Notify.success('🎉 Welcome back to Fashion Marketplace! Ready to shop?');
             });
         @endif
 
         // Show logout success notification
         @if(session('logout_success'))
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 Notiflix.Notify.success('👋 Successfully logged out! See you soon!');
             });
         @endif
@@ -529,4 +552,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

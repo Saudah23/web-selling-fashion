@@ -1,0 +1,357 @@
+// Marketplace Laravel Database Schema
+// Generated for dbdiagram.io
+// Exclude: cache, jobs, password_reset_tokens, sessions tables
+
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
+
+Table users {
+  id bigint [pk, increment]
+  name varchar
+  email varchar [unique, not null]
+  email_verified_at timestamp [null]
+  password varchar
+  role enum('owner', 'admin', 'customer') [default: 'customer']
+  remember_token varchar [null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    email
+    role
+  }
+}
+
+// ============================================
+// LOCATION / WILAYAH (Indonesia Region)
+// ============================================
+
+Table provinces {
+  id bigint [pk, increment]
+  wilayah_id varchar [unique, not null, note: 'ID from wilayah.id']
+  name varchar
+  rajaongkir_id varchar [null, note: 'RajaOngkir province ID']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    wilayah_id
+    rajaongkir_id
+    (wilayah_id, rajaongkir_id)
+  }
+}
+
+Table cities {
+  id bigint [pk, increment]
+  wilayah_id varchar [unique, not null, note: 'ID from wilayah.id']
+  name varchar
+  province_id bigint [ref: > provinces.id, note: 'ON DELETE CASCADE']
+  rajaongkir_id varchar [null, note: 'RajaOngkir city ID']
+  rajaongkir_type varchar [null, note: 'city/regency type for RajaOngkir']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    wilayah_id
+    province_id
+    rajaongkir_id
+    (wilayah_id, province_id, rajaongkir_id)
+  }
+}
+
+Table districts {
+  id bigint [pk, increment]
+  wilayah_id varchar [unique, not null, note: 'ID from wilayah.id']
+  name varchar
+  city_id bigint [ref: > cities.id, note: 'ON DELETE CASCADE']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    wilayah_id
+    city_id
+    (wilayah_id, city_id)
+  }
+}
+
+Table villages {
+  id bigint [pk, increment]
+  wilayah_id varchar [unique, not null, note: 'ID from wilayah.id']
+  name varchar
+  district_id bigint [ref: > districts.id, note: 'ON DELETE CASCADE']
+  postal_code varchar [null, note: 'For shipping calculations']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    wilayah_id
+    district_id
+    postal_code
+    (wilayah_id, district_id, postal_code)
+  }
+}
+
+// ============================================
+// CUSTOMER ADDRESS
+// ============================================
+
+Table customer_addresses {
+  id bigint [pk, increment]
+  user_id bigint [ref: > users.id, note: 'ON DELETE CASCADE']
+  label varchar [default: 'Home', note: 'Home, Office, Other']
+  is_default boolean [default: false]
+  recipient_name varchar
+  recipient_phone varchar
+  province_id bigint [ref: > provinces.id]
+  city_id bigint [ref: > cities.id]
+  district_id bigint [ref: > districts.id]
+  village_id bigint [ref: > villages.id]
+  address_detail text [note: 'Street, number, etc.']
+  postal_code varchar(10)
+  notes text [null, note: 'Additional delivery notes']
+  latitude decimal(10,7) [null, note: 'Optional for precise delivery']
+  longitude decimal(10,7) [null, note: 'Optional for precise delivery']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, is_default)
+    (province_id, city_id)
+    postal_code
+  }
+}
+
+// ============================================
+// SYSTEM SETTINGS
+// ============================================
+
+Table system_settings {
+  id bigint [pk, increment]
+  key varchar [unique, not null, note: 'Setting identifier']
+  value text [null, note: 'Setting value (JSON for complex data)']
+  type varchar [default: 'text', note: 'text, json, boolean, number']
+  group varchar [default: 'general', note: 'general, shipping, payment, etc.']
+  description varchar [null]
+  is_public boolean [default: false, note: 'Can be accessed by frontend']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    key
+    (group, key)
+  }
+}
+
+// ============================================
+// PRODUCT CATALOG
+// ============================================
+
+Table categories {
+  id bigint [pk, increment]
+  name varchar
+  slug varchar [unique]
+  description text [null]
+  image varchar [null]
+  is_active boolean [default: true]
+  sort_order int [default: 0]
+  parent_id bigint [null, ref: > categories.id, note: 'ON DELETE CASCADE - Self-referencing for nested categories']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    slug
+    (is_active, sort_order)
+  }
+}
+
+Table products {
+  id bigint [pk, increment]
+  name varchar
+  slug varchar [unique]
+  description text [null]
+  short_description text [null]
+  sku varchar [unique]
+  price decimal(15,2)
+  compare_price decimal(15,2) [null, note: 'Original price for discount display']
+  stock_quantity int [default: 0]
+  min_stock_level int [default: 0]
+  weight decimal(8,2) [null, note: 'For shipping calculation']
+  dimensions varchar [null]
+  is_active boolean [default: true]
+  is_featured boolean [default: false]
+  sort_order int [default: 0]
+  attributes json [null, note: 'Additional product attributes']
+  category_id bigint [ref: > categories.id, note: 'ON DELETE CASCADE']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    slug
+    sku
+    category_id
+    (is_active, is_featured)
+    (category_id, is_active)
+    stock_quantity
+  }
+}
+
+Table product_images {
+  id bigint [pk, increment]
+  product_id bigint [ref: > products.id, note: 'ON DELETE CASCADE']
+  filename varchar [note: 'Original filename']
+  path varchar [note: 'Storage path']
+  url varchar [note: 'Public URL']
+  alt_text varchar [null, note: 'Alt text for accessibility']
+  is_primary boolean [default: false, note: 'Main/default image']
+  sort_order int [default: 0, note: 'Display order']
+  file_size bigint [null, note: 'File size in bytes']
+  mime_type varchar [null]
+  metadata json [null, note: 'Additional metadata (dimensions, etc.)']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (product_id, is_primary)
+    (product_id, sort_order)
+  }
+}
+
+// ============================================
+// CUSTOMER FEATURES
+// ============================================
+
+Table wishlists {
+  id bigint [pk, increment]
+  user_id bigint [ref: > users.id, note: 'ON DELETE CASCADE']
+  product_id bigint [ref: > products.id, note: 'ON DELETE CASCADE']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, product_id) [unique, note: 'Ensure one user can only add one product once']
+  }
+}
+
+Table carts {
+  id bigint [pk, increment]
+  user_id bigint [ref: > users.id, note: 'ON DELETE CASCADE']
+  product_id bigint [ref: > products.id, note: 'ON DELETE CASCADE']
+  quantity int [default: 1]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, product_id) [unique, note: 'User cannot have duplicate products in cart']
+  }
+}
+
+// ============================================
+// ORDERS & TRANSACTIONS
+// ============================================
+
+Table orders {
+  id bigint [pk, increment]
+  order_number varchar [unique]
+  user_id bigint [ref: > users.id, note: 'ON DELETE CASCADE']
+  subtotal decimal(15,2)
+  shipping_cost decimal(10,2) [default: 0]
+  tax_amount decimal(10,2) [default: 0]
+  total_amount decimal(15,2)
+  status enum('pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded') [default: 'pending']
+  shipping_address json [note: 'Customer shipping address']
+  shipping_service varchar [null, note: 'JNE REG, TIKI ONS, etc.']
+  shipping_courier varchar [null, note: 'jne, tiki, pos']
+  shipping_etd varchar [null, note: 'Estimated delivery time']
+  tracking_number varchar [null]
+  payment_method varchar [null]
+  paid_at timestamp [null]
+  shipped_at timestamp [null]
+  delivered_at timestamp [null]
+  notes text [null]
+  metadata json [null, note: 'Additional order data']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    order_number
+    (user_id, status)
+    (status, created_at)
+  }
+}
+
+Table order_items {
+  id bigint [pk, increment]
+  order_id bigint [ref: > orders.id, note: 'ON DELETE CASCADE']
+  product_id bigint [ref: > products.id, note: 'ON DELETE CASCADE']
+  product_name varchar [note: 'Snapshot at time of order']
+  product_sku varchar [null, note: 'Snapshot at time of order']
+  product_price decimal(15,2) [note: 'Price at time of purchase']
+  product_compare_price decimal(15,2) [null]
+  product_image varchar [null, note: 'Primary image at time of purchase']
+  quantity int
+  subtotal decimal(15,2) [note: 'quantity * product_price']
+  product_attributes json [null, note: 'Product attributes at time of purchase (color, size, etc.)']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (order_id, product_id)
+  }
+}
+
+Table payment_transactions {
+  id bigint [pk, increment]
+  order_id varchar [unique, not null, note: 'Internal order ID reference']
+  user_id bigint [ref: > users.id]
+  transaction_id varchar [unique, null, note: 'Midtrans transaction ID']
+  payment_type varchar [null, note: 'credit_card, bank_transfer, etc.']
+  gross_amount decimal(15,2) [note: 'Total amount']
+  currency varchar(3) [default: 'IDR']
+  status enum('pending', 'settlement', 'capture', 'deny', 'cancel', 'expire', 'failure', 'refund', 'partial_refund') [default: 'pending']
+  fraud_status varchar [null, note: 'accept, challenge, deny']
+  transaction_time timestamp [null]
+  settlement_time timestamp [null]
+  midtrans_response json [null, note: 'Full response from Midtrans']
+  customer_details json [null, note: 'Customer info sent to Midtrans']
+  item_details json [null, note: 'Items sent to Midtrans']
+  shipping_address json [null]
+  shipping_cost decimal(10,2) [default: 0]
+  shipping_service varchar [null, note: 'JNE, TIKI, etc.']
+  payment_url text [null, note: 'Redirect URL for payment']
+  pdf_url text [null, note: 'PDF receipt URL']
+  notes text [null]
+  metadata json [null, note: 'Additional data']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    order_id
+    transaction_id
+    (user_id, status)
+    (order_id, status)
+    (transaction_id, status)
+    transaction_time
+  }
+}
+
+// ============================================
+// MARKETING & CONTENT
+// ============================================
+
+Table banners {
+  id bigint [pk, increment]
+  title varchar
+  subtitle varchar [null]
+  description text [null]
+  image varchar
+  button_text varchar [null]
+  is_active boolean [default: true]
+  sort_order int [default: 0]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (is_active, sort_order)
+  }
+}

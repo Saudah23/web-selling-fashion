@@ -298,7 +298,7 @@ class MidtransService
      */
     private function getEnabledPayments(): array
     {
-        $methods = SystemSetting::get('midtrans_payment_methods');
+        $methods = SystemSetting::get('payment_methods');
 
         if (is_string($methods)) {
             $methods = json_decode($methods, true);
@@ -306,7 +306,7 @@ class MidtransService
 
         return is_array($methods) && !empty($methods)
             ? $methods
-            : ['credit_card', 'bca_va', 'bni_va', 'bri_va', 'echannel', 'other_va'];
+            : ['qris', 'gopay', 'shopeepay', 'credit_card', 'bca_va', 'bni_va', 'bri_va', 'echannel'];
     }
 
     /**
