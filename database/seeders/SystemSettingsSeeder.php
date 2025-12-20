@@ -24,7 +24,7 @@ class SystemSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'app_description',
-                'value' => 'Toko fashion online terpercaya - Saadah Azzahra Store',
+                'value' => 'Toko fashion online terpercaya untuk gaya Anda',
                 'type' => 'text',
                 'group' => 'general',
                 'description' => 'Deskripsi aplikasi',
