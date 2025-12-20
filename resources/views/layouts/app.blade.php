@@ -356,7 +356,7 @@
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="{{ route('profile.show') }}">My Profile</a>
+                                            <a class="dropdown-item" href="{{ route('profile.show') }}">Profil Saya</a>
                                             @if(auth()->user()->role === 'customer')
                                                 <a class="dropdown-item" href="{{ route('addresses.index') }}">My
                                                     Addresses</a>
@@ -513,9 +513,9 @@
         function confirmLogout() {
             Notiflix.Confirm.show(
                 '👋 Logout Confirmation',
-                'Are you sure you want to logout from Fashion Marketplace?',
-                'Yes, Logout',
-                'Cancel',
+                'Are you sure you want to logout from FASHION SAAZZ?',
+                'Ya, Keluar',
+                'Batal',
                 function okCb() {
                     // Show loading
                     Notiflix.Loading.circle('Logging out...');
@@ -538,14 +538,14 @@
         // Show welcome notification if user just logged in
         @if(session('login_success'))
             document.addEventListener('DOMContentLoaded', function () {
-                Notiflix.Notify.success('🎉 Welcome back to Fashion Marketplace! Ready to shop?');
+                Notiflix.Notify.success('🎉 Selamat datang kembali di FASHION SAAZZ!');
             });
         @endif
 
         // Show logout success notification
         @if(session('logout_success'))
             document.addEventListener('DOMContentLoaded', function () {
-                Notiflix.Notify.success('👋 Successfully logged out! See you soon!');
+                Notiflix.Notify.success('👋 Berhasil keluar! Sampai jumpa lagi!');
             });
         @endif
     </script>
