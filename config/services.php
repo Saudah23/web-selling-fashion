@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'midtrans' => [
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'client_key' => env('MIDTRANS_CLIENT_KEY'),
+        'merchant_id' => env('MIDTRANS_MERCHANT_ID'),
+        'environment' => env('MIDTRANS_ENVIRONMENT', 'sandbox'),
+    ],
+
 ];

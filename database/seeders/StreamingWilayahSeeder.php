@@ -34,8 +34,12 @@ class StreamingWilayahSeeder extends Seeder
         $startTime = microtime(true);
 
         try {
-            // Optimize database settings
-            DB::unprepared("SET FOREIGN_KEY_CHECKS=0; SET AUTOCOMMIT=0;");
+            $driver = DB::connection()->getDriverName();
+
+            // Optimize database settings (MySQL only)
+            if ($driver === 'mysql') {
+                DB::unprepared("SET FOREIGN_KEY_CHECKS=0; SET AUTOCOMMIT=0;");
+            }
 
             // Clear existing data
             $this->command->info('🗑️  Clearing existing data...');
@@ -44,13 +48,15 @@ class StreamingWilayahSeeder extends Seeder
             DB::table('cities')->delete();
             DB::table('provinces')->delete();
 
-            // Reset auto increment
-            DB::unprepared("
-                ALTER TABLE provinces AUTO_INCREMENT = 1;
-                ALTER TABLE cities AUTO_INCREMENT = 1;
-                ALTER TABLE districts AUTO_INCREMENT = 1;
-                ALTER TABLE villages AUTO_INCREMENT = 1;
-            ");
+            // Reset auto increment (MySQL only, SQLite auto-handles this)
+            if ($driver === 'mysql') {
+                DB::unprepared("
+                    ALTER TABLE provinces AUTO_INCREMENT = 1;
+                    ALTER TABLE cities AUTO_INCREMENT = 1;
+                    ALTER TABLE districts AUTO_INCREMENT = 1;
+                    ALTER TABLE villages AUTO_INCREMENT = 1;
+                ");
+            }
 
             // Stream process each level separately
             $this->processProvinces($sqlFile);
@@ -58,7 +64,9 @@ class StreamingWilayahSeeder extends Seeder
             $this->processDistricts($sqlFile);
             $this->processVillages($sqlFile);
 
-            DB::unprepared("COMMIT;");
+            if ($driver === 'mysql') {
+                DB::unprepared("COMMIT;");
+            }
 
             $duration = round(microtime(true) - $startTime, 2);
             $this->command->newLine();
@@ -67,11 +75,17 @@ class StreamingWilayahSeeder extends Seeder
             $this->showResults();
 
         } catch (\Exception $e) {
-            DB::unprepared("ROLLBACK;");
+            $driver = DB::connection()->getDriverName();
+            if ($driver === 'mysql') {
+                DB::unprepared("ROLLBACK;");
+            }
             $this->command->error("❌ Import failed: " . $e->getMessage());
             throw $e;
         } finally {
-            DB::unprepared("SET FOREIGN_KEY_CHECKS=1; SET AUTOCOMMIT=1;");
+            $driver = DB::connection()->getDriverName();
+            if ($driver === 'mysql') {
+                DB::unprepared("SET FOREIGN_KEY_CHECKS=1; SET AUTOCOMMIT=1;");
+            }
         }
     }
 

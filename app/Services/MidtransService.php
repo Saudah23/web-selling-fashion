@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Log;
 
 class MidtransService
 {
-    private string $serverKey;
-    private string $clientKey;
-    private string $merchantId;
+    private ?string $serverKey;
+    private ?string $clientKey;
+    private ?string $merchantId;
     private string $environment;
     private string $baseUrl;
 
@@ -33,11 +33,17 @@ class MidtransService
 
         $this->environment = SystemSetting::get('midtrans_environment')
             ?? config('services.midtrans.environment')
-            ?? env('MIDTRANS_ENVIRONMENT', 'sandbox');
+            ?? env('MIDTRANS_ENVIRONMENT', 'sandbox')
+            ?? 'sandbox';
 
         $this->baseUrl = $this->environment === 'production'
             ? 'https://app.midtrans.com/snap/v1'
             : 'https://app.sandbox.midtrans.com/snap/v1';
+
+        // Skip validation during artisan commands to allow package discovery
+        if (app()->runningInConsole() && !app()->runningUnitTests()) {
+            return;
+        }
 
         if (!$this->serverKey || !$this->clientKey || !$this->merchantId) {
             throw new Exception('Midtrans credentials not properly configured');
