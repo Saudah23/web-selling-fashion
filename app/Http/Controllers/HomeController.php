@@ -21,7 +21,7 @@ class HomeController extends Controller
 
         // Get featured products (limit 8 for display)
         $featuredProducts = Product::with(['images' => function($query) {
-            $query->where('is_primary', true)->orderBy('is_primary', 'desc');
+            $query->orderBy('is_primary', 'desc')->orderBy('sort_order');
         }])
         ->where('is_active', true)
         ->where('is_featured', true)
@@ -32,7 +32,7 @@ class HomeController extends Controller
         // If no featured products, get latest products
         if ($featuredProducts->count() < 8) {
             $additionalProducts = Product::with(['images' => function($query) {
-                $query->where('is_primary', true)->orderBy('is_primary', 'desc');
+                $query->orderBy('is_primary', 'desc')->orderBy('sort_order');
             }])
             ->where('is_active', true)
             ->where('is_featured', false)
@@ -59,7 +59,7 @@ class HomeController extends Controller
     public function shop(Request $request)
     {
         $query = Product::with(['images' => function($q) {
-            $q->where('is_primary', true)->orderBy('is_primary', 'desc');
+            $q->orderBy('is_primary', 'desc')->orderBy('sort_order');
         }, 'category'])
         ->where('is_active', true);
 
@@ -125,7 +125,7 @@ class HomeController extends Controller
 
         // Get related products from same category
         $relatedProducts = Product::with(['images' => function($query) {
-            $query->where('is_primary', true)->orderBy('is_primary', 'desc');
+            $query->orderBy('is_primary', 'desc')->orderBy('sort_order');
         }])
         ->where('category_id', $product->category_id)
         ->where('id', '!=', $product->id)

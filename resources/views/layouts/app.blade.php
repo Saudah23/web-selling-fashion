@@ -358,20 +358,17 @@
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="{{ route('profile.show') }}">Profil Saya</a>
                                             @if(auth()->user()->role === 'customer')
-                                                <a class="dropdown-item" href="{{ route('addresses.index') }}">My
-                                                    Addresses</a>
+                                                <a class="dropdown-item" href="{{ route('addresses.index') }}">Alamat Saya</a>
                                             @elseif(auth()->user()->role === 'admin')
-                                                <a class="dropdown-item" href="{{ route('admin.settings.index') }}">System
-                                                    Settings</a>
+                                                <a class="dropdown-item" href="{{ route('admin.settings.index') }}">Pengaturan Sistem</a>
                                             @elseif(auth()->user()->role === 'owner')
-                                                <a class="dropdown-item" href="{{ route('owner.settings.index') }}">System
-                                                    Settings</a>
+                                                <a class="dropdown-item" href="{{ route('owner.settings.index') }}">Pengaturan Sistem</a>
                                             @endif
                                             <div class="dropdown-divider"></div>
                                             <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                                 @csrf
                                                 <button type="button" class="dropdown-item"
-                                                    onclick="confirmLogout()">Logout</button>
+                                                    onclick="confirmLogout()">Keluar</button>
                                             </form>
                                         </li>
                                     </div>
@@ -512,13 +509,13 @@
 
         function confirmLogout() {
             Notiflix.Confirm.show(
-                '👋 Logout Confirmation',
-                'Are you sure you want to logout from FASHION SAAZZ?',
+                'Konfirmasi Keluar',
+                'Apakah Anda yakin ingin keluar dari FASHION SAAZZ?',
                 'Ya, Keluar',
                 'Batal',
                 function okCb() {
                     // Show loading
-                    Notiflix.Loading.circle('Logging out...');
+                    Notiflix.Loading.circle('Sedang keluar...');
 
                     // Submit logout form
                     document.getElementById('logout-form').submit();

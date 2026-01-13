@@ -4,97 +4,81 @@
 
 @section('content')
 
-  @if($banners->isNotEmpty())
-    <!-- Start Banner Slider Section -->
-    <div class="hero-slider">
-      <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-indicators">
-          @foreach($banners as $key => $banner)
-            <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="{{ $key }}"
-              class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
-              aria-label="Slide {{ $key + 1 }}"></button>
-          @endforeach
-        </div>
+  @php
+    $customBanners = [
+      [
+        'title' => 'Selamat Datang di',
+        'subtitle' => 'FASHION SAAZZ',
+        'description' => 'Temukan koleksi fashion terbaik dengan kualitas premium. Tampil stylish dan percaya diri setiap hari bersama Fashion Saaz.',
+        'image' => 'furni-1.0.0/images/hero-fashion.png',
+        'button_text' => 'Belanja Sekarang',
+        'url' => route('shop')
+      ],
+      [
+        'title' => 'Koleksi Terbaru',
+        'subtitle' => 'Musim Ini',
+        'description' => 'Dapatkan penawaran eksklusif untuk produk terbaru kami. Desain modern yang cocok untuk gaya hidup Anda.',
+        'image' => 'furni-1.0.0/images/hero-fashion.png',
+        'button_text' => 'Lihat Katalog',
+        'url' => route('shop')
+      ]
+    ];
+  @endphp
 
-        <div class="carousel-inner">
-          @foreach($banners as $key => $banner)
-            <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-              <div class="hero" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
-                <div class="container">
-                  <div class="row justify-content-between align-items-center">
-                    <div class="col-lg-6">
-                      <div class="intro-excerpt">
-                        <h1 style="color: #2d3748;">
-                          {{ $banner->title }}
-                          @if($banner->subtitle)
-                            <span class="d-block" style="color: #ff6b6b;">{{ $banner->subtitle }}</span>
-                          @endif
-                        </h1>
-                        @if($banner->description)
-                          <p class="mb-4" style="color: #718096;">{{ $banner->description }}</p>
-                        @endif
-                        @if($banner->button_text)
-                          <p>
-                            <a href="{{ route('shop') }}" class="btn btn-banner-primary me-2">
-                              {{ $banner->button_text }}
-                            </a>
-                          </p>
-                        @endif
-                      </div>
+  <!-- Start Banner Slider Section -->
+  <div class="hero-slider">
+    <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-indicators">
+        @foreach($customBanners as $key => $banner)
+          <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="{{ $key }}"
+            class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
+            aria-label="Slide {{ $key + 1 }}"></button>
+        @endforeach
+      </div>
+
+      <div class="carousel-inner">
+        @foreach($customBanners as $key => $banner)
+          <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+            <div class="hero" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+              <div class="container">
+                <div class="row justify-content-between align-items-center">
+                  <div class="col-lg-6">
+                    <div class="intro-excerpt">
+                      <h1 style="color: #2d3748;">
+                        {{ $banner['title'] }}
+                        <span class="d-block" style="color: #ff6b6b;">{{ $banner['subtitle'] }}</span>
+                      </h1>
+                      <p class="mb-4" style="color: #718096;">{{ $banner['description'] }}</p>
+                      <p>
+                        <a href="{{ $banner['url'] }}" class="btn btn-banner-primary me-2">
+                          {{ $banner['button_text'] }}
+                        </a>
+                      </p>
                     </div>
-                    <div class="col-lg-6">
-                      <div class="hero-img-wrap">
-                        @if($banner->image && $banner->image !== 'banners/placeholder.jpg')
-                          <img src="{{ asset('storage/' . $banner->image) }}" class="img-fluid banner-image"
-                            alt="{{ $banner->title }}">
-                        @else
-                          <img src="{{ asset('furni-1.0.0/images/couch.png') }}" class="img-fluid banner-image"
-                            alt="{{ $banner->title }}">
-                        @endif
-                      </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="hero-img-wrap">
+                      <img src="{{ asset($banner['image']) }}" class="img-fluid banner-image"
+                        alt="{{ $banner['title'] }}">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          @endforeach
-        </div>
+          </div>
+        @endforeach
+      </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-  @else
-    <!-- Fallback Hero Section -->
-    <div class="hero">
-      <div class="container">
-        <div class="row justify-content-between">
-          <div class="col-lg-5">
-            <div class="intro-excerpt">
-              <h1>Fashion Terkini <span class="d-block">FASHION SAAZZ</span></h1>
-              <p class="mb-4">Temukan koleksi fashion terbaik dengan kualitas premium. Semua yang Anda butuhkan untuk tampil
-                stylish dan percaya diri.</p>
-              <p>
-                <a href="{{ route('shop') }}" class="btn btn-secondary me-2">Belanja Sekarang</a>
-                <a href="#products" class="btn btn-white-outline">Jelajahi</a>
-              </p>
-            </div>
-          </div>
-          <div class="col-lg-7">
-            <div class="hero-img-wrap">
-              <img src="{{ asset('furni-1.0.0/images/couch.png') }}" class="img-fluid">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
+  </div>
   <!-- End Banner/Hero Section -->
 
   <!-- Start Product Section -->
@@ -396,7 +380,7 @@
 
         <div class="col-lg-5">
           <div class="img-wrap">
-            <img src="{{ asset('furni-1.0.0/images/why-choose-us-img.jpg') }}" alt="Why choose us" class="img-fluid">
+            <img src="{{ asset('furni-1.0.0/images/why-choose-us-fashion.png') }}" alt="Why choose us" class="img-fluid">
           </div>
         </div>
 
@@ -415,7 +399,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-6 col-md-6 col-lg-3 mb-4">
+        <div class="col-6 col-md-6 col-lg-4 mb-4">
           <div class="category-showcase">
             <div class="category-icon">
               <i class="fas fa-tshirt fa-4x text-pink"></i>
@@ -425,34 +409,24 @@
             <a href="{{ route('shop', ['category' => 1]) }}" class="btn btn-outline-pink">Lihat</a>
           </div>
         </div>
-        <div class="col-6 col-md-6 col-lg-3 mb-4">
+        <div class="col-6 col-md-6 col-lg-4 mb-4">
           <div class="category-showcase">
             <div class="category-icon">
               <i class="fas fa-female fa-4x text-pink"></i>
             </div>
-            <h4>Pakaian Wanita</h4>
+            <h4>Pakaian</h4>
             <p>Koleksi fashion wanita stylish</p>
             <a href="{{ route('shop', ['category' => 2]) }}" class="btn btn-outline-pink">Lihat</a>
           </div>
         </div>
-        <div class="col-6 col-md-6 col-lg-3 mb-4">
-          <div class="category-showcase">
-            <div class="category-icon">
-              <i class="fas fa-gem fa-4x text-pink"></i>
-            </div>
-            <h4>Aksesori</h4>
-            <p>Tas, sepatu, dan perhiasan</p>
-            <a href="{{ route('shop', ['category' => 3]) }}" class="btn btn-outline-pink">Lihat</a>
-          </div>
-        </div>
-        <div class="col-6 col-md-6 col-lg-3 mb-4">
+        <div class="col-6 col-md-6 col-lg-4 mb-4">
           <div class="category-showcase">
             <div class="category-icon">
               <i class="fas fa-child fa-4x text-pink"></i>
             </div>
             <h4>Pakaian Anak</h4>
             <p>Fashion untuk si kecil</p>
-            <a href="{{ route('shop', ['category' => 4]) }}" class="btn btn-outline-pink">Lihat</a>
+            <a href="{{ route('shop', ['category' => 3]) }}" class="btn btn-outline-pink">Lihat</a>
           </div>
         </div>
       </div>
@@ -527,7 +501,7 @@
               <i class="fas fa-map-marker-alt fa-2x text-pink me-3"></i>
               <div>
                 <h6>Alamat</h6>
-                <p class="text-muted">{{ $shippingAddress['full_address'] }}</p>
+                <p class="text-muted">{{ $systemSettings['contact_address'] ?? $shippingAddress['full_address'] }}</p>
               </div>
             </div>
             <div class="contact-item mb-3">
@@ -549,10 +523,29 @@
               <div>
                 <h6>Jam Buka</h6>
                 <p class="text-muted">
-                  @if($systemSettings['business_hours'])
-                    {!! nl2br(e($systemSettings['business_hours'])) !!}
+                  @php
+                      $businessHours = $systemSettings['business_hours'];
+                      if (is_string($businessHours) && json_decode($businessHours, true)) {
+                          $businessHours = json_decode($businessHours, true);
+                      }
+                      $dayMap = [
+                          'monday' => 'Senin',
+                          'tuesday' => 'Selasa',
+                          'wednesday' => 'Rabu',
+                          'thursday' => 'Kamis',
+                          'friday' => 'Jumat',
+                          'saturday' => 'Sabtu',
+                          'sunday' => 'Minggu',
+                      ];
+                  @endphp
+                  @if(is_array($businessHours))
+                    @foreach($businessHours as $day => $hours)
+                        <span class="d-block text-capitalize">{{ $dayMap[strtolower($day)] ?? $day }}: {{ $hours }}</span>
+                    @endforeach
+                  @elseif($businessHours)
+                    {!! nl2br(e($businessHours)) !!}
                   @else
-                    Senin - Jumat: 09:00 - 18:00<br>Sabtu: 09:00 - 15:00<br>Minggu: Tutup
+                    Senin - Minggu: 08:00 - 17:00
                   @endif
                 </p>
               </div>
@@ -611,6 +604,21 @@
     .hero-slider .carousel-indicators button.active {
       background: #ff6b6b;
       width: 50px;
+    }
+
+    /* Custom Text Pink */
+    .text-pink {
+      color: #ff6b6b !important;
+    }
+    
+    .btn-outline-pink {
+      color: #ff6b6b;
+      border-color: #ff6b6b;
+    }
+    
+    .btn-outline-pink:hover {
+      background-color: #ff6b6b;
+      color: #fff;
     }
 
     /* Custom Banner Button */

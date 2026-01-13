@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Order Management - Admin Dashboard')
+@section('title', 'Manajemen Pesanan - Dashboard Admin')
 
 @section('content')
 <div class="row">
@@ -9,17 +9,17 @@
             <div class="card-header">
                 <div class="card-head-row">
                     <div class="card-title">
-                        <i class="fas fa-shopping-cart me-2"></i>Orders Management
+                        <i class="fas fa-shopping-cart me-2"></i>Manajemen Pesanan
                     </div>
                     <div class="card-tools">
                         <button class="btn btn-warning btn-round btn-sm me-2" onclick="showBulkUpdateModal()">
-                            <i class="fas fa-edit me-2"></i>Bulk Update Status
+                            <i class="fas fa-edit me-2"></i>Update Status Massal
                         </button>
                         <button class="btn btn-info btn-round btn-sm me-2" onclick="showOrderStatistics()">
-                            <i class="fas fa-chart-bar me-2"></i>Statistics
+                            <i class="fas fa-chart-bar me-2"></i>Statistik
                         </button>
                         <button class="btn btn-success btn-round btn-sm" onclick="refreshOrders()">
-                            <i class="fas fa-sync-alt me-2"></i>Refresh
+                            <i class="fas fa-sync-alt me-2"></i>Muat Ulang
                         </button>
                     </div>
                 </div>
@@ -37,16 +37,16 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Order Details</h5>
+                <h5 class="modal-title">Detail Pesanan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="orderDetailContent">
                 <!-- Dynamic content -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" id="editOrderStatusBtn" onclick="showStatusUpdateModal()">
-                    <i class="fas fa-edit me-2"></i>Update Status
+                    <i class="fas fa-edit me-2"></i>Perbarui Status
                 </button>
             </div>
         </div>
@@ -58,7 +58,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update Order Status</h5>
+                <h5 class="modal-title">Perbarui Status Pesanan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="statusUpdateForm">
@@ -68,30 +68,30 @@
                     <div class="mb-3">
                         <label for="updateStatus" class="form-label">Status <span class="text-danger">*</span></label>
                         <select class="form-select" id="updateStatus" name="status" required>
-                            <option value="">-- Select Status --</option>
-                            <option value="pending">Pending</option>
-                            <option value="paid">Paid</option>
-                            <option value="processing">Processing</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="delivered">Delivered</option>
-                            <option value="cancelled">Cancelled</option>
-                            <option value="refunded">Refunded</option>
+                            <option value="">-- Pilih Status --</option>
+                            <option value="pending">Menunggu</option>
+                            <option value="paid">Dibayar</option>
+                            <option value="processing">Diproses</option>
+                            <option value="shipped">Dikirim</option>
+                            <option value="delivered">Terkirim</option>
+                            <option value="cancelled">Dibatalkan</option>
+                            <option value="refunded">Dikembalikan</option>
                         </select>
                     </div>
 
                     <div class="mb-3" id="trackingNumberField" style="display: none;">
-                        <label for="updateTrackingNumber" class="form-label">Tracking Number</label>
-                        <input type="text" class="form-control" id="updateTrackingNumber" name="tracking_number" placeholder="Enter tracking number">
+                        <label for="updateTrackingNumber" class="form-label">Nomor Resi</label>
+                        <input type="text" class="form-control" id="updateTrackingNumber" name="tracking_number" placeholder="Masukkan nomor resi">
                     </div>
 
                     <div class="mb-3">
-                        <label for="updateNotes" class="form-label">Notes</label>
-                        <textarea class="form-control" id="updateNotes" name="notes" rows="3" placeholder="Add notes about this status update..."></textarea>
+                        <label for="updateNotes" class="form-label">Catatan</label>
+                        <textarea class="form-control" id="updateNotes" name="notes" rows="3" placeholder="Tambahkan catatan tentang pembaruan status ini..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Status</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Perbarui Status</button>
                 </div>
             </form>
         </div>
@@ -103,7 +103,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Mark Order as Shipped</h5>
+                <h5 class="modal-title">Tandai Pesanan Dikirim</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="shippingForm">
@@ -112,25 +112,25 @@
 
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Shipping Information Required</strong><br>
-                        Please provide tracking number for customer to track their order.
+                        <strong>Informasi Pengiriman Diperlukan</strong><br>
+                        Silakan berikan nomor resi agar pelanggan dapat melacak pesanan mereka.
                     </div>
 
                     <div class="mb-3">
-                        <label for="shippingTrackingNumber" class="form-label">Tracking Number <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="shippingTrackingNumber" name="tracking_number" placeholder="Enter tracking number" required>
-                        <div class="form-text">Customer will receive this tracking number via email/SMS</div>
+                        <label for="shippingTrackingNumber" class="form-label">Nomor Resi <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="shippingTrackingNumber" name="tracking_number" placeholder="Masukkan nomor resi" required>
+                        <div class="form-text">Pelanggan akan menerima nomor resi ini via email/SMS</div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="shippingNotes" class="form-label">Shipping Notes</label>
-                        <textarea class="form-control" id="shippingNotes" name="notes" rows="2" placeholder="Optional shipping notes..."></textarea>
+                        <label for="shippingNotes" class="form-label">Catatan Pengiriman</label>
+                        <textarea class="form-control" id="shippingNotes" name="notes" rows="2" placeholder="Catatan pengiriman opsional..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success">
-                        <i class="fas fa-truck me-2"></i>Mark as Shipped
+                        <i class="fas fa-truck me-2"></i>Tandai Dikirim
                     </button>
                 </div>
             </form>
@@ -143,26 +143,26 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Bulk Status Update</h5>
+                <h5 class="modal-title">Update Status Massal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    Select orders and update their status in bulk. Please use this feature carefully.
+                    Pilih pesanan dan perbarui statusnya secara massal. Harap gunakan fitur ini dengan hati-hati.
                 </div>
                 <div id="bulkUpdateContent">
                     <div class="text-center py-4">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        <p class="mt-2">Loading orders...</p>
+                        <p class="mt-2">Memuat pesanan...</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="updateBulkStatusBtn">Update Status</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="updateBulkStatusBtn">Perbarui Status</button>
             </div>
         </div>
     </div>
@@ -173,14 +173,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Order Statistics</h5>
+                <h5 class="modal-title">Statistik Pesanan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="statisticsContent">
                 <!-- Dynamic content -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -424,7 +424,7 @@ $(document).ready(function() {
         fields: [
             {
                 name: "order_number",
-                title: "Order Number",
+                title: "Nomor Pesanan",
                 type: "text",
                 width: 180,
                 filtering: true,
@@ -436,7 +436,7 @@ $(document).ready(function() {
             },
             {
                 name: "customer_name",
-                title: "Customer",
+                title: "Pelanggan",
                 type: "text",
                 width: 140,
                 filtering: false,
@@ -448,7 +448,7 @@ $(document).ready(function() {
             },
             {
                 name: "items_count",
-                title: "Items",
+                title: "Item",
                 type: "number",
                 width: 70,
                 filtering: false,
@@ -480,13 +480,13 @@ $(document).ready(function() {
                 headerCss: "text-center",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Pending", Id: "pending" },
-                    { Name: "Paid", Id: "paid" },
-                    { Name: "Processing", Id: "processing" },
-                    { Name: "Shipped", Id: "shipped" },
-                    { Name: "Delivered", Id: "delivered" },
-                    { Name: "Cancelled", Id: "cancelled" },
-                    { Name: "Refunded", Id: "refunded" }
+                    { Name: "Menunggu", Id: "pending" },
+                    { Name: "Dibayar", Id: "paid" },
+                    { Name: "Diproses", Id: "processing" },
+                    { Name: "Dikirim", Id: "shipped" },
+                    { Name: "Terkirim", Id: "delivered" },
+                    { Name: "Dibatalkan", Id: "cancelled" },
+                    { Name: "Dikembalikan", Id: "refunded" }
                 ],
                 valueField: "Id",
                 textField: "Name",
@@ -496,7 +496,7 @@ $(document).ready(function() {
             },
             {
                 name: "tracking_number",
-                title: "Tracking",
+                title: "Resi",
                 type: "text",
                 width: 180,
                 filtering: true,
@@ -510,7 +510,7 @@ $(document).ready(function() {
             },
             {
                 name: "created_date",
-                title: "Date",
+                title: "Tanggal",
                 type: "text",
                 width: 140,
                 filtering: true,
@@ -522,31 +522,31 @@ $(document).ready(function() {
             },
             {
                 type: "control",
-                title: "Actions",
+                title: "Aksi",
                 width: 80,
                 css: "actions-column text-center",
                 headerCss: "text-center",
                 itemTemplate: function(value, item) {
                     let actions = '<div class="btn-group btn-group-sm" role="group">' +
-                                 '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewOrder(' + item.id + ')" title="View Details">' +
+                                 '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewOrder(' + item.id + ')" title="Lihat Detail">' +
                                  '<i class="fas fa-eye"></i>' +
                                  '</button>';
 
                     // One-click status update buttons based on current status
                     if (item.status === 'paid') {
-                        actions += '<button type="button" class="btn btn-outline-primary btn-sm" onclick="quickUpdateStatus(' + item.id + ', \'processing\')" title="Mark as Processing">' +
+                        actions += '<button type="button" class="btn btn-outline-primary btn-sm" onclick="quickUpdateStatus(' + item.id + ', \'processing\')" title="Tandai Diproses">' +
                                    '<i class="fas fa-cogs"></i>' +
                                    '</button>';
                     } else if (item.status === 'processing') {
-                        actions += '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="showShippingModal(' + item.id + ')" title="Mark as Shipped">' +
+                        actions += '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="showShippingModal(' + item.id + ')" title="Tandai Dikirim">' +
                                    '<i class="fas fa-truck"></i>' +
                                    '</button>';
                     } else if (item.status === 'shipped') {
-                        actions += '<button type="button" class="btn btn-outline-info btn-sm disabled" title="Delivered status can only be updated by customer">' +
+                        actions += '<button type="button" class="btn btn-outline-info btn-sm disabled" title="Status terkirim hanya dapat diperbarui oleh pelanggan">' +
                                    '<i class="fas fa-info-circle"></i>' +
                                    '</button>';
                     } else {
-                        actions += '<button type="button" class="btn btn-outline-warning btn-sm" onclick="showStatusUpdateModal(' + item.id + ')" title="Update Status">' +
+                        actions += '<button type="button" class="btn btn-outline-warning btn-sm" onclick="showStatusUpdateModal(' + item.id + ')" title="Perbarui Status">' +
                                    '<i class="fas fa-edit"></i>' +
                                    '</button>';
                     }

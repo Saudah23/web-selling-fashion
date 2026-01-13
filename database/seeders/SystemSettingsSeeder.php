@@ -40,7 +40,7 @@ class SystemSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'contact_phone',
-                'value' => '+6287827683335',
+                'value' => '087827683335',
                 'type' => 'text',
                 'group' => 'general',
                 'description' => 'Nomor telepon kontak',
@@ -48,7 +48,7 @@ class SystemSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'contact_address',
-                'value' => 'Komplek Pesona Pondok Indah, RT 12/RW 06, Kec. Bati-Bati, Kab. Tanah Laut, Prov. Kalimantan Selatan',
+                'value' => 'Komp. Pesona Pondok Indah RT/12 RW/06 Desa.Lianganggang, Kec. Bati-Bati, Kab. Tanah Laut, Prov. Kalimantan selatan',
                 'type' => 'text',
                 'group' => 'general',
                 'description' => 'Alamat toko',
@@ -56,7 +56,7 @@ class SystemSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'contact_instagram',
-                'value' => '@Saaazz.id',
+                'value' => '@saaazz.id',
                 'type' => 'text',
                 'group' => 'general',
                 'description' => 'Akun Instagram',
@@ -64,8 +64,12 @@ class SystemSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'business_hours',
-                'value' => "Senin - Jumat: 09:00 - 18:00\nSabtu: 09:00 - 15:00\nMinggu: Tutup",
-                'type' => 'text',
+                'value' => json_encode([
+                    'monday' => '08:00 - 17:00',
+                    'saturday' => '08:00 - 17:00',
+                    'sunday' => '08:00 - 17:00',
+                ]),
+                'type' => 'json',
                 'group' => 'general',
                 'description' => 'Jam operasional',
                 'is_public' => true,

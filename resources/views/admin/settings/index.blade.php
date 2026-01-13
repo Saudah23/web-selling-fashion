@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'System Settings - Admin Dashboard')
+@section('title', 'Pengaturan Sistem - Dashboard Admin')
 
 
 @section('content')
 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
     <div>
-        <h3 class="fw-bold mb-3">System Settings</h3>
-        <h6 class="op-7 mb-2">Configure system-wide settings for your marketplace</h6>
+        <h3 class="fw-bold mb-3">Pengaturan Sistem</h3>
+        <h6 class="op-7 mb-2">Konfigurasi pengaturan sistem untuk marketplace Anda</h6>
     </div>
     <div class="ms-md-auto py-2 py-md-0">
         <button class="btn btn-primary btn-round" onclick="syncAllAPIs()">
-            <i class="fas fa-sync-alt me-2"></i>Sync All APIs
+            <i class="fas fa-sync-alt me-2"></i>Sinkronkan Semua API
         </button>
     </div>
 </div>
 
 @if(session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>Success!</strong> {{ session('success') }}
+    <strong>Berhasil!</strong> {{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 @endif
@@ -41,7 +41,7 @@
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">
-                            <i class="fas fa-info-circle me-2"></i>General Settings
+                            <i class="fas fa-info-circle me-2"></i>Pengaturan Umum
                         </div>
                     </div>
                 </div>
@@ -100,11 +100,11 @@
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">
-                            <i class="fas fa-shipping-fast me-2"></i>Shipping Settings (RajaOngkir)
+                            <i class="fas fa-shipping-fast me-2"></i>Pengaturan Pengiriman (RajaOngkir)
                         </div>
                         <div class="card-tools">
                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="syncRajaOngkir()">
-                                <i class="fas fa-sync-alt me-1"></i>Sync Data
+                                <i class="fas fa-sync-alt me-1"></i>Sinkronkan Data
                             </button>
                         </div>
                     </div>
@@ -115,15 +115,15 @@
                     <!-- Current Shipping Origin Display -->
                     @if($shippingOrigin['province'] || $shippingOrigin['city'] || $shippingOrigin['district'])
                     <div class="alert alert-info mb-4">
-                        <h6 class="alert-heading mb-2"><i class="fas fa-map-marker-alt me-2"></i>Current Shipping Origin</h6>
+                        <h6 class="alert-heading mb-2"><i class="fas fa-map-marker-alt me-2"></i>Asal Pengiriman Saat Ini</h6>
                         <div class="mb-1">
-                            <strong>Location:</strong>
-                            {{ $shippingOrigin['district']['name'] ?? 'Not Set' }},
-                            {{ $shippingOrigin['city']['name'] ?? 'Not Set' }},
-                            {{ $shippingOrigin['province']['name'] ?? 'Not Set' }}
+                            <strong>Lokasi:</strong>
+                            {{ $shippingOrigin['district']['name'] ?? 'Belum Diatur' }},
+                            {{ $shippingOrigin['city']['name'] ?? 'Belum Diatur' }},
+                            {{ $shippingOrigin['province']['name'] ?? 'Belum Diatur' }}
                         </div>
                         @if($shippingOrigin['address'])
-                        <div class="mb-1"><strong>Address:</strong> {{ $shippingOrigin['address'] }}</div>
+                        <div class="mb-1"><strong>Alamat:</strong> {{ $shippingOrigin['address'] }}</div>
                         @endif
                     </div>
                     @endif
@@ -131,11 +131,11 @@
                     <!-- Location Picker Section -->
                     <div class="form-group">
                         <label class="form-label">
-                            <i class="fas fa-map-marked-alt me-2"></i>Shipping Origin Location
+                            <i class="fas fa-map-marked-alt me-2"></i>Lokasi Asal Pengiriman
                             <span class="badge badge-warning ms-2">Private</span>
                         </label>
                         <button type="button" class="btn btn-outline-primary btn-sm ms-2" onclick="showLocationPicker()">
-                            <i class="fas fa-edit me-1"></i>Change Location
+                            <i class="fas fa-edit me-1"></i>Ubah Lokasi
                         </button>
                     </div>
 
@@ -203,11 +203,11 @@
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">
-                            <i class="fas fa-credit-card me-2"></i>Payment Settings (Midtrans)
+                            <i class="fas fa-credit-card me-2"></i>Pengaturan Pembayaran (Midtrans)
                         </div>
                         <div class="card-tools">
                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="syncMidtrans()">
-                                <i class="fas fa-sync-alt me-1"></i>Sync Settings
+                                <i class="fas fa-sync-alt me-1"></i>Sinkronkan Pengaturan
                             </button>
                         </div>
                     </div>
@@ -272,10 +272,10 @@
             <div class="card card-round">
                 <div class="card-body text-center">
                     <button type="submit" class="btn btn-primary btn-lg px-5">
-                        <i class="fas fa-save me-2"></i>Save All Settings
+                        <i class="fas fa-save me-2"></i>Simpan Semua Pengaturan
                     </button>
                     <button type="button" class="btn btn-secondary btn-lg px-5 ms-3" onclick="confirmResetChanges()">
-                        <i class="fas fa-undo me-2"></i>Reset Changes
+                        <i class="fas fa-undo me-2"></i>Reset Perubahan
                     </button>
                 </div>
             </div>
@@ -289,7 +289,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-map-marked-alt me-2"></i>Select Shipping Origin Location
+                    <i class="fas fa-map-marked-alt me-2"></i>Pilih Lokasi Asal Pengiriman
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -298,33 +298,33 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="modal_province" class="form-label">Province</label>
+                                <label for="modal_province" class="form-label">Provinsi</label>
                                 <select id="modal_province" class="form-control" onchange="loadCities()">
-                                    <option value="">Select Province</option>
+                                    <option value="">Pilih Provinsi</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="modal_city" class="form-label">City</label>
+                                <label for="modal_city" class="form-label">Kota</label>
                                 <select id="modal_city" class="form-control" onchange="loadDistricts()" disabled>
-                                    <option value="">Select City</option>
+                                    <option value="">Pilih Kota</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="modal_district" class="form-label">District</label>
+                                <label for="modal_district" class="form-label">Kecamatan</label>
                                 <select id="modal_district" class="form-control" disabled>
-                                    <option value="">Select District</option>
+                                    <option value="">Pilih Kecamatan</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_address" class="form-label">Complete Address</label>
+                        <label for="modal_address" class="form-label">Alamat Lengkap</label>
                         <textarea id="modal_address" class="form-control" rows="3"
-                                placeholder="Enter complete address details"></textarea>
+                                placeholder="Masukkan detail alamat lengkap"></textarea>
                     </div>
                     <div class="alert alert-info mt-3" id="rajaongkir-info" style="display: none;">
                         <i class="fas fa-info-circle me-2"></i>
@@ -333,9 +333,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" onclick="saveLocation()" disabled id="saveLocationBtn">
-                    <i class="fas fa-save me-2"></i>Save Location
+                    <i class="fas fa-save me-2"></i>Simpan Lokasi
                 </button>
             </div>
         </div>

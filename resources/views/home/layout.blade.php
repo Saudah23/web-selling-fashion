@@ -436,7 +436,7 @@
     arial-label="Furni navigation bar">
     <div class="container">
       <a class="navbar-brand"
-        href="{{ route('home') }}">{{ $systemSettings['app_name'] ?? 'Marketplace' }}<span>.</span></a>
+        href="{{ route('home') }}">{{ $systemSettings['app_name'] ?? 'FASHION SAAZZ' }}<span>.</span></a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
         aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
@@ -571,7 +571,7 @@
               @if(isset($systemSettings) && $systemSettings['app_name'])
                 {{ $systemSettings['app_name'] }}<span>.</span>
               @else
-                Fashion Marketplace<span>.</span>
+                FASHION SAAZZ<span>.</span>
               @endif
             </a>
           </div>
@@ -680,7 +680,7 @@
               @if(isset($systemSettings) && $systemSettings['app_name'])
                 {{ $systemSettings['app_name'] }}
               @else
-                Fashion Marketplace
+                FASHION SAAZZ
               @endif
               . All Rights Reserved.
             </p>

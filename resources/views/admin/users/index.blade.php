@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'User Management - Admin Dashboard')
+@section('title', 'Manajemen Pengguna - Dashboard Admin')
 
 @section('content')
 <div class="row">
@@ -9,11 +9,11 @@
             <div class="card-header">
                 <div class="card-head-row">
                     <div class="card-title">
-                        <i class="fas fa-users me-2"></i>Users List
+                        <i class="fas fa-users me-2"></i>Daftar Pengguna
                     </div>
                     <div class="card-tools">
                         <button class="btn btn-primary btn-round btn-sm" onclick="openCreateModal()">
-                            <i class="fas fa-plus me-2"></i>Add User
+                            <i class="fas fa-plus me-2"></i>Tambah Pengguna
                         </button>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Add User</h5>
+                <h5 class="modal-title" id="modalTitle">Tambah Pengguna</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="userForm">
@@ -39,24 +39,24 @@
                     <input type="hidden" id="userId">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" name="name" required>
                             <div class="invalid-feedback" id="nameError"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                            <label for="email" class="form-label">Alamat Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email" name="email" required>
                             <div class="invalid-feedback" id="emailError"></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+                            <label for="role" class="form-label">Peran <span class="text-danger">*</span></label>
                             <select class="form-select" id="role" name="role" required>
-                                <option value="">-- Select Role --</option>
-                                <option value="customer">Customer</option>
+                                <option value="">-- Pilih Peran --</option>
+                                <option value="customer">Pelanggan</option>
                                 <option value="admin">Admin</option>
-                                <option value="owner">Owner</option>
+                                <option value="owner">Pemilik</option>
                             </select>
                             <div class="invalid-feedback" id="roleError"></div>
                         </div>
@@ -64,28 +64,28 @@
                             <div class="form-check form-switch mt-4">
                                 <input class="form-check-input" type="checkbox" id="email_verified" name="email_verified">
                                 <label class="form-check-label" for="email_verified">
-                                    Email Verified
+                                    Email Terverifikasi
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="row" id="passwordSection">
                         <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password <span class="text-danger" id="passwordRequired">*</span></label>
+                            <label for="password" class="form-label">Kata Sandi <span class="text-danger" id="passwordRequired">*</span></label>
                             <input type="password" class="form-control" id="password" name="password">
                             <div class="invalid-feedback" id="passwordError"></div>
-                            <small class="form-text text-muted" id="passwordHelp">Minimum 8 characters</small>
+                            <small class="form-text text-muted" id="passwordHelp">Minimal 8 karakter</small>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="password_confirmation" class="form-label">Confirm Password <span class="text-danger" id="confirmRequired">*</span></label>
+                            <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi <span class="text-danger" id="confirmRequired">*</span></label>
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                             <div class="invalid-feedback" id="passwordConfirmationError"></div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Save User</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Simpan Pengguna</button>
                 </div>
             </form>
         </div>
@@ -97,14 +97,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">User Details</h5>
+                <h5 class="modal-title">Detail Pengguna</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="viewUserContent">
                 <!-- Content will be loaded here -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -300,7 +300,7 @@ $(document).ready(function() {
         fields: [
             {
                 name: "name",
-                title: "Full Name",
+                title: "Nama Lengkap",
                 type: "text",
                 width: 180,
                 filtering: true,
@@ -324,7 +324,7 @@ $(document).ready(function() {
             },
             {
                 name: "role",
-                title: "Role",
+                title: "Peran",
                 type: "select",
                 width: 100,
                 filtering: true,
@@ -332,9 +332,9 @@ $(document).ready(function() {
                 headerCss: "text-center",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Owner", Id: "owner" },
+                    { Name: "Pemilik", Id: "owner" },
                     { Name: "Admin", Id: "admin" },
-                    { Name: "Customer", Id: "customer" }
+                    { Name: "Pelanggan", Id: "customer" }
                 ],
                 valueField: "Id",
                 textField: "Name",
@@ -352,22 +352,22 @@ $(document).ready(function() {
                 headerCss: "text-center",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Verified", Id: "Verified" },
-                    { Name: "Unverified", Id: "Unverified" }
+                    { Name: "Terverifikasi", Id: "Verified" },
+                    { Name: "Belum Terverifikasi", Id: "Unverified" }
                 ],
                 valueField: "Id",
                 textField: "Name",
                 itemTemplate: function(value, item) {
                     if (value === 'Verified') {
-                        return '<span class="badge bg-success badge-sm">Verified</span>';
+                        return '<span class="badge bg-success badge-sm">Terverifikasi</span>';
                     } else {
-                        return '<span class="badge bg-warning badge-sm">Unverified</span>';
+                        return '<span class="badge bg-warning badge-sm">Belum Terverifikasi</span>';
                     }
                 }
             },
             {
                 name: "created_at",
-                title: "Date",
+                title: "Tanggal",
                 type: "text",
                 width: 140,
                 filtering: false,
@@ -379,19 +379,19 @@ $(document).ready(function() {
             },
             {
                 type: "control",
-                title: "Actions",
+                title: "Aksi",
                 width: 120,
                 css: "actions-column text-center",
                 headerCss: "text-center",
                 itemTemplate: function(value, item) {
                     return '<div class="btn-group btn-group-sm" role="group">' +
-                           '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewUser(' + item.id + ')" title="View Details">' +
+                           '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewUser(' + item.id + ')" title="Lihat Detail">' +
                            '<i class="fas fa-eye"></i>' +
                            '</button>' +
-                           '<button type="button" class="btn btn-outline-primary btn-sm" onclick="editUser(' + item.id + ')" title="Edit User">' +
+                           '<button type="button" class="btn btn-outline-primary btn-sm" onclick="editUser(' + item.id + ')" title="Edit Pengguna">' +
                            '<i class="fas fa-edit"></i>' +
                            '</button>' +
-                           '<button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteUser(' + item.id + ')" title="Delete User">' +
+                           '<button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteUser(' + item.id + ')" title="Hapus Pengguna">' +
                            '<i class="fas fa-trash"></i>' +
                            '</button>' +
                            '</div>';
@@ -452,13 +452,13 @@ $(document).ready(function() {
 function openCreateModal() {
     isEditMode = false;
     resetForm();
-    $('#modalTitle').text('Add User');
-    $('#submitBtn').text('Save User');
+    $('#modalTitle').text('Tambah Pengguna');
+    $('#submitBtn').text('Simpan Pengguna');
     $('#password').attr('required', true);
     $('#password_confirmation').attr('required', true);
     $('#passwordRequired').show();
     $('#confirmRequired').show();
-    $('#passwordHelp').text('Minimum 8 characters');
+    $('#passwordHelp').text('Minimal 8 karakter');
     $('#userModal').modal('show');
 }
 
@@ -482,7 +482,7 @@ function viewUser(id) {
                 $('#viewUserContent').html(`
                     <div class="row">
                         <div class="col-md-6">
-                            <strong>Name:</strong><br>
+                            <strong>Nama:</strong><br>
                             ${user.name}
                         </div>
                         <div class="col-md-6">
@@ -493,22 +493,22 @@ function viewUser(id) {
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
-                            <strong>Role:</strong><br>
+                            <strong>Peran:</strong><br>
                             <span class="badge bg-${roleColors[user.role] || 'secondary'}">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span>
                         </div>
                         <div class="col-md-6">
-                            <strong>Email Verified:</strong><br>
-                            ${user.email_verified_at ? '<span class="badge bg-success">Verified</span>' : '<span class="badge bg-warning">Unverified</span>'}
+                            <strong>Email Terverifikasi:</strong><br>
+                            ${user.email_verified_at ? '<span class="badge bg-success">Terverifikasi</span>' : '<span class="badge bg-warning">Belum Terverifikasi</span>'}
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
-                            <strong>Created:</strong><br>
+                            <strong>Dibuat:</strong><br>
                             ${user.created_at}
                         </div>
                         <div class="col-md-6">
-                            <strong>Updated:</strong><br>
+                            <strong>Diperbarui:</strong><br>
                             ${user.updated_at}
                         </div>
                     </div>
@@ -517,7 +517,7 @@ function viewUser(id) {
             }
         },
         error: function(xhr) {
-            Notiflix.Notify.failure('Failed to load user details');
+            Notiflix.Notify.failure('Gagal memuat detail pengguna');
         }
     });
 }
@@ -541,19 +541,19 @@ function editUser(id) {
                 $('#role').val(user.role);
                 $('#email_verified').prop('checked', user.email_verified_at !== null);
 
-                $('#modalTitle').text('Edit User');
-                $('#submitBtn').text('Update User');
+                $('#modalTitle').text('Edit Pengguna');
+                $('#submitBtn').text('Perbarui Pengguna');
                 $('#password').removeAttr('required');
                 $('#password_confirmation').removeAttr('required');
                 $('#passwordRequired').hide();
                 $('#confirmRequired').hide();
-                $('#passwordHelp').text('Leave empty to keep current password');
+                $('#passwordHelp').text('Kosongkan untuk mempertahankan kata sandi saat ini');
 
                 $('#userModal').modal('show');
             }
         },
         error: function(xhr) {
-            Notiflix.Notify.failure('Failed to load user data');
+            Notiflix.Notify.failure('Gagal memuat data pengguna');
         }
     });
 }
@@ -561,10 +561,10 @@ function editUser(id) {
 // Delete user
 function deleteUser(id) {
     Notiflix.Confirm.show(
-        'Confirm Delete',
-        'Are you sure you want to delete this user? This action cannot be undone.',
-        'Yes, Delete',
-        'Cancel',
+        'Konfirmasi Hapus',
+        'Apakah Anda yakin ingin menghapus pengguna ini? Tindakan ini tidak dapat dibatalkan.',
+        'Ya, Hapus',
+        'Batal',
         function() {
             $.ajax({
                 url: `{{ route('admin.users.index') }}/${id}`,
@@ -579,7 +579,7 @@ function deleteUser(id) {
                     }
                 },
                 error: function(xhr) {
-                    Notiflix.Notify.failure(xhr.responseJSON?.message || 'Failed to delete user');
+                    Notiflix.Notify.failure(xhr.responseJSON?.message || 'Gagal menghapus pengguna');
                 }
             });
         },

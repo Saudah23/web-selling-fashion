@@ -14,11 +14,11 @@
     </a>
 </li>
 
-{{-- Analytics Feature --}}
+{{-- Ringkasan Penjualan --}}
 <li class="nav-item {{ request()->routeIs('owner.analytics') ? 'active' : '' }}">
     <a href="{{ route('owner.analytics') }}" class="nav-link">
-        <i class="fas fa-chart-line"></i>
-        <p>Analitik</p>
+        <i class="fas fa-chart-bar"></i>
+        <p>Ringkasan Penjualan</p>
     </a>
 </li>
 

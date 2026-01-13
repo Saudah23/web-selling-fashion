@@ -30,7 +30,7 @@ class CategorySeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Pakaian Wanita',
+                'name' => 'Pakaian',
                 'description' => 'Koleksi fashion wanita terlengkap',
                 'is_active' => true,
                 'sort_order' => 2,
@@ -44,24 +44,10 @@ class CategorySeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Aksesori',
-                'description' => 'Aksesori fashion pelengkap gaya',
-                'is_active' => true,
-                'sort_order' => 3,
-                'parent_id' => null,
-                'children' => [
-                    ['name' => 'Tas', 'description' => 'Tas pria dan wanita', 'sort_order' => 1],
-                    ['name' => 'Jam Tangan', 'description' => 'Jam tangan fashion', 'sort_order' => 2],
-                    ['name' => 'Topi', 'description' => 'Topi dan headwear', 'sort_order' => 3],
-                    ['name' => 'Kacamata', 'description' => 'Kacamata fashion dan sunglasses', 'sort_order' => 4],
-                    ['name' => 'Ikat Pinggang', 'description' => 'Belt dan ikat pinggang', 'sort_order' => 5],
-                ]
-            ],
-            [
                 'name' => 'Pakaian Anak',
                 'description' => 'Fashion anak-anak',
                 'is_active' => true,
-                'sort_order' => 4,
+                'sort_order' => 3,
                 'parent_id' => null,
                 'children' => [
                     ['name' => 'Baju Anak Laki-laki', 'description' => 'Pakaian anak laki-laki', 'sort_order' => 1],

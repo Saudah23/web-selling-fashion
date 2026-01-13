@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Product Management - Admin Dashboard')
+@section('title', 'Manajemen Produk - Dashboard Admin')
 
 @section('content')
 <div class="row">
@@ -9,14 +9,14 @@
             <div class="card-header">
                 <div class="card-head-row">
                     <div class="card-title">
-                        <i class="fas fa-box me-2"></i>Products List
+                        <i class="fas fa-box me-2"></i>Daftar Produk
                     </div>
                     <div class="card-tools">
                         <button class="btn btn-success btn-round btn-sm me-2" onclick="showBulkStockModal()">
-                            <i class="fas fa-boxes me-2"></i>Bulk Stock Update
+                            <i class="fas fa-boxes me-2"></i>Update Stok Massal
                         </button>
                         <button class="btn btn-primary btn-round btn-sm" onclick="openCreateModal()">
-                            <i class="fas fa-plus me-2"></i>Add Product
+                            <i class="fas fa-plus me-2"></i>Tambah Produk
                         </button>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Add Product</h5>
+                <h5 class="modal-title" id="modalTitle">Tambah Produk</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="productForm">
@@ -44,7 +44,7 @@
                     <!-- Basic Information Tab -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                            <label for="name" class="form-label">Nama Produk <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" name="name" required>
                             <div class="invalid-feedback" id="nameError"></div>
                         </div>
@@ -54,9 +54,9 @@
                             <div class="invalid-feedback" id="skuError"></div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
+                            <label for="category_id" class="form-label">Kategori <span class="text-danger">*</span></label>
                             <select class="form-select" id="category_id" name="category_id" required>
-                                <option value="">-- Select Category --</option>
+                                <option value="">-- Pilih Kategori --</option>
                             </select>
                             <div class="invalid-feedback" id="categoryIdError"></div>
                         </div>
@@ -64,16 +64,16 @@
 
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="short_description" class="form-label">Short Description</label>
+                            <label for="short_description" class="form-label">Deskripsi Singkat</label>
                             <textarea class="form-control" id="short_description" name="short_description" rows="2" maxlength="500"></textarea>
                             <div class="invalid-feedback" id="shortDescriptionError"></div>
-                            <small class="text-muted">Maximum 500 characters</small>
+                            <small class="text-muted">Maksimal 500 karakter</small>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="description" class="form-label">Description</label>
+                            <label for="description" class="form-label">Deskripsi</label>
                             <textarea class="form-control" id="description" name="description" rows="4"></textarea>
                             <div class="invalid-feedback" id="descriptionError"></div>
                         </div>
@@ -82,7 +82,7 @@
                     <!-- Pricing & Stock -->
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
+                            <label for="price" class="form-label">Harga <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
                                 <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>
@@ -90,7 +90,7 @@
                             <div class="invalid-feedback" id="priceError"></div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="compare_price" class="form-label">Compare Price</label>
+                            <label for="compare_price" class="form-label">Harga Banding</label>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
                                 <input type="number" class="form-control" id="compare_price" name="compare_price" min="0" step="0.01">
@@ -98,12 +98,12 @@
                             <div class="invalid-feedback" id="comparePriceError"></div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="stock_quantity" class="form-label">Stock Quantity <span class="text-danger">*</span></label>
+                            <label for="stock_quantity" class="form-label">Jumlah Stok <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" min="0" required>
                             <div class="invalid-feedback" id="stockQuantityError"></div>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="min_stock_level" class="form-label">Min Stock Level <span class="text-danger">*</span></label>
+                            <label for="min_stock_level" class="form-label">Level Stok Min <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="min_stock_level" name="min_stock_level" min="0" required>
                             <div class="invalid-feedback" id="minStockLevelError"></div>
                         </div>
@@ -112,17 +112,17 @@
                     <!-- Physical Properties -->
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="weight" class="form-label">Weight (kg)</label>
+                            <label for="weight" class="form-label">Berat (kg)</label>
                             <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.01">
                             <div class="invalid-feedback" id="weightError"></div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="dimensions" class="form-label">Dimensions</label>
-                            <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="e.g., S, M, L, XL">
+                            <label for="dimensions" class="form-label">Dimensi</label>
+                            <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="contoh: S, M, L, XL">
                             <div class="invalid-feedback" id="dimensionsError"></div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="sort_order" class="form-label">Sort Order</label>
+                            <label for="sort_order" class="form-label">Urutan</label>
                             <input type="number" class="form-control" id="sort_order" name="sort_order" value="0" min="0">
                             <div class="invalid-feedback" id="sortOrderError"></div>
                         </div>
@@ -134,7 +134,7 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
                                 <label class="form-check-label" for="is_active">
-                                    Active
+                                    Aktif
                                 </label>
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured">
                                 <label class="form-check-label" for="is_featured">
-                                    Featured
+                                    Unggulan
                                 </label>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                             <hr class="my-4">
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
-                                <strong>Product Images:</strong> Save the product first to upload images. You can add multiple images and set one as the primary image.
+                                <strong>Gambar Produk:</strong> Simpan produk terlebih dahulu untuk mengunggah gambar. Anda dapat menambahkan beberapa gambar dan menetapkan satu sebagai gambar utama.
                             </div>
                         </div>
                     </div>
@@ -164,7 +164,7 @@
                         <div class="col-12">
                             <hr class="my-4">
                             <h6 class="mb-3">
-                                <i class="fas fa-images me-2"></i>Product Images
+                                <i class="fas fa-images me-2"></i>Gambar Produk
                             </h6>
 
                             <!-- Image Upload Area -->
@@ -173,10 +173,10 @@
                                     <div class="image-dropzone" id="imageDropzone">
                                         <div class="text-center py-4">
                                             <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                                            <h5>Drag & Drop Images Here</h5>
-                                            <p class="text-muted">or <button type="button" class="btn btn-link p-0" onclick="document.getElementById('imageInput').click()">browse files</button></p>
+                                            <h5>Seret & Lepas Gambar di Sini</h5>
+                                            <p class="text-muted">atau <button type="button" class="btn btn-link p-0" onclick="document.getElementById('imageInput').click()">pilih file</button></p>
                                             <small class="text-muted">
-                                                Support: JPEG, PNG, WebP, GIF | Max: 5MB per file | Max: 5 files
+                                                Dukungan: JPEG, PNG, WebP, GIF | Maks: 5MB per file | Maks: 5 file
                                             </small>
                                         </div>
                                         <input type="file" id="imageInput" name="images[]" multiple accept="image/*" style="display: none;">
@@ -186,23 +186,23 @@
 
                             <!-- Selected Images Preview -->
                             <div id="selectedImagesPreview" style="display: none;">
-                                <h6 class="mb-3">Selected Images</h6>
+                                <h6 class="mb-3">Gambar Terpilih</h6>
                                 <div id="imagePreviewContainer" class="row g-2">
                                     <!-- Dynamic content -->
                                 </div>
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-primary btn-sm" onclick="uploadImages()">
-                                        <i class="fas fa-upload me-2"></i>Upload Images
+                                        <i class="fas fa-upload me-2"></i>Unggah Gambar
                                     </button>
                                     <button type="button" class="btn btn-secondary btn-sm" onclick="clearSelectedImages()">
-                                        <i class="fas fa-times me-2"></i>Clear All
+                                        <i class="fas fa-times me-2"></i>Hapus Semua
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Existing Images -->
                             <div id="existingImagesContainer">
-                                <h6 class="mb-3">Current Images</h6>
+                                <h6 class="mb-3">Gambar Saat Ini</h6>
                                 <div id="existingImagesGrid" class="row g-2">
                                     <!-- Dynamic content -->
                                 </div>
@@ -211,8 +211,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Save Product</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Simpan Produk</button>
                 </div>
             </form>
         </div>
@@ -224,14 +224,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Product Details</h5>
+                <h5 class="modal-title">Detail Produk</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="productDetailContent">
                 <!-- Dynamic content -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -242,26 +242,26 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Bulk Stock Update</h5>
+                <h5 class="modal-title">Update Stok Massal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    Select products and enter new stock quantities. Only active products are shown.
+                    Pilih produk dan masukkan jumlah stok baru. Hanya produk aktif yang ditampilkan.
                 </div>
                 <div id="bulkStockContent">
                     <div class="text-center py-4">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        <p class="mt-2">Loading products...</p>
+                        <p class="mt-2">Memuat produk...</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="updateBulkStockBtn">Update Stock</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="updateBulkStockBtn">Perbarui Stok</button>
             </div>
         </div>
     </div>
@@ -491,7 +491,7 @@ $(document).ready(function() {
         fields: [
             {
                 name: "name",
-                title: "Product Name",
+                title: "Nama Produk",
                 type: "text",
                 width: 150,
                 minWidth: 120,
@@ -512,7 +512,7 @@ $(document).ready(function() {
             },
             {
                 name: "category_name",
-                title: "Category",
+                title: "Kategori",
                 type: "text",
                 width: 100,
                 minWidth: 80,
@@ -521,7 +521,7 @@ $(document).ready(function() {
             },
             {
                 name: "price",
-                title: "Price",
+                title: "Harga",
                 type: "text",
                 width: 90,
                 minWidth: 80,
@@ -534,7 +534,7 @@ $(document).ready(function() {
             },
             {
                 name: "stock_quantity",
-                title: "Stock",
+                title: "Stok",
                 type: "number",
                 width: 70,
                 minWidth: 60,
@@ -549,7 +549,7 @@ $(document).ready(function() {
             },
             {
                 name: "is_featured",
-                title: "Featured",
+                title: "Unggulan",
                 type: "select",
                 width: 80,
                 minWidth: 70,
@@ -558,15 +558,15 @@ $(document).ready(function() {
                 headerCss: "text-center",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Yes", Id: "true" },
-                    { Name: "No", Id: "false" }
+                    { Name: "Ya", Id: "true" },
+                    { Name: "Tidak", Id: "false" }
                 ],
                 valueField: "Id",
                 textField: "Name",
                 itemTemplate: function(value) {
                     return value ?
-                        '<i class="fas fa-star text-warning" title="Featured"></i>' :
-                        '<i class="far fa-star text-muted" title="Not Featured"></i>';
+                        '<i class="fas fa-star text-warning" title="Unggulan"></i>' :
+                        '<i class="far fa-star text-muted" title="Tidak Unggulan"></i>';
                 }
             },
             {
@@ -579,33 +579,33 @@ $(document).ready(function() {
                 css: "status-column",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Active", Id: "true" },
-                    { Name: "Inactive", Id: "false" }
+                    { Name: "Aktif", Id: "true" },
+                    { Name: "Tidak Aktif", Id: "false" }
                 ],
                 valueField: "Id",
                 textField: "Name",
                 itemTemplate: function(value) {
                     return value ?
-                        '<span class="badge bg-success badge-sm">Active</span>' :
-                        '<span class="badge bg-danger badge-sm">Inactive</span>';
+                        '<span class="badge bg-success badge-sm">Aktif</span>' :
+                        '<span class="badge bg-danger badge-sm">Tidak Aktif</span>';
                 }
             },
             {
                 type: "control",
-                title: "Actions",
+                title: "Aksi",
                 width: 120,
                 minWidth: 100,
                 css: "actions-column text-center",
                 headerCss: "text-center",
                 itemTemplate: function(value, item) {
                     return '<div class="btn-group btn-group-sm" role="group">' +
-                           '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewProduct(' + item.id + ')" title="View">' +
+                           '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewProduct(' + item.id + ')" title="Lihat">' +
                            '<i class="fas fa-eye"></i>' +
                            '</button>' +
                            '<button type="button" class="btn btn-outline-primary btn-sm" onclick="editProduct(' + item.id + ')" title="Edit">' +
                            '<i class="fas fa-edit"></i>' +
                            '</button>' +
-                           '<button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteProduct(' + item.id + ')" title="Delete">' +
+                           '<button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteProduct(' + item.id + ')" title="Hapus">' +
                            '<i class="fas fa-trash"></i>' +
                            '</button>' +
                            '</div>';

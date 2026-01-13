@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Banner Management - Admin Dashboard')
+@section('title', 'Manajemen Banner - Dashboard Admin')
 
 @section('content')
 <div class="row">
@@ -9,11 +9,11 @@
             <div class="card-header">
                 <div class="card-head-row">
                     <div class="card-title">
-                        <i class="fas fa-images me-2"></i>Homepage Banners
+                        <i class="fas fa-images me-2"></i>Banner Beranda
                     </div>
                     <div class="card-tools">
                         <button class="btn btn-primary btn-round btn-sm" onclick="openCreateModal()">
-                            <i class="fas fa-plus me-2"></i>Add Banner
+                            <i class="fas fa-plus me-2"></i>Tambah Banner
                         </button>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Add Banner</h5>
+                <h5 class="modal-title" id="modalTitle">Tambah Banner</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="bannerForm" enctype="multipart/form-data">
@@ -41,12 +41,12 @@
                     <!-- Basic Information -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                            <label for="title" class="form-label">Judul <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="title" name="title" required>
                             <div class="invalid-feedback" id="titleError"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="subtitle" class="form-label">Subtitle</label>
+                            <label for="subtitle" class="form-label">Subjudul</label>
                             <input type="text" class="form-control" id="subtitle" name="subtitle">
                             <div class="invalid-feedback" id="subtitleError"></div>
                         </div>
@@ -54,7 +54,7 @@
 
                     <div class="row">
                         <div class="col-12 mb-3">
-                            <label for="description" class="form-label">Description</label>
+                            <label for="description" class="form-label">Deskripsi</label>
                             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                             <div class="invalid-feedback" id="descriptionError"></div>
                         </div>
@@ -63,10 +63,10 @@
                     <!-- Image Upload -->
                     <div class="row">
                         <div class="col-12 mb-3">
-                            <label for="image" class="form-label">Banner Image <span class="text-danger">*</span></label>
+                            <label for="image" class="form-label">Gambar Banner <span class="text-danger">*</span></label>
                             <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
                             <div class="invalid-feedback" id="imageError"></div>
-                            <small class="text-muted">Recommended size: 1920x600px. Max: 5MB. Formats: JPEG, PNG, GIF, WebP</small>
+                            <small class="text-muted">Ukuran disarankan: 1920x600px. Maks: 5MB. Format: JPEG, PNG, GIF, WebP</small>
 
                             <!-- Image Preview -->
                             <div id="imagePreview" class="mt-3" style="display: none;">
@@ -78,16 +78,16 @@
                     <!-- Button Settings -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="button_text" class="form-label">Button Text</label>
+                            <label for="button_text" class="form-label">Teks Tombol</label>
                             <input type="text" class="form-control" id="button_text" name="button_text">
                             <div class="invalid-feedback" id="buttonTextError"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="button_style" class="form-label">Button Style</label>
+                            <label for="button_style" class="form-label">Gaya Tombol</label>
                             <select class="form-select" id="button_style" name="button_style">
-                                <option value="primary">Primary (Blue)</option>
-                                <option value="secondary">Secondary (Orange)</option>
-                                <option value="outline">Outline (White)</option>
+                                <option value="primary">Utama (Biru)</option>
+                                <option value="secondary">Sekunder (Oranye)</option>
+                                <option value="outline">Outline (Putih)</option>
                             </select>
                             <div class="invalid-feedback" id="buttonStyleError"></div>
                         </div>
@@ -96,21 +96,21 @@
                     <!-- Style Settings -->
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="text_position" class="form-label">Text Position <span class="text-danger">*</span></label>
+                            <label for="text_position" class="form-label">Posisi Teks <span class="text-danger">*</span></label>
                             <select class="form-select" id="text_position" name="text_position" required>
-                                <option value="left">Left</option>
-                                <option value="center">Center</option>
-                                <option value="right">Right</option>
+                                <option value="left">Kiri</option>
+                                <option value="center">Tengah</option>
+                                <option value="right">Kanan</option>
                             </select>
                             <div class="invalid-feedback" id="textPositionError"></div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="text_color" class="form-label">Text Color</label>
+                            <label for="text_color" class="form-label">Warna Teks</label>
                             <input type="color" class="form-control form-control-color" id="text_color" name="text_color" value="#ffffff">
                             <div class="invalid-feedback" id="textColorError"></div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="background_color" class="form-label">Background Color</label>
+                            <label for="background_color" class="form-label">Warna Latar</label>
                             <input type="color" class="form-control form-control-color" id="background_color" name="background_color">
                             <div class="invalid-feedback" id="backgroundColorError"></div>
                         </div>
@@ -119,7 +119,7 @@
                     <!-- Status & Order -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="sort_order" class="form-label">Sort Order</label>
+                            <label for="sort_order" class="form-label">Urutan</label>
                             <input type="number" class="form-control" id="sort_order" name="sort_order" value="0" min="0">
                             <div class="invalid-feedback" id="sortOrderError"></div>
                         </div>
@@ -127,15 +127,15 @@
                             <div class="form-check form-switch mt-4">
                                 <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
                                 <label class="form-check-label" for="is_active">
-                                    Active
+                                    Aktif
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Save Banner</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Simpan Banner</button>
                 </div>
             </form>
         </div>
@@ -147,14 +147,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Banner Details</h5>
+                <h5 class="modal-title">Detail Banner</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="viewBannerContent">
                 <!-- Content will be loaded here -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -259,7 +259,7 @@ $(document).ready(function() {
         fields: [
             {
                 name: "image_preview",
-                title: "Image",
+                title: "Gambar",
                 type: "text",
                 width: 80,
                 minWidth: 60,
@@ -273,7 +273,7 @@ $(document).ready(function() {
             },
             {
                 name: "title",
-                title: "Title",
+                title: "Judul",
                 type: "text",
                 width: 150,
                 minWidth: 120,
@@ -282,7 +282,7 @@ $(document).ready(function() {
             },
             {
                 name: "subtitle",
-                title: "Subtitle",
+                title: "Subjudul",
                 type: "text",
                 width: 120,
                 minWidth: 100,
@@ -294,7 +294,7 @@ $(document).ready(function() {
             },
             {
                 name: "button_text",
-                title: "Button",
+                title: "Tombol",
                 type: "text",
                 width: 100,
                 minWidth: 80,
@@ -306,7 +306,7 @@ $(document).ready(function() {
             },
             {
                 name: "text_position",
-                title: "Position",
+                title: "Posisi",
                 type: "select",
                 width: 80,
                 minWidth: 70,
@@ -315,17 +315,17 @@ $(document).ready(function() {
                 headerCss: "text-center",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Left", Id: "left" },
-                    { Name: "Center", Id: "center" },
-                    { Name: "Right", Id: "right" }
+                    { Name: "Kiri", Id: "left" },
+                    { Name: "Tengah", Id: "center" },
+                    { Name: "Kanan", Id: "right" }
                 ],
                 valueField: "Id",
                 textField: "Name",
                 itemTemplate: function(value) {
                     const badges = {
-                        'left': '<span class="badge bg-info">Left</span>',
-                        'center': '<span class="badge bg-warning">Center</span>',
-                        'right': '<span class="badge bg-success">Right</span>'
+                        'left': '<span class="badge bg-info">Kiri</span>',
+                        'center': '<span class="badge bg-warning">Tengah</span>',
+                        'right': '<span class="badge bg-success">Kanan</span>'
                     };
                     return badges[value] || '-';
                 }
@@ -341,20 +341,20 @@ $(document).ready(function() {
                 headerCss: "text-center",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Active", Id: "true" },
-                    { Name: "Inactive", Id: "false" }
+                    { Name: "Aktif", Id: "true" },
+                    { Name: "Tidak Aktif", Id: "false" }
                 ],
                 valueField: "Id",
                 textField: "Name",
                 itemTemplate: function(value) {
                     return value ?
-                        '<span class="badge bg-success badge-sm">Active</span>' :
-                        '<span class="badge bg-danger badge-sm">Inactive</span>';
+                        '<span class="badge bg-success badge-sm">Aktif</span>' :
+                        '<span class="badge bg-danger badge-sm">Tidak Aktif</span>';
                 }
             },
             {
                 name: "sort_order",
-                title: "Order",
+                title: "Urutan",
                 type: "number",
                 width: 70,
                 minWidth: 60,
@@ -364,20 +364,20 @@ $(document).ready(function() {
             },
             {
                 type: "control",
-                title: "Actions",
+                title: "Aksi",
                 width: 120,
                 minWidth: 100,
                 css: "actions-column text-center",
                 headerCss: "text-center",
                 itemTemplate: function(value, item) {
                     return '<div class="btn-group btn-group-sm" role="group">' +
-                           '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewBanner(' + item.id + ')" title="View">' +
+                           '<button type="button" class="btn btn-outline-info btn-sm" onclick="viewBanner(' + item.id + ')" title="Lihat">' +
                            '<i class="fas fa-eye"></i>' +
                            '</button>' +
                            '<button type="button" class="btn btn-outline-primary btn-sm" onclick="editBanner(' + item.id + ')" title="Edit">' +
                            '<i class="fas fa-edit"></i>' +
                            '</button>' +
-                           '<button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteBanner(' + item.id + ')" title="Delete">' +
+                           '<button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteBanner(' + item.id + ')" title="Hapus">' +
                            '<i class="fas fa-trash"></i>' +
                            '</button>' +
                            '</div>';
@@ -460,8 +460,8 @@ $(document).ready(function() {
 function openCreateModal() {
     isEditMode = false;
     resetForm();
-    $('#modalTitle').text('Add Banner');
-    $('#submitBtn').text('Save Banner');
+    $('#modalTitle').text('Tambah Banner');
+    $('#submitBtn').text('Simpan Banner');
     // Image is required for create
     $('#image').prop('required', true);
     $('#bannerModal').modal('show');
@@ -487,22 +487,22 @@ function viewBanner(id) {
                         </div>
                         <div class="col-md-6">
                             <table class="table table-sm">
-                                <tr><td><strong>Title:</strong></td><td>${banner.title}</td></tr>
-                                <tr><td><strong>Subtitle:</strong></td><td>${banner.subtitle || '-'}</td></tr>
-                                <tr><td><strong>Button:</strong></td><td>${banner.button_text || '-'}</td></tr>
-                                <tr><td><strong>Position:</strong></td><td>${banner.text_position}</td></tr>
-                                <tr><td><strong>Status:</strong></td><td>${banner.is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>'}</td></tr>
-                                <tr><td><strong>Order:</strong></td><td>${banner.sort_order}</td></tr>
+                                <tr><td><strong>Judul:</strong></td><td>${banner.title}</td></tr>
+                                <tr><td><strong>Subjudul:</strong></td><td>${banner.subtitle || '-'}</td></tr>
+                                <tr><td><strong>Tombol:</strong></td><td>${banner.button_text || '-'}</td></tr>
+                                <tr><td><strong>Posisi:</strong></td><td>${banner.text_position}</td></tr>
+                                <tr><td><strong>Status:</strong></td><td>${banner.is_active ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Tidak Aktif</span>'}</td></tr>
+                                <tr><td><strong>Urutan:</strong></td><td>${banner.sort_order}</td></tr>
                             </table>
                         </div>
                     </div>
-                    ${banner.description ? `<div class="row mt-3"><div class="col-12"><strong>Description:</strong><br><p class="mt-2">${banner.description}</p></div></div>` : ''}
+                    ${banner.description ? `<div class="row mt-3"><div class="col-12"><strong>Deskripsi:</strong><br><p class="mt-2">${banner.description}</p></div></div>` : ''}
                 `);
                 $('#viewBannerModal').modal('show');
             }
         },
         error: function(xhr) {
-            Notiflix.Notify.failure('Failed to load banner details');
+            Notiflix.Notify.failure('Gagal memuat detail banner');
         }
     });
 }
@@ -542,12 +542,12 @@ function editBanner(id) {
                 }
 
                 $('#modalTitle').text('Edit Banner');
-                $('#submitBtn').text('Update Banner');
+                $('#submitBtn').text('Perbarui Banner');
                 $('#bannerModal').modal('show');
             }
         },
         error: function(xhr) {
-            Notiflix.Notify.failure('Failed to load banner data');
+            Notiflix.Notify.failure('Gagal memuat data banner');
         }
     });
 }
@@ -555,10 +555,10 @@ function editBanner(id) {
 // Delete banner
 function deleteBanner(id) {
     Notiflix.Confirm.show(
-        'Confirm Delete',
-        'Are you sure you want to delete this banner? This action cannot be undone.',
-        'Yes, Delete',
-        'Cancel',
+        'Konfirmasi Hapus',
+        'Apakah Anda yakin ingin menghapus banner ini? Tindakan ini tidak dapat dibatalkan.',
+        'Ya, Hapus',
+        'Batal',
         function() {
             $.ajax({
                 url: `/admin/banners/${id}`,
@@ -573,7 +573,7 @@ function deleteBanner(id) {
                     }
                 },
                 error: function(xhr) {
-                    Notiflix.Notify.failure(xhr.responseJSON?.message || 'Failed to delete banner');
+                    Notiflix.Notify.failure(xhr.responseJSON?.message || 'Gagal menghapus banner');
                 }
             });
         }

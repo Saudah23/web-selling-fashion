@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Category Management - Admin Dashboard')
+@section('title', 'Manajemen Kategori - Dashboard Admin')
 
 @section('content')
 <div class="row">
@@ -9,11 +9,11 @@
             <div class="card-header">
                 <div class="card-head-row">
                     <div class="card-title">
-                        <i class="fas fa-tags me-2"></i>Categories List
+                        <i class="fas fa-tags me-2"></i>Daftar Kategori
                     </div>
                     <div class="card-tools">
                         <button class="btn btn-primary btn-round btn-sm" onclick="openCreateModal()">
-                            <i class="fas fa-plus me-2"></i>Add Category
+                            <i class="fas fa-plus me-2"></i>Tambah Kategori
                         </button>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Add Category</h5>
+                <h5 class="modal-title" id="modalTitle">Tambah Kategori</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="categoryForm">
@@ -39,26 +39,26 @@
                     <input type="hidden" id="categoryId">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                            <label for="name" class="form-label">Nama <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" name="name" required>
                             <div class="invalid-feedback" id="nameError"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="parent_id" class="form-label">Parent Category</label>
+                            <label for="parent_id" class="form-label">Kategori Induk</label>
                             <select class="form-select" id="parent_id" name="parent_id">
-                                <option value="">-- No Parent (Main Category) --</option>
+                                <option value="">-- Tanpa Induk (Kategori Utama) --</option>
                             </select>
                             <div class="invalid-feedback" id="parentError"></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label for="description" class="form-label">Description</label>
+                            <label for="description" class="form-label">Deskripsi</label>
                             <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                             <div class="invalid-feedback" id="descriptionError"></div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="sort_order" class="form-label">Sort Order</label>
+                            <label for="sort_order" class="form-label">Urutan</label>
                             <input type="number" class="form-control" id="sort_order" name="sort_order" value="0" min="0">
                             <div class="invalid-feedback" id="sortOrderError"></div>
                         </div>
@@ -68,15 +68,15 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
                                 <label class="form-check-label" for="is_active">
-                                    Active
+                                    Aktif
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Save Category</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Simpan Kategori</button>
                 </div>
             </form>
         </div>
@@ -146,7 +146,7 @@ $(document).ready(function() {
         fields: [
             {
                 name: "name",
-                title: "Name",
+                title: "Nama",
                 type: "text",
                 width: 120,
                 minWidth: 100,
@@ -167,7 +167,7 @@ $(document).ready(function() {
             },
             {
                 name: "parent_name",
-                title: "Parent",
+                title: "Induk",
                 type: "text",
                 width: 100,
                 minWidth: 80,
@@ -179,7 +179,7 @@ $(document).ready(function() {
             },
             {
                 name: "description",
-                title: "Description",
+                title: "Deskripsi",
                 type: "text",
                 width: 180,
                 minWidth: 120,
@@ -202,20 +202,20 @@ $(document).ready(function() {
                 css: "status-column",
                 items: [
                     { Name: "", Id: "" },
-                    { Name: "Active", Id: "true" },
-                    { Name: "Inactive", Id: "false" }
+                    { Name: "Aktif", Id: "true" },
+                    { Name: "Tidak Aktif", Id: "false" }
                 ],
                 valueField: "Id",
                 textField: "Name",
                 itemTemplate: function(value) {
                     return value ?
-                        '<span class="badge bg-success badge-sm">Active</span>' :
-                        '<span class="badge bg-danger badge-sm">Inactive</span>';
+                        '<span class="badge bg-success badge-sm">Aktif</span>' :
+                        '<span class="badge bg-danger badge-sm">Tidak Aktif</span>';
                 }
             },
             {
                 name: "sort_order",
-                title: "Order",
+                title: "Urutan",
                 type: "number",
                 width: 60,
                 minWidth: 50,
@@ -225,7 +225,7 @@ $(document).ready(function() {
             },
             {
                 type: "control",
-                title: "Actions",
+                title: "Aksi",
                 width: 100,
                 minWidth: 90,
                 css: "actions-column text-center",
@@ -259,7 +259,7 @@ function loadParentCategories() {
             if (response.success) {
                 const select = $('#parent_id');
                 select.empty();
-                select.append('<option value="">-- No Parent (Main Category) --</option>');
+                select.append('<option value="">-- Tanpa Induk (Kategori Utama) --</option>');
 
                 response.data.forEach(function(category) {
                     select.append(`<option value="${category.id}">${category.name}</option>`);
@@ -271,8 +271,8 @@ function loadParentCategories() {
 
 function openCreateModal() {
     isEditMode = false;
-    $('#modalTitle').text('Add Category');
-    $('#submitBtn').text('Save Category');
+    $('#modalTitle').text('Tambah Kategori');
+    $('#submitBtn').text('Simpan Kategori');
     $('#categoryForm')[0].reset();
     $('#categoryId').val('');
     $('#is_active').prop('checked', true);
@@ -282,8 +282,8 @@ function openCreateModal() {
 
 function editCategory(id) {
     isEditMode = true;
-    $('#modalTitle').text('Edit Category');
-    $('#submitBtn').text('Update Category');
+    $('#modalTitle').text('Edit Kategori');
+    $('#submitBtn').text('Perbarui Kategori');
 
     $.ajax({
         url: `/admin/categories/${id}`,
@@ -303,17 +303,17 @@ function editCategory(id) {
             }
         },
         error: function() {
-            Notiflix.Notify.failure('Failed to load category data');
+            Notiflix.Notify.failure('Gagal memuat data kategori');
         }
     });
 }
 
 function deleteCategory(id) {
     Notiflix.Confirm.show(
-        'Confirm Delete',
-        'Are you sure you want to delete this category?',
-        'Yes, Delete',
-        'Cancel',
+        'Konfirmasi Hapus',
+        'Apakah Anda yakin ingin menghapus kategori ini?',
+        'Ya, Hapus',
+        'Batal',
         function() {
             $.ajax({
                 url: `/admin/categories/${id}`,
@@ -332,7 +332,7 @@ function deleteCategory(id) {
                 },
                 error: function(xhr) {
                     const response = xhr.responseJSON;
-                    Notiflix.Notify.failure(response?.message || 'Failed to delete category');
+                    Notiflix.Notify.failure(response?.message || 'Gagal menghapus kategori');
                 }
             });
         }
@@ -353,7 +353,7 @@ function submitForm() {
 
     // Client-side validation
     if (!formData.name) {
-        showValidationErrors({name: ['Name field is required']});
+        showValidationErrors({name: ['Kolom nama wajib diisi']});
         return;
     }
 
@@ -361,7 +361,7 @@ function submitForm() {
     const method = isEditMode ? 'PUT' : 'POST';
 
     // Show loading
-    Notiflix.Loading.circle('Saving category...');
+    Notiflix.Loading.circle('Menyimpan kategori...');
 
     $.ajax({
         url: url,
@@ -385,7 +385,7 @@ function submitForm() {
                 $('#categoryForm')[0].reset();
                 $('#is_active').prop('checked', true);
             } else {
-                Notiflix.Notify.failure(response.message || 'Operation failed');
+                Notiflix.Notify.failure(response.message || 'Operasi gagal');
             }
         },
         error: function(xhr, status, error) {
@@ -398,11 +398,11 @@ function submitForm() {
                 if (response && response.errors) {
                     showValidationErrors(response.errors);
                 } else {
-                    Notiflix.Notify.failure('Validation failed. Please check your input.');
+                    Notiflix.Notify.failure('Validasi gagal. Silakan periksa input Anda.');
                 }
             } else if (xhr.status === 419) {
                 // CSRF token mismatch
-                Notiflix.Notify.failure('Session expired. Please refresh the page.');
+                Notiflix.Notify.failure('Sesi kedaluwarsa. Silakan muat ulang halaman.');
             } else {
                 // Other errors
                 const response = xhr.responseJSON;

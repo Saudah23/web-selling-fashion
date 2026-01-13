@@ -42,6 +42,8 @@ class ViewServiceProvider extends ServiceProvider
                 'app_description' => SystemSetting::get('app_description', 'Premium fashion marketplace for modern clothing'),
                 'contact_email' => SystemSetting::get('contact_email'),
                 'contact_phone' => SystemSetting::get('contact_phone'),
+                'contact_address' => SystemSetting::get('contact_address'),
+                'contact_instagram' => SystemSetting::get('contact_instagram'),
                 'business_hours' => SystemSetting::get('business_hours'),
             ];
 
