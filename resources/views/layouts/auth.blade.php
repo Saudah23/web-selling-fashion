@@ -246,8 +246,8 @@
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <div class="brand-logo">
-                    <i class="fas fa-tshirt"></i>
+                <div class="brand-logo" style="width: auto; height: auto; background: transparent; border-radius: 0;">
+                    <img src="{{ asset('LogoFahionSaazz.jpg') }}" alt="Fashion Saazz" style="height: 60px; border-radius: 10px;">
                 </div>
                 <h1 class="brand-name">FASHION <span>SAAZZ</span></h1>
                 <p class="auth-subtitle">@yield('subtitle', 'Selamat Datang')</p>

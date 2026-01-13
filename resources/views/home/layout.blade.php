@@ -435,8 +435,9 @@
   <nav class="custom-navbar navbar navbar navbar-expand-md navbar-light bg-white border-bottom"
     arial-label="Furni navigation bar">
     <div class="container">
-      <a class="navbar-brand"
-        href="{{ route('home') }}">{{ $systemSettings['app_name'] ?? 'FASHION SAAZZ' }}<span>.</span></a>
+      <a class="navbar-brand" href="{{ route('home') }}">
+        <img src="{{ asset('LogoFahionSaazz.jpg') }}" alt="Fashion Saazz" style="height: 40px; border-radius: 5px;">
+      </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
         aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
@@ -568,11 +569,7 @@
         <div class="col-lg-4">
           <div class="mb-4 footer-logo-wrap">
             <a href="{{ route('home') }}" class="footer-logo">
-              @if(isset($systemSettings) && $systemSettings['app_name'])
-                {{ $systemSettings['app_name'] }}<span>.</span>
-              @else
-                FASHION SAAZZ<span>.</span>
-              @endif
+              <img src="{{ asset('LogoFahionSaazz.jpg') }}" alt="Fashion Saazz" style="height: 50px; border-radius: 8px;">
             </a>
           </div>
           <p class="mb-4">

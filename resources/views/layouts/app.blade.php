@@ -261,7 +261,7 @@
             <div class="sidebar-logo">
                 <div class="logo-header" data-background-color="dark">
                     <a href="{{ url('/') }}" class="logo">
-                        <span style="font-size: 1.25rem; font-weight: 700; color: #fff;">FASHION SAAZZ</span>
+                        <img src="{{ asset('LogoFahionSaazz.jpg') }}" alt="Fashion Saazz" style="height: 35px; border-radius: 5px;">
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
