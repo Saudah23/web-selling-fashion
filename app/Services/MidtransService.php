@@ -312,7 +312,7 @@ class MidtransService
 
         return is_array($methods) && !empty($methods)
             ? $methods
-            : ['qris', 'gopay', 'shopeepay', 'credit_card', 'bca_va', 'bni_va', 'bri_va', 'echannel'];
+            : ['qris', 'gopay', 'bca_va', 'bni_va', 'bri_va', 'echannel'];
     }
 
     /**
