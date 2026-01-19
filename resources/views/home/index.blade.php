@@ -5,31 +5,26 @@
 @section('content')
 
   @php
-    $customBanners = [
+    // Fallback banners jika tidak ada banner aktif di database
+    $defaultBanners = [
       [
         'title' => 'Selamat Datang di',
         'subtitle' => 'FASHION SAAZZ',
         'description' => 'Temukan koleksi fashion terbaik dengan kualitas premium. Tampil stylish dan percaya diri setiap hari bersama Fashion Saaz.',
-        'image' => 'furni-1.0.0/images/hero-fashion.png',
+        'image_url' => asset('furni-1.0.0/images/hero-fashion.png'),
         'button_text' => 'Belanja Sekarang',
-        'url' => route('shop')
       ],
-      [
-        'title' => 'Koleksi Terbaru',
-        'subtitle' => 'Musim Ini',
-        'description' => 'Dapatkan penawaran eksklusif untuk produk terbaru kami. Desain modern yang cocok untuk gaya hidup Anda.',
-        'image' => 'furni-1.0.0/images/hero-fashion.png',
-        'button_text' => 'Lihat Katalog',
-        'url' => route('shop')
-      ]
     ];
+    
+    // Gunakan banners dari database jika ada, jika tidak gunakan default
+    $activeBanners = $banners->count() > 0 ? $banners : collect($defaultBanners);
   @endphp
 
   <!-- Start Banner Slider Section -->
   <div class="hero-slider">
     <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-indicators">
-        @foreach($customBanners as $key => $banner)
+        @foreach($activeBanners as $key => $banner)
           <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="{{ $key }}"
             class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
             aria-label="Slide {{ $key + 1 }}"></button>
@@ -37,7 +32,7 @@
       </div>
 
       <div class="carousel-inner">
-        @foreach($customBanners as $key => $banner)
+        @foreach($activeBanners as $key => $banner)
           <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
             <div class="hero" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
               <div class="container">
@@ -45,21 +40,21 @@
                   <div class="col-lg-6">
                     <div class="intro-excerpt">
                       <h1 style="color: #2d3748;">
-                        {{ $banner['title'] }}
-                        <span class="d-block" style="color: #ff6b6b;">{{ $banner['subtitle'] }}</span>
+                        {{ is_array($banner) ? $banner['title'] : $banner->title }}
+                        <span class="d-block" style="color: #ff6b6b;">{{ is_array($banner) ? $banner['subtitle'] : $banner->subtitle }}</span>
                       </h1>
-                      <p class="mb-4" style="color: #718096;">{{ $banner['description'] }}</p>
+                      <p class="mb-4" style="color: #718096;">{{ is_array($banner) ? $banner['description'] : $banner->description }}</p>
                       <p>
-                        <a href="{{ $banner['url'] }}" class="btn btn-banner-primary me-2">
-                          {{ $banner['button_text'] }}
+                        <a href="{{ route('shop') }}" class="btn btn-banner-primary me-2">
+                          {{ is_array($banner) ? $banner['button_text'] : ($banner->button_text ?: 'Belanja Sekarang') }}
                         </a>
                       </p>
                     </div>
                   </div>
                   <div class="col-lg-6">
                     <div class="hero-img-wrap">
-                      <img src="{{ asset($banner['image']) }}" class="img-fluid banner-image"
-                        alt="{{ $banner['title'] }}">
+                      <img src="{{ is_array($banner) ? $banner['image_url'] : $banner->image_url }}" class="img-fluid banner-image"
+                        alt="{{ is_array($banner) ? $banner['title'] : $banner->title }}">
                     </div>
                   </div>
                 </div>
@@ -380,7 +375,7 @@
 
         <div class="col-lg-5">
           <div class="img-wrap">
-            <img src="{{ asset('furni-1.0.0/images/why-choose-us-fashion.png') }}" alt="Why choose us" class="img-fluid">
+            <img src="{{ asset('gambar-toko.png') }}" alt="Toko Kami" class="img-fluid">
           </div>
         </div>
 
@@ -414,7 +409,7 @@
             <div class="category-icon">
               <i class="fas fa-female fa-4x text-pink"></i>
             </div>
-            <h4>Pakaian</h4>
+            <h4>Pakaian Wanita</h4>
             <p>Koleksi fashion wanita stylish</p>
             <a href="{{ route('shop', ['category' => 2]) }}" class="btn btn-outline-pink">Lihat</a>
           </div>
@@ -492,9 +487,9 @@
           <p class="text-muted">Lihat produk kami langsung di lokasi toko</p>
         </div>
       </div>
-      <div class="row">
-        <!-- Contact Info -->
-        <div class="col-lg-6 mb-4">
+      <div class="row justify-content-center">
+        <!-- Contact Info - Column 1 -->
+        <div class="col-lg-5 col-md-6 mb-4">
           <div class="contact-info">
             <h4 class="mb-4">Hubungi Kami</h4>
             <div class="contact-item mb-3">
@@ -511,6 +506,13 @@
                 <p class="text-muted">{{ $systemSettings['contact_phone'] ?: '+62 812-3456-7890' }}</p>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Contact Info - Column 2 -->
+        <div class="col-lg-5 col-md-6 mb-4">
+          <div class="contact-info">
+            <h4 class="mb-4">&nbsp;</h4>
             <div class="contact-item mb-3">
               <i class="fas fa-envelope fa-2x text-pink me-3"></i>
               <div>
@@ -549,25 +551,6 @@
                   @endif
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-        <!-- Map -->
-        <div class="col-lg-6">
-          <div class="map-container">
-            <h4 class="mb-4">Lokasi Kami</h4>
-            <div class="map-wrapper">
-              <iframe
-                src="https://maps.google.com/maps?q={{ urlencode($shippingAddress['city'] . ', ' . $shippingAddress['province']) }}&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                width="100%" height="350" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-              </iframe>
-            </div>
-            <div class="directions-btn mt-3">
-              <a href="https://maps.google.com?q={{ urlencode($shippingAddress['full_address']) }}" target="_blank"
-                class="btn btn-outline-pink">
-                <i class="fas fa-directions me-2"></i>Lihat Rute
-              </a>
             </div>
           </div>
         </div>

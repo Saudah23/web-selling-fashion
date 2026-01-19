@@ -330,8 +330,10 @@
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/profile.jpg') }}" alt="..."
-                                            class="avatar-img rounded-circle" />
+                                        <div class="avatar-img rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 40px; height: 40px; font-weight: 600; color: #fff; font-size: 14px;">
+                                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}{{ strtoupper(substr(strstr(auth()->user()->name, ' '), 1, 1)) }}
+                                        </div>
                                     </div>
                                     <span class="profile-username">
                                         <span class="fw-bold">{{ auth()->user()->name }}</span>
@@ -342,8 +344,10 @@
                                         <li>
                                             <div class="user-box">
                                                 <div class="avatar-lg">
-                                                    <img src="{{ asset('kaiadmin-lite-1.2.0/assets/img/profile.jpg') }}"
-                                                        alt="image profile" class="avatar-img rounded" />
+                                                    <div class="avatar-img rounded d-flex align-items-center justify-content-center" 
+                                                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 60px; height: 60px; font-weight: 700; color: #fff; font-size: 22px;">
+                                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}{{ strtoupper(substr(strstr(auth()->user()->name, ' '), 1, 1)) }}
+                                                    </div>
                                                 </div>
                                                 <div class="u-text">
                                                     <h4>{{ auth()->user()->name }}</h4>
