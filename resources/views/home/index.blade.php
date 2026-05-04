@@ -20,61 +20,37 @@
     $activeBanners = $banners->count() > 0 ? $banners : collect($defaultBanners);
   @endphp
 
-  <!-- Start Banner Slider Section -->
+  <!-- Start Banner Section -->
   <div class="hero-slider">
-    <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-      <div class="carousel-indicators">
-        @foreach($activeBanners as $key => $banner)
-          <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="{{ $key }}"
-            class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
-            aria-label="Slide {{ $key + 1 }}"></button>
-        @endforeach
-      </div>
-
-      <div class="carousel-inner">
-        @foreach($activeBanners as $key => $banner)
-          <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-            <div class="hero" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
-              <div class="container">
-                <div class="row justify-content-between align-items-center">
-                  <div class="col-lg-6">
-                    <div class="intro-excerpt">
-                      <h1 style="color: #2d3748;">
-                        {{ is_array($banner) ? $banner['title'] : $banner->title }}
-                        <span class="d-block" style="color: #ff6b6b;">{{ is_array($banner) ? $banner['subtitle'] : $banner->subtitle }}</span>
-                      </h1>
-                      <p class="mb-4" style="color: #718096;">{{ is_array($banner) ? $banner['description'] : $banner->description }}</p>
-                      <p>
-                        <a href="{{ route('shop') }}" class="btn btn-banner-primary me-2">
-                          {{ is_array($banner) ? $banner['button_text'] : ($banner->button_text ?: 'Belanja Sekarang') }}
-                        </a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="hero-img-wrap">
-                      <img src="{{ is_array($banner) ? $banner['image_url'] : $banner->image_url }}" class="img-fluid banner-image"
-                        alt="{{ is_array($banner) ? $banner['title'] : $banner->title }}">
-                    </div>
-                  </div>
-                </div>
-              </div>
+    @php $banner = $activeBanners->first(); @endphp
+    <div class="hero" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+      <div class="container">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-lg-6">
+            <div class="intro-excerpt">
+              <h1 style="color: #2d3748;">
+                {{ is_array($banner) ? $banner['title'] : $banner->title }}
+                <span class="d-block" style="color: #ff6b6b;">{{ is_array($banner) ? $banner['subtitle'] : $banner->subtitle }}</span>
+              </h1>
+              <p class="mb-4" style="color: #718096;">{{ is_array($banner) ? $banner['description'] : $banner->description }}</p>
+              <p>
+                <a href="{{ route('shop') }}" class="btn btn-banner-primary me-2">
+                  {{ is_array($banner) ? $banner['button_text'] : ($banner->button_text ?: 'Belanja Sekarang') }}
+                </a>
+              </p>
             </div>
           </div>
-        @endforeach
+          <div class="col-lg-6">
+            <div class="hero-img-wrap">
+              <img src="{{ asset('images/Logo-Store.png') }}" class="img-fluid banner-image"
+                alt="Saudah-Azzahra Store Logo">
+            </div>
+          </div>
+        </div>
       </div>
-
-      <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
     </div>
   </div>
-  <!-- End Banner/Hero Section -->
+  <!-- End Banner Section -->
 
   <!-- Start Product Section -->
   <div class="product-section bg-light" id="products">
@@ -92,7 +68,7 @@
         </div>
         <!-- End Column 1 -->
 
-        @forelse($featuredProducts->take(3) as $product)
+        @forelse($showcaseProducts as $product)
           <!-- Product {{ $loop->iteration }} -->
           <div class="col-6 col-md-4 col-lg-3 mb-4">
             <div class="product-card">
@@ -180,39 +156,27 @@
           </div>
           <!-- End Product {{ $loop->iteration }} -->
         @empty
-          <!-- Default Products when no products available -->
+          <!-- Fallback: Category showcase images -->
+          @foreach([['img' => 'Wanita.png', 'label' => 'Produk Wanita', 'cat' => 'Pakaian'], ['img' => 'Pria.webp', 'label' => 'Produk Pria', 'cat' => 'Pakaian Pria'], ['img' => 'Anak-Anak.jpeg', 'label' => 'Produk Anak', 'cat' => 'Pakaian Anak']] as $item)
           <div class="col-6 col-md-4 col-lg-3 mb-4">
-            <a class="product-item" href="#">
-              <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" class="img-fluid product-thumbnail">
-              <h3 class="product-title">Nordic Chair</h3>
-              <strong class="product-price">Rp 750.000</strong>
-              <span class="icon-cross">
-                <img src="{{ asset('furni-1.0.0/images/cross.svg') }}" class="img-fluid">
-              </span>
-            </a>
+            <div class="product-card">
+              <div class="product-image">
+                <a href="{{ route('shop') }}">
+                  <img src="{{ asset('images/' . $item['img']) }}" class="img-fluid" alt="{{ $item['label'] }}">
+                </a>
+              </div>
+              <div class="product-info">
+                <h5 class="product-name">{{ $item['label'] }}</h5>
+                <div class="product-actions mt-2">
+                  <a href="{{ route('shop') }}" class="btn btn-cart">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="btn-text">Lihat Produk</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <div class="col-6 col-md-4 col-lg-3 mb-4">
-            <a class="product-item" href="#">
-              <img src="{{ asset('furni-1.0.0/images/product-2.png') }}" class="img-fluid product-thumbnail">
-              <h3 class="product-title">Kruzo Aero Chair</h3>
-              <strong class="product-price">Rp 780.000</strong>
-              <span class="icon-cross">
-                <img src="{{ asset('furni-1.0.0/images/cross.svg') }}" class="img-fluid">
-              </span>
-            </a>
-          </div>
-
-          <div class="col-6 col-md-4 col-lg-3 mb-4">
-            <a class="product-item" href="#">
-              <img src="{{ asset('furni-1.0.0/images/product-3.png') }}" class="img-fluid product-thumbnail">
-              <h3 class="product-title">Ergonomic Chair</h3>
-              <strong class="product-price">Rp 430.000</strong>
-              <span class="icon-cross">
-                <img src="{{ asset('furni-1.0.0/images/cross.svg') }}" class="img-fluid">
-              </span>
-            </a>
-          </div>
+          @endforeach
         @endforelse
 
       </div>
@@ -220,106 +184,6 @@
   </div>
   <!-- End Product Section -->
 
-  @if($featuredProducts->count() > 3)
-    <!-- Start More Products Section -->
-    <div class="product-section bg-light pt-0">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center mb-5">
-            <h2 class="section-title">Produk Unggulan Lainnya</h2>
-          </div>
-
-          @foreach($featuredProducts->slice(3)->take(4) as $product)
-            <div class="col-6 col-md-6 col-lg-3 mb-4">
-              <div class="product-card">
-                <!-- Discount Badge -->
-                @if($product->compare_price && $product->compare_price > $product->price)
-                  @php
-                    $discount = round((($product->compare_price - $product->price) / $product->compare_price) * 100);
-                  @endphp
-                  <div class="discount-badge">{{ $discount }}%</div>
-                @else
-                  <div class="discount-badge">50%</div>
-                @endif
-
-                <!-- Wishlist Button -->
-                <button class="wishlist-btn" type="button" data-product-id="{{ $product->id }}">
-                  <i class="far fa-heart" id="heart-more-{{ $product->id }}"></i>
-                </button>
-
-                <!-- Product Image -->
-                <div class="product-image">
-                  <a href="{{ route('product.detail', $product->id) }}">
-                    @php
-                      $primaryImage = $product->images->where('is_primary', true)->first();
-                      if (!$primaryImage) {
-                        $primaryImage = $product->images->first();
-                      }
-                    @endphp
-                    @if($primaryImage)
-                      <img src="{{ asset($primaryImage->url) }}" class="img-fluid" alt="{{ $product->name }}"
-                        onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
-                    @else
-                      <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" class="img-fluid" alt="{{ $product->name }}">
-                    @endif
-                  </a>
-                </div>
-
-                <!-- Product Info -->
-                <div class="product-info">
-                  <h5 class="product-name">
-                    <a href="{{ route('product.detail', $product->id) }}">{{ Str::limit($product->name, 15) }}</a>
-                  </h5>
-
-                  <div class="product-price">
-                    @if($product->compare_price && $product->compare_price > $product->price)
-                      <span class="original-price">Rp{{ number_format($product->compare_price, 0, ',', '.') }}</span>
-                    @else
-                      <span class="original-price">Rp{{ number_format($product->price * 2, 0, ',', '.') }}</span>
-                    @endif
-                    <span class="current-price">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
-                  </div>
-
-                  <!-- Stock Status -->
-                  @if($product->stock_quantity <= $product->low_stock_threshold && $product->stock_quantity > 0)
-                    <div class="stock-status low-stock">
-                      <small>Stok Terbatas</small>
-                    </div>
-                  @elseif($product->stock_quantity == 0)
-                    <div class="stock-status out-of-stock">
-                      <small>Stok Habis</small>
-                    </div>
-                  @endif
-
-                  <!-- Action Buttons -->
-                  <div class="product-actions mt-2">
-                    @if($product->stock_quantity > 0)
-                      <button class="btn btn-cart" onclick="addToCartFromHome({{ $product->id }}, this)"
-                        data-product-id="{{ $product->id }}">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="btn-text">Tambah ke Keranjang</span>
-                      </button>
-                    @else
-                      <button class="btn btn-cart" disabled>
-                        <i class="fas fa-times"></i>
-                        <span class="btn-text">Stok Habis</span>
-                      </button>
-                    @endif
-
-                    <!-- Wishlist Button -->
-                    <button class="btn btn-wishlist" data-product-id="{{ $product->id }}">
-                      <i class="far fa-heart" id="heart-more-small-{{ $product->id }}"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          @endforeach
-        </div>
-      </div>
-    </div>
-    <!-- End More Products Section -->
-  @endif
 
   <!-- Start Why Choose Us Section -->
   <div class="why-choose-section bg-light">

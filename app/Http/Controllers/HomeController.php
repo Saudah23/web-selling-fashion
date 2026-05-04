@@ -50,7 +50,28 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        return view('home.index', compact('banners', 'featuredProducts', 'categories'));
+        // Get 1 product per main category for the homepage showcase
+        $categoryNames = ['Pakaian Pria' => 'Pria', 'Pakaian Wanita' => 'Wanita', 'Pakaian Anak-anak' => 'Anak'];
+        $showcaseProducts = collect();
+        foreach ($categoryNames as $catName => $label) {
+            $cat = Category::where('name', $catName)->whereNull('parent_id')->first();
+            if ($cat) {
+                $childIds = Category::where('parent_id', $cat->id)->pluck('id')->push($cat->id);
+                $product = Product::with(['images' => function($q) {
+                    $q->orderBy('is_primary', 'desc')->orderBy('sort_order');
+                }])
+                ->where('is_active', true)
+                ->whereIn('category_id', $childIds)
+                ->orderBy('created_at', 'desc')
+                ->first();
+                if ($product) {
+                    $product->category_label = $label;
+                    $showcaseProducts->push($product);
+                }
+            }
+        }
+
+        return view('home.index', compact('banners', 'featuredProducts', 'categories', 'showcaseProducts'));
     }
 
     /**
