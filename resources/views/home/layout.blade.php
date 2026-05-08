@@ -435,8 +435,9 @@
   <nav class="custom-navbar navbar navbar navbar-expand-md navbar-light bg-white border-bottom"
     arial-label="Furni navigation bar">
     <div class="container">
-      <a class="navbar-brand" href="{{ route('home') }}">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('home') }}">
         <img src="{{ asset('LogoFahionSaazz.jpg') }}" alt="Fashion Saazz" style="height: 40px; border-radius: 5px;">
+        <span style="font-size: 1rem; font-weight: 700; color: #2c3e50; letter-spacing: 0.5px;">FASHION <span style="color: #ff6b6b;">SAAZZ</span></span>
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"

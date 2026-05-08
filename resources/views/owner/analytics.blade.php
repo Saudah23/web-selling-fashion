@@ -176,7 +176,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    @php $recentMonths = array_slice($analyticsData['revenue']['monthly']->toArray(), -6); @endphp
+                    @php $recentMonths = array_slice(is_array($analyticsData['revenue']['monthly']) ? $analyticsData['revenue']['monthly'] : $analyticsData['revenue']['monthly']->toArray(), -6); @endphp
                     @foreach($recentMonths as $index => $month)
                         <div class="col-md-2 col-6 mb-3">
                             <div class="card border-0 bg-light h-100">
