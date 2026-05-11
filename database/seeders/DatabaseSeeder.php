@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProductSeeder::class,
             BannerSeeder::class,
+            OrderSeeder::class,
         ]);
 
         // Auto-sync RajaOngkir data if API key is available

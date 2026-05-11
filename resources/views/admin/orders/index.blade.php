@@ -613,35 +613,35 @@ function renderOrderDetails(order) {
             <div class="col-md-6">
                 <h6><i class="fas fa-info-circle me-2"></i>Order Information</h6>
                 <table class="table table-sm">
-                    <tr><td><strong>Order Number:</strong></td><td><code>${order.order_number}</code></td></tr>
+                    <tr><td><strong>No. Pesanan:</strong></td><td><code>${order.order_number}</code></td></tr>
                     <tr><td><strong>Status:</strong></td><td>${getStatusBadge(order.status)}</td></tr>
-                    <tr><td><strong>Created:</strong></td><td>${formatDateTime(order.created_at)}</td></tr>
-                    ${order.paid_at ? `<tr><td><strong>Paid:</strong></td><td>${formatDateTime(order.paid_at)}</td></tr>` : ''}
-                    ${order.shipped_at ? `<tr><td><strong>Shipped:</strong></td><td>${formatDateTime(order.shipped_at)}</td></tr>` : ''}
-                    ${order.delivered_at ? `<tr><td><strong>Delivered:</strong></td><td>${formatDateTime(order.delivered_at)}</td></tr>` : ''}
+                    <tr><td><strong>Dibuat:</strong></td><td>${formatDateTime(order.created_at)}</td></tr>
+                    ${order.paid_at ? `<tr><td><strong>Dibayar:</strong></td><td>${formatDateTime(order.paid_at)}</td></tr>` : ''}
+                    ${order.shipped_at ? `<tr><td><strong>Dikirim:</strong></td><td>${formatDateTime(order.shipped_at)}</td></tr>` : ''}
+                    ${order.delivered_at ? `<tr><td><strong>Terkirim:</strong></td><td>${formatDateTime(order.delivered_at)}</td></tr>` : ''}
                 </table>
             </div>
             <div class="col-md-6">
-                <h6><i class="fas fa-user me-2"></i>Customer Information</h6>
+                <h6><i class="fas fa-user me-2"></i>Informasi Pelanggan</h6>
                 <table class="table table-sm">
-                    <tr><td><strong>Name:</strong></td><td>${order.user.name}</td></tr>
+                    <tr><td><strong>Nama:</strong></td><td>${order.user.name}</td></tr>
                     <tr><td><strong>Email:</strong></td><td>${order.user.email}</td></tr>
-                    <tr><td><strong>Phone:</strong></td><td>${order.user.phone || 'N/A'}</td></tr>
+                    <tr><td><strong>Telepon:</strong></td><td>${order.user.phone || 'N/A'}</td></tr>
                 </table>
 
-                <h6><i class="fas fa-truck me-2"></i>Shipping Information</h6>
+                <h6><i class="fas fa-truck me-2"></i>Informasi Pengiriman</h6>
                 <table class="table table-sm">
-                    <tr><td><strong>Service:</strong></td><td>${order.shipping_service || 'N/A'}</td></tr>
-                    <tr><td><strong>Courier:</strong></td><td>${order.shipping_courier || 'N/A'}</td></tr>
-                    <tr><td><strong>ETD:</strong></td><td>${order.shipping_etd || 'N/A'}</td></tr>
-                    <tr><td><strong>Tracking:</strong></td><td>${order.tracking_number ? '<code>' + order.tracking_number + '</code>' : 'N/A'}</td></tr>
+                    <tr><td><strong>Layanan:</strong></td><td>${order.shipping_service || 'N/A'}</td></tr>
+                    <tr><td><strong>Kurir:</strong></td><td>${order.shipping_courier || 'N/A'}</td></tr>
+                    <tr><td><strong>Estimasi:</strong></td><td>${order.shipping_etd || 'N/A'}</td></tr>
+                    <tr><td><strong>Resi:</strong></td><td>${order.tracking_number ? '<code>' + order.tracking_number + '</code>' : 'N/A'}</td></tr>
                 </table>
             </div>
         </div>
 
         <div class="row mb-4">
             <div class="col-12">
-                <h6><i class="fas fa-map-marker-alt me-2"></i>Shipping Address</h6>
+                <h6><i class="fas fa-map-marker-alt me-2"></i>Alamat Pengiriman</h6>
                 <div class="border p-3 rounded bg-light">
                     <strong>${shippingAddress.recipient_name}</strong><br>
                     ${shippingAddress.phone}<br>
@@ -653,15 +653,15 @@ function renderOrderDetails(order) {
 
         <div class="row mb-4">
             <div class="col-12">
-                <h6><i class="fas fa-shopping-bag me-2"></i>Order Items</h6>
+                <h6><i class="fas fa-shopping-bag me-2"></i>Item Pesanan</h6>
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead class="table-light">
                             <tr>
-                                <th>Product</th>
+                                <th>Produk</th>
                                 <th>SKU</th>
                                 <th class="text-center">Qty</th>
-                                <th class="text-end">Price</th>
+                                <th class="text-end">Harga</th>
                                 <th class="text-end">Subtotal</th>
                             </tr>
                         </thead>
@@ -699,11 +699,11 @@ function renderOrderDetails(order) {
                                 <th class="text-end">${order.formatted_subtotal}</th>
                             </tr>
                             <tr>
-                                <th colspan="4" class="text-end">Shipping:</th>
+                                <th colspan="4" class="text-end">Ongkir:</th>
                                 <th class="text-end">${order.formatted_shipping_cost}</th>
                             </tr>
                             <tr>
-                                <th colspan="4" class="text-end">Tax:</th>
+                                <th colspan="4" class="text-end">Pajak:</th>
                                 <th class="text-end">Rp ${Number(order.tax_amount).toLocaleString('id-ID')}</th>
                             </tr>
                             <tr class="table-primary">
@@ -721,7 +721,7 @@ function renderOrderDetails(order) {
         content += `
             <div class="row">
                 <div class="col-12">
-                    <h6><i class="fas fa-sticky-note me-2"></i>Notes</h6>
+                    <h6><i class="fas fa-sticky-note me-2"></i>Catatan</h6>
                     <div class="border p-3 rounded bg-light">
                         ${order.notes}
                     </div>
@@ -827,17 +827,17 @@ function showBulkUpdateModal() {
                 <form id="bulkUpdateForm">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">New Status</label>
+                            <label class="form-label">Status Baru</label>
                             <select class="form-select" id="bulkStatus" required>
-                                <option value="">-- Select Status --</option>
-                                <option value="paid">Paid</option>
-                                <option value="processing">Processing</option>
-                                <option value="shipped">Shipped</option>
+                                <option value="">-- Pilih Status --</option>
+                                <option value="paid">Dibayar</option>
+                                <option value="processing">Diproses</option>
+                                <option value="shipped">Dikirim</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Notes (Optional)</label>
-                            <input type="text" class="form-control" id="bulkNotes" placeholder="Bulk update notes">
+                            <label class="form-label">Catatan (Opsional)</label>
+                            <input type="text" class="form-control" id="bulkNotes" placeholder="Catatan pembaruan massal">
                         </div>
                     </div>
                     <hr>
@@ -845,14 +845,14 @@ function showBulkUpdateModal() {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="selectAllOrders">
                             <label class="form-check-label" for="selectAllOrders">
-                                <strong>Select All Orders</strong>
+                                <strong>Pilih Semua Pesanan</strong>
                             </label>
                         </div>
                     </div>
             `;
 
             if (orders.length === 0) {
-                content += '<div class="alert alert-warning">No orders found.</div>';
+                content += '<div class="alert alert-warning">Tidak ada pesanan ditemukan.</div>';
             } else {
                 orders.forEach(function(order) {
                     content += `
@@ -1072,31 +1072,31 @@ function renderStatistics(stats) {
                     <div class="col-md-2 col-sm-4 col-6 mb-2">
                         <div class="text-center">
                             <div class="h5 text-info">${stats.paid_orders}</div>
-                            <small>Paid</small>
+                            <small>Dibayar</small>
                         </div>
                     </div>
                     <div class="col-md-2 col-sm-4 col-6 mb-2">
                         <div class="text-center">
                             <div class="h5 text-primary">${stats.processing_orders}</div>
-                            <small>Processing</small>
+                            <small>Diproses</small>
                         </div>
                     </div>
                     <div class="col-md-2 col-sm-4 col-6 mb-2">
                         <div class="text-center">
                             <div class="h5 text-secondary">${stats.shipped_orders}</div>
-                            <small>Shipped</small>
+                            <small>Dikirim</small>
                         </div>
                     </div>
                     <div class="col-md-2 col-sm-4 col-6 mb-2">
                         <div class="text-center">
                             <div class="h5 text-success">${stats.delivered_orders}</div>
-                            <small>Delivered</small>
+                            <small>Terkirim</small>
                         </div>
                     </div>
                     <div class="col-md-2 col-sm-4 col-6 mb-2">
                         <div class="text-center">
                             <div class="h5 text-danger">${stats.cancelled_orders}</div>
-                            <small>Cancelled</small>
+                            <small>Dibatalkan</small>
                         </div>
                     </div>
                 </div>
@@ -1146,26 +1146,26 @@ function renderStatistics(stats) {
 // Quick status update functions
 function quickUpdateStatus(orderId, newStatus) {
     const statusLabels = {
-        'processing': 'Processing',
-        'delivered': 'Delivered'
+        'processing': 'Diproses',
+        'delivered': 'Terkirim'
     };
 
-    const confirmMessage = `Are you sure you want to mark this order as ${statusLabels[newStatus]}?`;
+    const confirmMessage = `Yakin ingin mengubah status pesanan ini menjadi ${statusLabels[newStatus]}?`;
 
     Notiflix.Confirm.show(
-        'Confirm Status Update',
+        'Konfirmasi Perubahan Status',
         confirmMessage,
-        'Yes, Update',
-        'Cancel',
+        'Ya, Ubah',
+        'Batal',
         function() {
-            Notiflix.Loading.circle('Updating status...');
+            Notiflix.Loading.circle('Memperbarui status...');
 
             $.ajax({
                 url: `/admin/orders/${orderId}/status`,
                 type: 'POST',
                 data: {
                     status: newStatus,
-                    notes: `Quick update to ${statusLabels[newStatus]} by admin`
+                    notes: `Pembaruan cepat ke ${statusLabels[newStatus]} oleh admin`
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1243,21 +1243,21 @@ function submitShippingUpdate() {
 
 function refreshOrders() {
     $("#jsGrid").jsGrid("loadData");
-    Notiflix.Notify.success('Orders refreshed');
+    Notiflix.Notify.success('Data pesanan diperbarui');
 }
 
 // Helper functions
 function getStatusBadge(status) {
     const badges = {
-        pending: '<span class="badge bg-warning">Pending</span>',
-        paid: '<span class="badge bg-info">Paid</span>',
-        processing: '<span class="badge bg-primary">Processing</span>',
-        shipped: '<span class="badge bg-secondary">Shipped</span>',
-        delivered: '<span class="badge bg-success">Delivered</span>',
-        cancelled: '<span class="badge bg-danger">Cancelled</span>',
-        refunded: '<span class="badge bg-dark">Refunded</span>'
+        pending: '<span class="badge bg-warning">Menunggu</span>',
+        paid: '<span class="badge bg-info">Dibayar</span>',
+        processing: '<span class="badge bg-primary">Diproses</span>',
+        shipped: '<span class="badge bg-secondary">Dikirim</span>',
+        delivered: '<span class="badge bg-success">Terkirim</span>',
+        cancelled: '<span class="badge bg-danger">Dibatalkan</span>',
+        refunded: '<span class="badge bg-dark">Dikembalikan</span>'
     };
-    return badges[status] || '<span class="badge bg-light">Unknown</span>';
+    return badges[status] || '<span class="badge bg-light">Tidak Diketahui</span>';
 }
 
 function formatDateTime(dateTime) {

@@ -43,35 +43,38 @@ Route::middleware('auth')->group(function () {
     Route::post('/wishlist/check', [WishlistController::class, 'check'])->name('wishlist.check');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
-    // Cart routes (authenticated users only)
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-    Route::get('/cart/count', [CartController::class, 'getCount'])->name('cart.count');
-    Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    // Cart, Checkout, Orders - customer only
+    Route::middleware('role:customer')->group(function () {
+        // Cart routes
+        Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+        Route::put('/cart/update', [CartController::class, 'update'])->name('cart.update');
+        Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+        Route::get('/cart/count', [CartController::class, 'getCount'])->name('cart.count');
+        Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
-    // Checkout routes (authenticated users only)
-    Route::prefix('checkout')->group(function () {
-        Route::get('/', [App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('checkout.index');
-        Route::post('/calculate-shipping', [App\Http\Controllers\Customer\CheckoutController::class, 'calculateShipping'])->name('checkout.shipping');
-        Route::post('/process', [App\Http\Controllers\Customer\CheckoutController::class, 'process'])->name('checkout.process');
-        Route::get('/payment/{order}', [App\Http\Controllers\Customer\CheckoutController::class, 'payment'])->name('checkout.payment');
-        Route::get('/success', [App\Http\Controllers\Customer\CheckoutController::class, 'success'])->name('checkout.success');
-        Route::get('/pending', [App\Http\Controllers\Customer\CheckoutController::class, 'pending'])->name('checkout.pending');
-        Route::get('/error', [App\Http\Controllers\Customer\CheckoutController::class, 'error'])->name('checkout.error');
-    });
+        // Checkout routes
+        Route::prefix('checkout')->group(function () {
+            Route::get('/', [App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('checkout.index');
+            Route::post('/calculate-shipping', [App\Http\Controllers\Customer\CheckoutController::class, 'calculateShipping'])->name('checkout.shipping');
+            Route::post('/process', [App\Http\Controllers\Customer\CheckoutController::class, 'process'])->name('checkout.process');
+            Route::get('/payment/{order}', [App\Http\Controllers\Customer\CheckoutController::class, 'payment'])->name('checkout.payment');
+            Route::get('/success', [App\Http\Controllers\Customer\CheckoutController::class, 'success'])->name('checkout.success');
+            Route::get('/pending', [App\Http\Controllers\Customer\CheckoutController::class, 'pending'])->name('checkout.pending');
+            Route::get('/error', [App\Http\Controllers\Customer\CheckoutController::class, 'error'])->name('checkout.error');
+        });
 
-    // Order routes (authenticated users only)
-    Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Customer\OrderController::class, 'index'])->name('index');
-        Route::get('/{orderNumber}', [App\Http\Controllers\Customer\OrderController::class, 'show'])->name('show');
-        Route::post('/{orderNumber}/cancel', [App\Http\Controllers\Customer\OrderController::class, 'cancel'])->name('cancel');
-        Route::post('/{orderNumber}/refresh-payment', [App\Http\Controllers\Customer\OrderController::class, 'refreshPaymentStatus'])->name('refresh.payment');
-        Route::get('/{orderNumber}/track', [App\Http\Controllers\Customer\OrderController::class, 'track'])->name('track');
-        Route::post('/{orderNumber}/reorder', [App\Http\Controllers\Customer\OrderController::class, 'reorder'])->name('reorder');
-        Route::get('/{orderNumber}/invoice', [App\Http\Controllers\Customer\OrderController::class, 'invoice'])->name('invoice');
-        Route::post('/{orderNumber}/mark-delivered', [App\Http\Controllers\Customer\OrderController::class, 'markAsDelivered'])->name('mark-delivered');
+        // Order routes
+        Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Customer\OrderController::class, 'index'])->name('index');
+            Route::get('/{orderNumber}', [App\Http\Controllers\Customer\OrderController::class, 'show'])->name('show');
+            Route::post('/{orderNumber}/cancel', [App\Http\Controllers\Customer\OrderController::class, 'cancel'])->name('cancel');
+            Route::post('/{orderNumber}/refresh-payment', [App\Http\Controllers\Customer\OrderController::class, 'refreshPaymentStatus'])->name('refresh.payment');
+            Route::get('/{orderNumber}/track', [App\Http\Controllers\Customer\OrderController::class, 'track'])->name('track');
+            Route::post('/{orderNumber}/reorder', [App\Http\Controllers\Customer\OrderController::class, 'reorder'])->name('reorder');
+            Route::get('/{orderNumber}/invoice', [App\Http\Controllers\Customer\OrderController::class, 'invoice'])->name('invoice');
+            Route::post('/{orderNumber}/mark-delivered', [App\Http\Controllers\Customer\OrderController::class, 'markAsDelivered'])->name('mark-delivered');
+        });
     });
 
 });

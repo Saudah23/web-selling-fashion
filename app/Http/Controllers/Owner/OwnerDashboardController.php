@@ -78,14 +78,14 @@ class OwnerDashboardController extends Controller
             case 'last_month':
                 $startDate = $now->copy()->subMonth()->startOfMonth();
                 $endDate = $now->copy()->subMonth()->endOfMonth();
-                $label = 'Last Month';
-                $dateRange = $startDate->format('F Y');
+                $label = 'Bulan Lalu';
+                $dateRange = $startDate->translatedFormat('F Y');
                 break;
 
             case 'this_year':
                 $startDate = $now->copy()->startOfYear();
                 $endDate = $now->copy()->endOfYear();
-                $label = 'This Year';
+                $label = 'Tahun Ini';
                 $dateRange = $now->format('Y');
                 break;
 
@@ -93,8 +93,8 @@ class OwnerDashboardController extends Controller
             default:
                 $startDate = $now->copy()->startOfMonth();
                 $endDate = $now->copy()->endOfMonth();
-                $label = 'This Month';
-                $dateRange = $now->format('F Y');
+                $label = 'Bulan Ini';
+                $dateRange = $now->translatedFormat('F Y');
                 break;
         }
 
@@ -152,7 +152,7 @@ class OwnerDashboardController extends Controller
                 ->sum('gross_amount');
 
             $monthlyRevenue[] = [
-                'month' => $date->format('M Y'),
+                'month' => $date->translatedFormat('M Y'),
                 'revenue' => $revenue
             ];
         }
@@ -167,7 +167,7 @@ class OwnerDashboardController extends Controller
                 ->sum('gross_amount');
 
             $dailyRevenue[] = [
-                'date' => $date->format('M d'),
+                'date' => $date->translatedFormat('d M'),
                 'revenue' => $revenue
             ];
         }
@@ -272,7 +272,7 @@ class OwnerDashboardController extends Controller
                 ->sum('gross_amount');
 
             $monthlyRevenue[] = [
-                'month' => $date->format('M Y'),
+                'month' => $date->translatedFormat('M Y'),
                 'revenue' => $revenue,
                 'short_month' => $date->format('M')
             ];
@@ -303,7 +303,7 @@ class OwnerDashboardController extends Controller
                 ->count();
 
             $customerGrowth[] = [
-                'month' => $date->format('M Y'),
+                'month' => $date->translatedFormat('M Y'),
                 'new_customers' => $newCustomers,
                 'short_month' => $date->format('M')
             ];
@@ -366,7 +366,7 @@ class OwnerDashboardController extends Controller
                 ->count();
 
             $orderTrends[] = [
-                'month' => $date->format('M Y'),
+                'month' => $date->translatedFormat('M Y'),
                 'orders' => $orderCount,
                 'short_month' => $date->format('M')
             ];
@@ -486,7 +486,7 @@ class OwnerDashboardController extends Controller
             'period_info' => [
                 'period' => $period,
                 'year' => $year,
-                'date_range' => $periodData['label'] . ' (' . $periodData['start_date']->format('M d') . ' - ' . $periodData['end_date']->format('M d, Y') . ')',
+                'date_range' => $periodData['label'] . ' (' . $periodData['start_date']->translatedFormat('d M') . ' - ' . $periodData['end_date']->translatedFormat('d M Y') . ')',
                 'start_date' => $periodData['start_date'],
                 'end_date' => $periodData['end_date']
             ],
@@ -662,7 +662,7 @@ class OwnerDashboardController extends Controller
             'period_info' => [
                 'period' => $period,
                 'year' => $year,
-                'date_range' => $periodData['label'] . ' (' . $periodData['start_date']->format('M d') . ' - ' . $periodData['end_date']->format('M d, Y') . ')',
+                'date_range' => $periodData['label'] . ' (' . $periodData['start_date']->translatedFormat('d M') . ' - ' . $periodData['end_date']->translatedFormat('d M Y') . ')',
                 'start_date' => $periodData['start_date'],
                 'end_date' => $periodData['end_date']
             ],
@@ -962,8 +962,8 @@ class OwnerDashboardController extends Controller
         if ($businessMetrics['revenue']['avg_order_value'] > 500000) {
             $insights[] = [
                 'type' => 'success',
-                'title' => 'High Average Order Value',
-                'message' => 'Average order value of Rp ' . number_format($businessMetrics['revenue']['avg_order_value']) . ' indicates premium customer base'
+                'title' => 'Nilai Pesanan Rata-rata Tinggi',
+                'message' => 'Nilai pesanan rata-rata Rp ' . number_format($businessMetrics['revenue']['avg_order_value']) . ' menunjukkan basis pelanggan premium'
             ];
         }
 
@@ -971,8 +971,8 @@ class OwnerDashboardController extends Controller
         if ($businessMetrics['customers']['acquisition_rate'] > 10) {
             $insights[] = [
                 'type' => 'success',
-                'title' => 'Strong Customer Acquisition',
-                'message' => number_format($businessMetrics['customers']['acquisition_rate'], 1) . '% new customer acquisition rate shows healthy growth'
+                'title' => 'Akuisisi Pelanggan Kuat',
+                'message' => 'Tingkat akuisisi pelanggan baru ' . number_format($businessMetrics['customers']['acquisition_rate'], 1) . '% menunjukkan pertumbuhan yang sehat'
             ];
         }
 
@@ -980,8 +980,8 @@ class OwnerDashboardController extends Controller
         if ($businessMetrics['products']['sell_through_rate'] < 50) {
             $insights[] = [
                 'type' => 'warning',
-                'title' => 'Product Optimization Needed',
-                'message' => 'Only ' . number_format($businessMetrics['products']['sell_through_rate'], 1) . '% of products sold. Consider inventory optimization'
+                'title' => 'Optimasi Produk Diperlukan',
+                'message' => 'Hanya ' . number_format($businessMetrics['products']['sell_through_rate'], 1) . '% produk yang terjual. Pertimbangkan optimasi inventaris'
             ];
         }
 
@@ -991,8 +991,8 @@ class OwnerDashboardController extends Controller
         if (($loyalCustomers / $totalCustomers) * 100 > 20) {
             $insights[] = [
                 'type' => 'success',
-                'title' => 'Strong Customer Loyalty',
-                'message' => number_format(($loyalCustomers / $totalCustomers) * 100, 1) . '% of customers are loyal repeat buyers'
+                'title' => 'Loyalitas Pelanggan Kuat',
+                'message' => number_format(($loyalCustomers / $totalCustomers) * 100, 1) . '% pelanggan adalah pembeli setia yang berulang'
             ];
         }
 
@@ -1086,9 +1086,9 @@ class OwnerDashboardController extends Controller
             ->orderBy('day_of_week')
             ->get()
             ->map(function($item) {
-                $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
                 return [
-                    'day' => $days[$item->day_of_week - 1] ?? 'Unknown',
+                    'day' => $days[$item->day_of_week - 1] ?? 'Tidak Diketahui',
                     'revenue' => $item->revenue
                 ];
             });
@@ -1103,7 +1103,7 @@ class OwnerDashboardController extends Controller
                 ->avg('gross_amount');
 
             $avgTransactionTrends[] = [
-                'month' => $date->format('M Y'),
+                'month' => $date->translatedFormat('M Y'),
                 'avg_value' => $avgTransaction ?? 0
             ];
         }
@@ -1240,7 +1240,7 @@ class OwnerDashboardController extends Controller
             ->orderBy('month')
             ->get()
             ->map(function($item) {
-                $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
                 return [
                     'month' => $monthNames[$item->month - 1],
                     'year' => $item->year,
@@ -1371,7 +1371,7 @@ class OwnerDashboardController extends Controller
             for ($i = 1; $i <= 3; $i++) {
                 $forecasted = $lastRevenue * pow((1 + $avgGrowth/100), $i);
                 $forecasts[] = [
-                    'month' => Carbon::now()->addMonths($i)->format('M Y'),
+                    'month' => Carbon::now()->addMonths($i)->translatedFormat('M Y'),
                     'forecasted_revenue' => $forecasted,
                     'confidence' => max(60, 90 - ($i * 10)) // Decreasing confidence
                 ];
