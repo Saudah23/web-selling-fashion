@@ -19,22 +19,10 @@ class MidtransService
 
     public function __construct()
     {
-        $this->serverKey = SystemSetting::get('midtrans_server_key')
-            ?? config('services.midtrans.server_key')
-            ?? env('MIDTRANS_SERVER_KEY');
-
-        $this->clientKey = SystemSetting::get('midtrans_client_key')
-            ?? config('services.midtrans.client_key')
-            ?? env('MIDTRANS_CLIENT_KEY');
-
-        $this->merchantId = SystemSetting::get('midtrans_merchant_id')
-            ?? config('services.midtrans.merchant_id')
-            ?? env('MIDTRANS_MERCHANT_ID');
-
-        $this->environment = SystemSetting::get('midtrans_environment')
-            ?? config('services.midtrans.environment')
-            ?? env('MIDTRANS_ENVIRONMENT', 'sandbox')
-            ?? 'sandbox';
+        $this->serverKey = config('services.midtrans.server_key');
+        $this->clientKey = config('services.midtrans.client_key');
+        $this->merchantId = config('services.midtrans.merchant_id');
+        $this->environment = config('services.midtrans.environment') ?: 'sandbox';
 
         $this->baseUrl = $this->environment === 'production'
             ? 'https://app.midtrans.com/snap/v1'

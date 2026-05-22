@@ -196,77 +196,6 @@
         </div>
     </div>
 
-    <!-- Payment Settings -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card card-round">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">
-                            <i class="fas fa-credit-card me-2"></i>Pengaturan Pembayaran (Midtrans)
-                        </div>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="syncMidtrans()">
-                                <i class="fas fa-sync-alt me-1"></i>Sinkronkan Pengaturan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="midtrans-status" class="mb-3" style="display: none;"></div>
-                    @if(isset($settings['payment']))
-                        @foreach($settings['payment'] as $setting)
-                            <div class="form-group">
-                                <label for="{{ $setting->key }}" class="form-label">
-                                    {{ ucfirst(str_replace(['_', 'midtrans'], [' ', 'Midtrans'], $setting->key)) }}
-                                    @if(!$setting->is_public)
-                                        <span class="badge badge-warning ms-2">Private</span>
-                                    @endif
-                                </label>
-                                @if($setting->key === 'midtrans_environment')
-                                    <select name="settings[{{ $setting->key }}]" id="{{ $setting->key }}" class="form-control">
-                                        <option value="sandbox" {{ $setting->value === 'sandbox' ? 'selected' : '' }}>Sandbox</option>
-                                        <option value="production" {{ $setting->value === 'production' ? 'selected' : '' }}>Production</option>
-                                    </select>
-                                @elseif($setting->type === 'json')
-                                    <textarea name="settings[{{ $setting->key }}]" id="{{ $setting->key }}"
-                                            class="form-control" rows="6"
-                                            placeholder="{{ $setting->description }}">@php
-                                                $jsonValue = json_decode($setting->value, true);
-                                                if (json_last_error() === JSON_ERROR_NONE && is_array($jsonValue)) {
-                                                    echo json_encode($jsonValue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-                                                } else {
-                                                    echo $setting->value;
-                                                }
-                                            @endphp</textarea>
-                                @else
-                                    <input type="{{ in_array($setting->key, ['midtrans_server_key', 'midtrans_client_key']) ? 'password' : 'text' }}"
-                                           name="settings[{{ $setting->key }}]"
-                                           id="{{ $setting->key }}"
-                                           class="form-control @error('settings.' . $setting->key) is-invalid @enderror"
-                                           value="{{ old('settings.' . $setting->key, $setting->value) }}"
-                                           placeholder="{{ $setting->description }}"
-                                           @if(in_array($setting->key, ['midtrans_server_key', 'midtrans_client_key', 'midtrans_merchant_id'])) data-optional="true" @endif>
-                                @endif
-                                @if($setting->description)
-                                    <small class="form-text text-muted">
-                                        {{ $setting->description }}
-                                        @if(in_array($setting->key, ['midtrans_server_key', 'midtrans_client_key', 'midtrans_merchant_id']))
-                                            <br><em class="text-secondary">Optional - can be configured later</em>
-                                        @endif
-                                    </small>
-                                @endif
-                                @error('settings.' . $setting->key)
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="card card-round">
@@ -714,48 +643,6 @@ function syncRajaOngkir() {
     });
 }
 
-function syncMidtrans() {
-    Notiflix.Loading.circle('Validating Midtrans settings...');
-
-    fetch('{{ route("admin.settings.sync") }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ sync_midtrans: true })
-    })
-    .then(response => {
-        // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-            return response.json();
-        }
-        // If not JSON, it's likely an error page - get the text
-        return response.text().then(text => {
-            throw new Error('Server returned HTML instead of JSON. Check server logs.');
-        });
-    })
-    .then(data => {
-        Notiflix.Loading.remove();
-        showConnectionStatus('midtrans-status', data.midtrans);
-
-        if (data.midtrans.status === 'success') {
-            Notiflix.Notify.success('💳 Midtrans settings validated successfully!');
-        } else {
-            Notiflix.Notify.failure('❌ Midtrans validation failed: ' + data.midtrans.message);
-        }
-    })
-    .catch(error => {
-        Notiflix.Loading.remove();
-        showConnectionStatus('midtrans-status', {
-            status: 'error',
-            message: 'Failed to test connection: ' + error.message
-        });
-        Notiflix.Notify.failure('❌ Failed to test Midtrans connection: ' + error.message);
-    });
-}
-
 function syncAllAPIs() {
     Notiflix.Loading.circle('Syncing all APIs...');
 
@@ -766,8 +653,7 @@ function syncAllAPIs() {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
         body: JSON.stringify({
-            sync_rajaongkir: true,
-            sync_midtrans: true
+            sync_rajaongkir: true
         })
     })
     .then(response => {
@@ -794,13 +680,6 @@ function syncAllAPIs() {
             if (data.rajaongkir.status === 'success') successCount++;
             if (data.rajaongkir.status === 'warning') warningCount++;
         }
-        if (data.midtrans) {
-            showConnectionStatus('midtrans-status', data.midtrans);
-            totalTests++;
-            if (data.midtrans.status === 'success') successCount++;
-            if (data.midtrans.status === 'warning') warningCount++;
-        }
-
         // Summary notification
         if (successCount === totalTests) {
             Notiflix.Notify.success(`🎉 All API connections successful! (${successCount}/${totalTests})`);

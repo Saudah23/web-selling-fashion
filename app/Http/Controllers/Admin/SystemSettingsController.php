@@ -80,11 +80,6 @@ class SystemSettingsController extends Controller
             'rajaongkir_api_key',
             'rajaongkir_origin_city_id',
 
-            // Midtrans fields (optional until configured)
-            'midtrans_server_key',
-            'midtrans_client_key',
-            'midtrans_merchant_id',
-
             // Other optional fields
             'shipping_origin_address',
         ];
@@ -103,20 +98,14 @@ class SystemSettingsController extends Controller
     }
 
     /**
-     * Sync API data and validate connections (RajaOngkir, Midtrans)
+     * Sync API data and validate connections (RajaOngkir)
      */
     public function syncAPIs(Request $request)
     {
         $results = [];
 
-        // Sync RajaOngkir API
         if ($request->has('sync_rajaongkir')) {
             $results['rajaongkir'] = $this->syncRajaOngkirData();
-        }
-
-        // Validate Midtrans API
-        if ($request->has('sync_midtrans')) {
-            $results['midtrans'] = $this->validateMidtransConnection();
         }
 
         return response()->json($results);
@@ -165,12 +154,6 @@ class SystemSettingsController extends Controller
             case 'tax_rate':
                 if (!empty($value) && ($value < 0 || $value > 100)) {
                     throw new \InvalidArgumentException("Tax rate must be between 0-100%");
-                }
-                break;
-
-            case 'midtrans_environment':
-                if (!empty($value) && !in_array($value, ['sandbox', 'production'])) {
-                    throw new \InvalidArgumentException("Midtrans environment must be 'sandbox' or 'production'");
                 }
                 break;
 
@@ -252,57 +235,4 @@ class SystemSettingsController extends Controller
         }
     }
 
-    /**
-     * Validate Midtrans API connection and settings
-     */
-    private function validateMidtransConnection(): array
-    {
-        try {
-            $serverKey = SystemSetting::get('midtrans_server_key');
-            $clientKey = SystemSetting::get('midtrans_client_key');
-            $merchantId = SystemSetting::get('midtrans_merchant_id');
-            $environment = SystemSetting::get('midtrans_environment', 'sandbox');
-
-            // Check required fields
-            $missingFields = [];
-            if (!$serverKey) $missingFields[] = 'Server Key';
-            if (!$clientKey) $missingFields[] = 'Client Key';
-            if (!$merchantId) $missingFields[] = 'Merchant ID';
-
-            if (!empty($missingFields)) {
-                return ['status' => 'error', 'message' => 'Missing required fields: ' . implode(', ', $missingFields)];
-            }
-
-            $baseUrl = $environment === 'production'
-                ? 'https://api.midtrans.com'
-                : 'https://api.sandbox.midtrans.com';
-
-            // Validate API connection with a test call
-            $response = Http::withBasicAuth($serverKey, '')
-                ->get("{$baseUrl}/v2/test-transaction-id/status");
-
-            if ($response->successful()) {
-                $data = $response->json();
-                // Check if we get expected 404 response for non-existent transaction
-                if (isset($data['status_code']) && $data['status_code'] === '404') {
-                    return [
-                        'status' => 'success',
-                        'message' => "Midtrans {$environment} API validated successfully! All credentials are working."
-                    ];
-                }
-                // If we get any other successful response, it's also valid connection
-                if (isset($data['status_code'])) {
-                    return [
-                        'status' => 'success',
-                        'message' => "Midtrans {$environment} API validated successfully!"
-                    ];
-                }
-            }
-
-            return ['status' => 'error', 'message' => 'Invalid Midtrans API credentials or network error'];
-
-        } catch (\Exception $e) {
-            return ['status' => 'error', 'message' => 'Validation failed: ' . $e->getMessage()];
-        }
-    }
 }

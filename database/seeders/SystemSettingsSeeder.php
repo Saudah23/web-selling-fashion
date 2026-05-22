@@ -133,39 +133,7 @@ class SystemSettingsSeeder extends Seeder
                 'is_public' => true,
             ],
 
-            // Payment Settings (Midtrans)
-            [
-                'key' => 'midtrans_server_key',
-                'value' => env('MIDTRANS_SERVER_KEY', ''), // Auto-fill from env
-                'type' => 'text',
-                'group' => 'payment',
-                'description' => 'Midtrans Server Key',
-                'is_public' => false,
-            ],
-            [
-                'key' => 'midtrans_client_key',
-                'value' => env('MIDTRANS_CLIENT_KEY', ''), // Auto-fill from env
-                'type' => 'text',
-                'group' => 'payment',
-                'description' => 'Midtrans Client Key',
-                'is_public' => false,
-            ],
-            [
-                'key' => 'midtrans_merchant_id',
-                'value' => env('MIDTRANS_MERCHANT_ID', ''), // Auto-fill from env
-                'type' => 'text',
-                'group' => 'payment',
-                'description' => 'Midtrans Merchant ID',
-                'is_public' => false,
-            ],
-            [
-                'key' => 'midtrans_environment',
-                'value' => env('MIDTRANS_ENVIRONMENT', 'sandbox'), // Auto-fill from env or default to sandbox
-                'type' => 'text',
-                'group' => 'payment',
-                'description' => 'Midtrans Environment (sandbox/production)',
-                'is_public' => false,
-            ],
+            // Payment Settings
             [
                 'key' => 'payment_methods',
                 'value' => json_encode([
