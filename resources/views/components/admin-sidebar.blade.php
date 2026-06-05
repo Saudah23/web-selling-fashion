@@ -28,6 +28,13 @@
     </a>
 </li>
 
+<li class="nav-item {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">
+    <a href="{{ route('admin.reviews.index') }}" class="nav-link">
+        <i class="fas fa-star"></i>
+        <p>Penilaian Produk</p>
+    </a>
+</li>
+
 <li class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
     <a href="{{ route('admin.users.index') }}" class="nav-link">
         <i class="fas fa-users"></i>

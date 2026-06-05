@@ -51,6 +51,22 @@ class Product extends Model
         return $this->hasOne(ProductImage::class)->where('is_primary', true);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->latest();
+    }
+
+    // Accessors penilaian
+    public function getAverageRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating') ?? 0, 1);
+    }
+
+    public function getReviewsCountAttribute()
+    {
+        return $this->reviews()->count();
+    }
+
     // Mutators
     public function setNameAttribute($value)
     {

@@ -58,6 +58,11 @@ class Order extends Model
         return $this->hasOne(PaymentTransaction::class, 'order_id', 'order_number');
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     // Accessors
     public function getFormattedSubtotalAttribute(): string
     {
@@ -77,14 +82,14 @@ class Order extends Model
     public function getStatusBadgeAttribute(): string
     {
         return match($this->status) {
-            'pending' => '<span class="badge bg-warning">Pending</span>',
-            'paid' => '<span class="badge bg-info">Paid</span>',
-            'processing' => '<span class="badge bg-primary">Processing</span>',
-            'shipped' => '<span class="badge bg-secondary">Shipped</span>',
-            'delivered' => '<span class="badge bg-success">Delivered</span>',
-            'cancelled' => '<span class="badge bg-danger">Cancelled</span>',
-            'refunded' => '<span class="badge bg-dark">Refunded</span>',
-            default => '<span class="badge bg-light">Unknown</span>'
+            'pending' => '<span class="badge bg-warning">Menunggu</span>',
+            'paid' => '<span class="badge bg-info">Dibayar</span>',
+            'processing' => '<span class="badge bg-primary">Diproses</span>',
+            'shipped' => '<span class="badge bg-secondary">Dikirim</span>',
+            'delivered' => '<span class="badge bg-success">Selesai</span>',
+            'cancelled' => '<span class="badge bg-danger">Dibatalkan</span>',
+            'refunded' => '<span class="badge bg-dark">Dikembalikan</span>',
+            default => '<span class="badge bg-light">Tidak Diketahui</span>'
         };
     }
 

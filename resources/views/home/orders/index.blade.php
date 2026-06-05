@@ -121,12 +121,8 @@
                     @foreach($order->items->take(1) as $item)
                       <div class="item-preview">
                         <div class="item-image-tiny">
-                          @if($item->product_image)
-                            <img src="{{ asset('storage/' . $item->product_image) }}" alt="{{ $item->product_name }}"
-                              onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
-                          @else
-                            <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" alt="{{ $item->product_name }}">
-                          @endif
+                          <img src="{{ $item->image_url }}" alt="{{ $item->product_name }}"
+                            onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
                         </div>
                         <div class="item-info-tiny">
                           <div class="item-name-tiny">{{ $item->product_name }}</div>
@@ -153,8 +149,11 @@
                         onclick="markAsDelivered('{{ $order->order_number }}')">
                         <i class="fa fa-check"></i>
                       </button>
-                      <i class="fa fa-check"></i>
-                      </button>
+                    @endif
+                    @if($order->status === 'delivered')
+                      <a href="{{ route('orders.show', $order->order_number) }}#rating" class="action-btn action-btn-warning" title="Beri Penilaian">
+                        <i class="fa fa-star"></i>
+                      </a>
                     @endif
                   </div>
                 </div>
@@ -197,12 +196,8 @@
           @foreach($recommendedProducts as $product)
             <div class="product-item">
               <div class="product-image-small">
-                @if($product->images->where('is_primary', true)->first())
-                  <img src="{{ asset('storage/' . $product->images->where('is_primary', true)->first()->file_path) }}"
-                    alt="{{ $product->name }}" onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
-                @else
-                  <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" alt="{{ $product->name }}">
-                @endif
+                <img src="{{ $product->main_image_url ?? asset('furni-1.0.0/images/product-1.png') }}"
+                  alt="{{ $product->name }}" onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
               </div>
               <div class="product-details">
                 <div class="product-name-small">{{ $product->name }}</div>
@@ -556,13 +551,13 @@
   <script>
     function markAsDelivered(orderNumber) {
       Notiflix.Confirm.show(
-        'Confirm Delivery',
-        'Are you sure you want to mark this order as delivered?',
-        'Yes',
-        'Cancel',
+        'Konfirmasi Penerimaan',
+        'Apakah pesanan ini sudah Anda terima?',
+        'Ya, Sudah Diterima',
+        'Batal',
         function okCb() {
           // Show loading
-          Notiflix.Loading.circle('Processing...');
+          Notiflix.Loading.circle('Memproses...');
 
           fetch(`/orders/${orderNumber}/mark-delivered`, {
             method: 'POST',
@@ -576,18 +571,18 @@
               Notiflix.Loading.remove();
 
               if (data.success) {
-                Notiflix.Notify.success(data.message || 'Order marked as delivered successfully!');
+                Notiflix.Notify.success(data.message || 'Pesanan berhasil ditandai sebagai diterima!');
                 setTimeout(() => {
                   location.reload();
                 }, 1500);
               } else {
-                Notiflix.Notify.failure(data.message || 'Failed to mark order as delivered');
+                Notiflix.Notify.failure(data.message || 'Gagal menandai pesanan sebagai diterima');
               }
             })
             .catch(error => {
               Notiflix.Loading.remove();
               console.error('Error:', error);
-              Notiflix.Notify.failure('An error occurred. Please try again.');
+              Notiflix.Notify.failure('Terjadi kesalahan. Silakan coba lagi.');
             });
         },
         function cancelCb() {

@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/{orderNumber}/reorder', [App\Http\Controllers\Customer\OrderController::class, 'reorder'])->name('reorder');
             Route::get('/{orderNumber}/invoice', [App\Http\Controllers\Customer\OrderController::class, 'invoice'])->name('invoice');
             Route::post('/{orderNumber}/mark-delivered', [App\Http\Controllers\Customer\OrderController::class, 'markAsDelivered'])->name('mark-delivered');
+            Route::post('/{orderNumber}/review', [App\Http\Controllers\Customer\ReviewController::class, 'store'])->name('review');
         });
     });
 
@@ -183,6 +184,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('admin.orders.show');
         Route::post('/{order}/status', [App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
         Route::post('/bulk-update-status', [App\Http\Controllers\Admin\OrderController::class, 'bulkUpdateStatus'])->name('admin.orders.bulk-update-status');
+    });
+
+    // Review/rating management routes
+    Route::prefix('reviews')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('admin.reviews.index');
+        Route::delete('/{review}', [App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
     });
 
 

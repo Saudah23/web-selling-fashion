@@ -130,7 +130,7 @@ class HomeController extends Controller
                 break;
         }
 
-        $products = $query->paginate(12);
+        $products = $query->paginate(8);
 
         // Categories for shop page filtering (use global categories)
         return view('home.shop', compact('products'));
@@ -142,7 +142,7 @@ class HomeController extends Controller
      */
     public function productDetail($id)
     {
-        $product = Product::with(['images', 'category'])->findOrFail($id);
+        $product = Product::with(['images', 'category', 'reviews.user'])->findOrFail($id);
 
         // Get related products from same category
         $relatedProducts = Product::with(['images' => function($query) {

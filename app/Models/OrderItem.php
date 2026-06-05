@@ -50,6 +50,22 @@ class OrderItem extends Model
         return 'Rp ' . number_format($this->subtotal, 0, ',', '.');
     }
 
+    public function getImageUrlAttribute(): string
+    {
+        // Utamakan snapshot gambar saat pesanan dibuat
+        if ($this->product_image) {
+            return asset('storage/' . ltrim($this->product_image, '/'));
+        }
+
+        // Jika tidak ada, pakai gambar produk yang masih ada
+        if ($this->product && $this->product->main_image_url) {
+            return $this->product->main_image_url;
+        }
+
+        // Placeholder terakhir
+        return asset('furni-1.0.0/images/product-1.png');
+    }
+
     public function getDiscountPercentageAttribute(): ?int
     {
         if ($this->product_compare_price && $this->product_compare_price > $this->product_price) {

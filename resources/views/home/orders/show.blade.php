@@ -1,6 +1,6 @@
 @extends('home.layout')
 
-@section('title', 'Order Details - ' . $order->order_number)
+@section('title', 'Detail Pesanan - ' . $order->order_number)
 
 @section('content')
 
@@ -10,10 +10,10 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('home') }}">Beranda</a>
           </li>
           <li class="breadcrumb-item">
-            <a href="{{ route('orders.index') }}">My Orders</a>
+            <a href="{{ route('orders.index') }}">Pesanan Saya</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">{{ $order->order_number }}</li>
         </ol>
@@ -32,7 +32,7 @@
             <div class="order-info">
               <h2 class="order-title">
                 <i class="fa fa-receipt me-2"></i>
-                Order #{{ $order->order_number }}
+                Pesanan #{{ $order->order_number }}
               </h2>
               <div class="order-meta">
                 <span class="order-date">
@@ -52,14 +52,14 @@
               @if($order->status === 'pending')
                 <div class="action-group">
                   @if($order->paymentTransaction && $order->paymentTransaction->status === 'pending')
-                    <a href="{{ route('checkout.payment', $order->order_number) }}" class="action-btn action-btn-success" title="Pay Now">
+                    <a href="{{ route('checkout.payment', $order->order_number) }}" class="action-btn action-btn-success" title="Bayar Sekarang">
                       <i class="fa fa-credit-card"></i>
                     </a>
                   @endif
                   <form method="POST" action="{{ route('orders.cancel', $order->order_number) }}"
-                        class="action-form" onsubmit="return confirm('Are you sure you want to cancel this order?')">
+                        class="action-form" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')">
                     @csrf
-                    <button type="submit" class="action-btn action-btn-danger" title="Cancel Order">
+                    <button type="submit" class="action-btn action-btn-danger" title="Batalkan Pesanan">
                       <i class="fa fa-times"></i>
                     </button>
                   </form>
@@ -70,14 +70,14 @@
               @if(in_array($order->status, ['delivered']))
                 <form method="POST" action="{{ route('orders.reorder', $order->order_number) }}" class="action-form">
                   @csrf
-                  <button type="submit" class="action-btn action-btn-primary" title="Reorder">
+                  <button type="submit" class="action-btn action-btn-primary" title="Pesan Lagi">
                     <i class="fa fa-redo"></i>
                   </button>
                 </form>
               @endif
 
               @if($order->status !== 'pending')
-                <a href="{{ route('orders.invoice', $order->order_number) }}" class="action-btn" target="_blank" title="Download Invoice">
+                <a href="{{ route('orders.invoice', $order->order_number) }}" class="action-btn" target="_blank" title="Unduh Invoice">
                   <i class="fa fa-file-pdf"></i>
                 </a>
               @endif
@@ -92,20 +92,15 @@
               <div class="detail-card">
                 <h4 class="card-title">
                   <i class="fa fa-box me-2"></i>
-                  Order Items ({{ $order->items->count() }} items)
+                  Item Pesanan ({{ $order->items->count() }} item)
                 </h4>
                 <div class="order-items-list">
                   @foreach($order->items as $item)
                     <div class="order-item">
                       <div class="item-image">
-                        @if($item->product_image)
-                          <img src="{{ asset('storage/' . $item->product_image) }}"
-                               alt="{{ $item->product_name }}"
-                               onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
-                        @else
-                          <img src="{{ asset('furni-1.0.0/images/product-1.png') }}"
-                               alt="{{ $item->product_name }}">
-                        @endif
+                        <img src="{{ $item->image_url }}"
+                             alt="{{ $item->product_name }}"
+                             onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
                       </div>
                       <div class="item-details">
                         <h6 class="item-name">{{ $item->product_name }}</h6>
@@ -142,7 +137,7 @@
                         </div>
                       </div>
                       <div class="item-quantity">
-                        <span class="quantity-label">Qty:</span>
+                        <span class="quantity-label">Jml:</span>
                         <span class="quantity-value">{{ $item->quantity }}</span>
                       </div>
                       <div class="item-subtotal">
@@ -153,30 +148,103 @@
                 </div>
               </div>
 
+              <!-- Penilaian Produk (hanya untuk pesanan yang sudah diterima) -->
+              @if($order->status === 'delivered')
+                <div class="detail-card" id="rating">
+                  <h4 class="card-title">
+                    <i class="fa fa-star me-2"></i>
+                    Beri Penilaian Produk
+                  </h4>
+
+                  @if(session('success'))
+                    <div class="alert alert-success py-2">{{ session('success') }}</div>
+                  @endif
+                  @if(session('error'))
+                    <div class="alert alert-danger py-2">{{ session('error') }}</div>
+                  @endif
+                  @if($errors->any())
+                    <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
+                  @endif
+
+                  @php $ratedProducts = collect(); @endphp
+                  @foreach($order->items as $item)
+                    @continue(!$item->product_id || $ratedProducts->contains($item->product_id))
+                    @php
+                      $ratedProducts->push($item->product_id);
+                      $existingReview = $reviewsByProduct[$item->product_id] ?? null;
+                    @endphp
+
+                    <div class="review-block">
+                      <div class="review-product">
+                        <div class="item-image">
+                          <img src="{{ $item->image_url }}" alt="{{ $item->product_name }}"
+                               onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                        </div>
+                        <span class="review-product-name">{{ $item->product_name }}</span>
+                      </div>
+
+                      <form method="POST" action="{{ route('orders.review', $order->order_number) }}">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+
+                        <div class="star-rating">
+                          @for($s = 5; $s >= 1; $s--)
+                            <input type="radio" id="star{{ $item->product_id }}-{{ $s }}"
+                                   name="rating" value="{{ $s }}"
+                                   {{ $existingReview && $existingReview->rating == $s ? 'checked' : '' }} required>
+                            <label for="star{{ $item->product_id }}-{{ $s }}" title="{{ $s }} bintang">
+                              <i class="fa fa-star"></i>
+                            </label>
+                          @endfor
+                        </div>
+
+                        <textarea name="comment" class="form-control review-comment" rows="2"
+                                  placeholder="Tulis ulasan Anda (opsional)...">{{ $existingReview->comment ?? '' }}</textarea>
+
+                        <button type="submit" class="btn btn-sm btn-warning mt-2">
+                          <i class="fa fa-paper-plane me-1"></i>
+                          {{ $existingReview ? 'Perbarui Penilaian' : 'Kirim Penilaian' }}
+                        </button>
+                        @if($existingReview)
+                          <small class="text-success ms-2"><i class="fa fa-check-circle"></i> Sudah dinilai</small>
+                        @endif
+                      </form>
+                    </div>
+                  @endforeach
+                </div>
+              @endif
+
               <!-- Shipping Information -->
               <div class="detail-card">
                 <h4 class="card-title">
                   <i class="fa fa-truck me-2"></i>
-                  Shipping Information
+                  Informasi Pengiriman
                 </h4>
+                @php
+                  $addr = $order->shipping_address ?? [];
+                  $recipient = $addr['recipient_name'] ?? ($addr['name'] ?? '-');
+                  $recipientPhone = $addr['phone'] ?? '-';
+                  $recipientAddress = $addr['address'] ?? '-';
+                  $recipientLocation = collect([
+                    $addr['village_name'] ?? null,
+                    $addr['district_name'] ?? null,
+                    $addr['city_name'] ?? ($addr['city'] ?? null),
+                    $addr['province_name'] ?? ($addr['province'] ?? null),
+                    $addr['postal_code'] ?? null,
+                  ])->filter()->implode(', ');
+                @endphp
                 <div class="shipping-details">
                   <div class="shipping-address">
-                    <h6>Delivery Address</h6>
+                    <h6>Alamat Pengiriman</h6>
                     <div class="address-info">
-                      <p class="recipient-name">{{ $order->shipping_address['recipient_name'] }}</p>
-                      <p class="phone">{{ $order->shipping_address['phone'] }}</p>
-                      <p class="address">{{ $order->shipping_address['address'] }}</p>
-                      <p class="location">
-                        {{ $order->shipping_address['village_name'] }},
-                        {{ $order->shipping_address['district_name'] }},<br>
-                        {{ $order->shipping_address['city_name'] }},
-                        {{ $order->shipping_address['province_name'] }}
-                        {{ $order->shipping_address['postal_code'] }}
-                      </p>
+                      <p class="recipient-name">{{ $recipient }}</p>
+                      <p class="phone">{{ $recipientPhone }}</p>
+                      <p class="address">{{ $recipientAddress }}</p>
+                      <p class="location">{{ $recipientLocation ?: '-' }}</p>
                     </div>
                   </div>
                   <div class="shipping-service">
-                    <h6>Shipping Service</h6>
+                    <h6>Jasa Pengiriman</h6>
                     <div class="courier-info">
                       @php
                         $courier = strtolower($order->shipping_courier ?? '');
@@ -205,7 +273,7 @@
                     </div>
                     @if($order->tracking_number)
                       <div class="tracking-info">
-                        <strong>Tracking:</strong>
+                        <strong>No. Resi:</strong>
                         <code>{{ $order->tracking_number }}</code>
                       </div>
                     @endif
@@ -218,11 +286,11 @@
                 <div class="detail-card">
                   <h4 class="card-title">
                     <i class="fa fa-credit-card me-2"></i>
-                    Payment Information
+                    Informasi Pembayaran
                   </h4>
                   <div class="payment-details">
                     <div class="payment-status">
-                      <span class="status-label">Payment Status:</span>
+                      <span class="status-label">Status Pembayaran:</span>
                       @if(is_string($order->paymentTransaction->status_badge))
                         {!! $order->paymentTransaction->status_badge !!}
                       @else
@@ -231,19 +299,19 @@
                     </div>
                     @if($order->paymentTransaction->payment_type)
                       <div class="payment-method">
-                        <span class="method-label">Payment Method:</span>
+                        <span class="method-label">Metode Pembayaran:</span>
                         <span class="method-value">{{ ucfirst(str_replace('_', ' ', $order->paymentTransaction->payment_type)) }}</span>
                       </div>
                     @endif
                     @if($order->paymentTransaction->transaction_id)
                       <div class="transaction-id">
-                        <span class="transaction-label">Transaction ID:</span>
+                        <span class="transaction-label">ID Transaksi:</span>
                         <code>{{ $order->paymentTransaction->transaction_id }}</code>
                       </div>
                     @endif
                     @if($order->paymentTransaction->settlement_time)
                       <div class="payment-time">
-                        <span class="time-label">Payment Time:</span>
+                        <span class="time-label">Waktu Pembayaran:</span>
                         <span class="time-value">{{ $order->paymentTransaction->settlement_time->format('d M Y, H:i') }}</span>
                       </div>
                     @endif
@@ -256,7 +324,7 @@
                 <div class="detail-card">
                   <h4 class="card-title">
                     <i class="fa fa-comment me-2"></i>
-                    Order Notes
+                    Catatan Pesanan
                   </h4>
                   <p class="order-notes">{{ $order->notes }}</p>
                 </div>
@@ -269,20 +337,20 @@
               <div class="order-summary-card">
                 <h4 class="card-title">
                   <i class="fa fa-calculator me-2"></i>
-                  Order Summary
+                  Ringkasan Pesanan
                 </h4>
                 <div class="summary-details">
                   <div class="summary-row">
-                    <span>Subtotal ({{ $order->items->count() }} items)</span>
+                    <span>Subtotal ({{ $order->items->count() }} item)</span>
                     <span>{{ $order->formatted_subtotal }}</span>
                   </div>
                   <div class="summary-row">
-                    <span>Shipping Cost</span>
+                    <span>Ongkos Kirim</span>
                     <span>{{ $order->formatted_shipping_cost }}</span>
                   </div>
                   @if($order->tax_amount > 0)
                     <div class="summary-row">
-                      <span>Tax</span>
+                      <span>Pajak</span>
                       <span>{{ 'Rp ' . number_format($order->tax_amount, 0, ',', '.') }}</span>
                     </div>
                   @endif
@@ -294,14 +362,14 @@
 
                 <!-- Order Timeline -->
                 <div class="order-timeline">
-                  <h6>Order Timeline</h6>
+                  <h6>Riwayat Pesanan</h6>
                   <div class="timeline">
                     <div class="timeline-item {{ $order->created_at ? 'completed' : '' }}">
                       <div class="timeline-icon">
                         <i class="fa fa-shopping-cart"></i>
                       </div>
                       <div class="timeline-content">
-                        <h6>Order Placed</h6>
+                        <h6>Pesanan Dibuat</h6>
                         @if($order->created_at)
                           <p>{{ $order->created_at->format('d M Y, H:i') }}</p>
                         @endif
@@ -313,11 +381,11 @@
                         <i class="fa fa-credit-card"></i>
                       </div>
                       <div class="timeline-content">
-                        <h6>Payment Confirmed</h6>
+                        <h6>Pembayaran Dikonfirmasi</h6>
                         @if($order->paid_at)
                           <p>{{ $order->paid_at->format('d M Y, H:i') }}</p>
                         @else
-                          <p>Waiting for payment</p>
+                          <p>Menunggu pembayaran</p>
                         @endif
                       </div>
                     </div>
@@ -327,8 +395,8 @@
                         <i class="fa fa-cogs"></i>
                       </div>
                       <div class="timeline-content">
-                        <h6>Processing</h6>
-                        <p>Order being prepared</p>
+                        <h6>Diproses</h6>
+                        <p>Pesanan sedang disiapkan</p>
                       </div>
                     </div>
 
@@ -337,11 +405,11 @@
                         <i class="fa fa-truck"></i>
                       </div>
                       <div class="timeline-content">
-                        <h6>Shipped</h6>
+                        <h6>Dikirim</h6>
                         @if($order->shipped_at)
                           <p>{{ $order->shipped_at->format('d M Y, H:i') }}</p>
                         @else
-                          <p>Waiting to ship</p>
+                          <p>Menunggu pengiriman</p>
                         @endif
                       </div>
                     </div>
@@ -351,11 +419,11 @@
                         <i class="fa fa-check-circle"></i>
                       </div>
                       <div class="timeline-content">
-                        <h6>Delivered</h6>
+                        <h6>Diterima</h6>
                         @if($order->delivered_at)
                           <p>{{ $order->delivered_at->format('d M Y, H:i') }}</p>
                         @else
-                          <p>Waiting for delivery</p>
+                          <p>Menunggu diterima</p>
                         @endif
                       </div>
                     </div>
@@ -380,6 +448,73 @@
 .order-details-section {
     padding: 0.75rem 0;
     background-color: #f8f9fa;
+}
+
+/* Penilaian Produk */
+.review-block {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.review-product {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.review-product .item-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.review-product .item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-product-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #2c3e50;
+}
+
+/* Star rating widget (radio buttons reversed for hover) */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #d0d0d0;
+    cursor: pointer;
+    padding: 0 0.1rem;
+    transition: color 0.15s;
+    margin: 0;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f1c40f;
+}
+
+.review-comment {
+    font-size: 0.85rem;
 }
 
 .order-header-card {

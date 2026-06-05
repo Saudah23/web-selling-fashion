@@ -69,10 +69,13 @@ class OrderController extends Controller
     {
         $order = Order::where('order_number', $orderNumber)
             ->where('user_id', Auth::id())
-            ->with(['items.product', 'paymentTransaction'])
+            ->with(['items.product', 'paymentTransaction', 'reviews'])
             ->firstOrFail();
 
-        return view('home.orders.show', compact('order'));
+        // Petakan penilaian yang sudah ada berdasarkan product_id
+        $reviewsByProduct = $order->reviews->keyBy('product_id');
+
+        return view('home.orders.show', compact('order', 'reviewsByProduct'));
     }
 
     /**

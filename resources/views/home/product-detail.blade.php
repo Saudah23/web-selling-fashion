@@ -11,10 +11,10 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="{{ route('home') }}">Home</a>
+            <a href="{{ route('home') }}">Beranda</a>
           </li>
           <li class="breadcrumb-item">
-            <a href="{{ route('shop') }}">Shop</a>
+            <a href="{{ route('shop') }}">Katalog</a>
           </li>
           @if($product->category)
             <li class="breadcrumb-item">
@@ -79,6 +79,18 @@
             <!-- Product Header -->
             <div class="product-header">
               <h1 class="product-title">{{ $product->name }}</h1>
+              @php $avgRating = $product->average_rating; $reviewsCount = $product->reviews_count; @endphp
+              <div class="product-rating-summary">
+                @for($i = 1; $i <= 5; $i++)
+                  <i class="fa fa-star {{ $i <= round($avgRating) ? 'text-warning' : 'text-muted' }}"></i>
+                @endfor
+                @if($reviewsCount > 0)
+                  <span class="rating-value">{{ number_format($avgRating, 1) }}</span>
+                  <a href="#reviews" class="rating-count">({{ $reviewsCount }} ulasan)</a>
+                @else
+                  <span class="rating-count">Belum ada ulasan</span>
+                @endif
+              </div>
               @if($product->sku)
                 <p class="product-sku">SKU: {{ $product->sku }}</p>
               @endif
@@ -110,19 +122,17 @@
                 @if($product->stock_quantity <= $product->low_stock_threshold)
                   <div class="stock-warning">
                     <i class="fas fa-exclamation-triangle"></i>
-                    Only {{ $product->stock_quantity }} left in stock!
+                    Stok tinggal {{ $product->stock_quantity }} lagi!
                   </div>
                 @else
                   <div class="stock-available">
                     <i class="fas fa-check-circle"></i>
-                    In Stock ({{ $product->stock_quantity }} available)
+                    Tersedia ({{ $product->stock_quantity }} stok)
                   </div>
                 @endif
               @else
                 <div class="stock-out">
-                  <i class="fas fa-times-circle"></i>
-                  Out of Stock
-                </div>
+                  <i class="fas fa-times-circle"></i>Stok Habis</div>
               @endif
             </div>
 
@@ -131,7 +141,7 @@
               @if($product->stock_quantity > 0)
                 <!-- Quantity Selector -->
                 <div class="quantity-selector">
-                  <label for="quantity" class="quantity-label">Quantity:</label>
+                  <label for="quantity" class="quantity-label">Jumlah:</label>
                   <div class="quantity-controls">
                     <button type="button" class="quantity-btn quantity-minus" onclick="changeQuantity(-1)">-</button>
                     <input type="number"
@@ -143,21 +153,17 @@
                            class="quantity-input">
                     <button type="button" class="quantity-btn quantity-plus" onclick="changeQuantity(1)">+</button>
                   </div>
-                  <small class="quantity-note">{{ $product->stock_quantity }} available</small>
+                  <small class="quantity-note">{{ $product->stock_quantity }} tersedia</small>
                 </div>
               @endif
 
               <div class="action-buttons">
                 @if($product->stock_quantity > 0)
                   <button class="btn btn-add-cart" type="button" onclick="addToCart({{ $product->id }})">
-                    <i class="fas fa-shopping-cart"></i>
-                    Add to Cart
-                  </button>
+                    <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang </button>
                 @else
                   <button class="btn btn-add-cart" disabled>
-                    <i class="fas fa-times"></i>
-                    Out of Stock
-                  </button>
+                    <i class="fas fa-times"></i>Stok Habis</button>
                 @endif
 
                 <!-- Wishlist Button -->
@@ -174,18 +180,18 @@
             <!-- Product Details -->
             @if($product->description || ($product->attributes && is_array($product->attributes) && count($product->attributes) > 0) || $product->weight || $product->dimensions)
               <div class="product-details">
-                <h3>Product Details</h3>
+                <h3>Detail Produk</h3>
 
                 @if($product->description)
                   <div class="detail-section">
-                    <h4>Description</h4>
+                    <h4>Deskripsi</h4>
                     <p>{!! nl2br(e($product->description)) !!}</p>
                   </div>
                 @endif
 
                 @if($product->attributes && is_array($product->attributes) && count($product->attributes) > 0)
                   <div class="detail-section">
-                    <h4>Specifications</h4>
+                    <h4>Spesifikasi</h4>
                     <div class="spec-list">
                       @foreach($product->attributes as $key => $value)
                         @if($value && !in_array(strtolower($key), ['id', 'created_at', 'updated_at']))
@@ -201,17 +207,17 @@
 
                 @if($product->weight || $product->dimensions)
                   <div class="detail-section">
-                    <h4>Physical Properties</h4>
+                    <h4>Properti Fisik</h4>
                     <div class="spec-list">
                       @if($product->weight)
                         <div class="spec-item">
-                          <span class="spec-label">Weight:</span>
+                          <span class="spec-label">Berat:</span>
                           <span class="spec-value">{{ $product->weight }}g</span>
                         </div>
                       @endif
                       @if($product->dimensions)
                         <div class="spec-item">
-                          <span class="spec-label">Dimensions:</span>
+                          <span class="spec-label">Dimensi:</span>
                           <span class="spec-value">{{ $product->dimensions }}</span>
                         </div>
                       @endif
@@ -225,10 +231,33 @@
 
       </div>
 
+      <!-- Ulasan Pelanggan -->
+      <div class="product-reviews" id="reviews">
+        <h3>Ulasan Pelanggan ({{ $product->reviews_count }})</h3>
+        @forelse($product->reviews as $review)
+          <div class="review-card">
+            <div class="review-card-head">
+              <span class="review-author">{{ $review->user->name ?? 'Pelanggan' }}</span>
+              <span class="review-stars">
+                @for($i = 1; $i <= 5; $i++)
+                  <i class="fa fa-star {{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}"></i>
+                @endfor
+              </span>
+              <small class="review-date text-muted">{{ $review->created_at->format('d M Y') }}</small>
+            </div>
+            @if($review->comment)
+              <p class="review-text">{{ $review->comment }}</p>
+            @endif
+          </div>
+        @empty
+          <p class="text-muted">Belum ada ulasan untuk produk ini.</p>
+        @endforelse
+      </div>
+
       <!-- Related Products -->
       @if($relatedProducts->isNotEmpty())
         <div class="related-products">
-          <h3>Related Products</h3>
+          <h3>Produk Terkait</h3>
           <div class="related-grid">
             @foreach($relatedProducts as $relatedProduct)
               <div class="related-card">
@@ -546,6 +575,55 @@ function showNotification(type, message) {
     color: #333;
     font-weight: 500;
   }
+
+  /* Rating Summary & Reviews */
+  .product-rating-summary {
+    margin: 8px 0;
+    font-size: 1rem;
+  }
+  .product-rating-summary .rating-value {
+    font-weight: 600;
+    margin-left: 6px;
+    color: #2c3e50;
+  }
+  .product-rating-summary .rating-count {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-left: 4px;
+    text-decoration: none;
+  }
+  .text-warning { color: #f1c40f !important; }
+  .text-muted { color: #d0d0d0 !important; }
+
+  .product-reviews {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+  }
+  .product-reviews > h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #2c3e50;
+  }
+  .review-card {
+    padding: 12px 16px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #fafafa;
+  }
+  .review-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .review-author { font-weight: 600; color: #2c3e50; }
+  .review-stars { font-size: 0.9rem; }
+  .review-date { margin-left: auto; }
+  .review-text { margin: 0; color: #555; font-size: 0.92rem; }
 
   /* Product Detail Section */
   .product-detail-section {
