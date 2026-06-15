@@ -40,9 +40,9 @@
                   <div class="cart-item-image">
                     @if($item->product->images->isNotEmpty())
                       <img src="{{ asset($item->product->images->first()->url) }}" alt="{{ $item->product->name }}"
-                        onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                        onerror="this.src='{{ asset('images/no-image.svg') }}';">
                     @else
-                      <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" alt="{{ $item->product->name }}">
+                      <img src="{{ asset('images/no-image.svg') }}" alt="{{ $item->product->name }}">
                     @endif
                   </div>
 
@@ -131,9 +131,9 @@
                     <div class="rec-image">
                       @if($product->images->isNotEmpty())
                         <img src="{{ asset($product->images->first()->url) }}" alt="{{ $product->name }}"
-                          onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                          onerror="this.src='{{ asset('images/no-image.svg') }}';">
                       @else
-                        <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" alt="{{ $product->name }}">
+                        <img src="{{ asset('images/no-image.svg') }}" alt="{{ $product->name }}">
                       @endif
                     </div>
                     <div class="rec-details">

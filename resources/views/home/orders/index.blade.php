@@ -122,7 +122,7 @@
                       <div class="item-preview">
                         <div class="item-image-tiny">
                           <img src="{{ $item->image_url }}" alt="{{ $item->product_name }}"
-                            onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                            onerror="this.src='{{ asset('images/no-image.svg') }}';">
                         </div>
                         <div class="item-info-tiny">
                           <div class="item-name-tiny">{{ $item->product_name }}</div>
@@ -196,8 +196,8 @@
           @foreach($recommendedProducts as $product)
             <div class="product-item">
               <div class="product-image-small">
-                <img src="{{ $product->main_image_url ?? asset('furni-1.0.0/images/product-1.png') }}"
-                  alt="{{ $product->name }}" onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                <img src="{{ $product->main_image_url ?? asset('images/no-image.svg') }}"
+                  alt="{{ $product->name }}" onerror="this.src='{{ asset('images/no-image.svg') }}';">
               </div>
               <div class="product-details">
                 <div class="product-name-small">{{ $product->name }}</div>

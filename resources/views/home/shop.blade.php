@@ -111,9 +111,9 @@
                   @endphp
                   @if($primaryImage)
                     <img src="{{ asset($primaryImage->url) }}" class="img-fluid" alt="{{ $product->name }}"
-                      onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                      onerror="this.src='{{ asset('images/no-image.svg') }}';">
                   @else
-                    <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" class="img-fluid" alt="{{ $product->name }}">
+                    <img src="{{ asset('images/no-image.svg') }}" class="img-fluid" alt="{{ $product->name }}">
                   @endif
                 </a>
               </div>

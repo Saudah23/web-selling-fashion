@@ -107,9 +107,9 @@
                     @if($product->images->isNotEmpty())
                       <img src="{{ asset($product->images->first()->url) }}"
                            alt="{{ $product->name }}"
-                           onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                           onerror="this.src='{{ asset('images/no-image.svg') }}';">
                     @else
-                      <img src="{{ asset('furni-1.0.0/images/product-1.png') }}"
+                      <img src="{{ asset('images/no-image.svg') }}"
                            alt="{{ $product->name }}">
                     @endif
                   </div>

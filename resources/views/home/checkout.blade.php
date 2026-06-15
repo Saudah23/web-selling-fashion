@@ -136,13 +136,13 @@
               @foreach($cartItems as $item)
                 <div class="order-item">
                   <div class="order-item-image">
-                    @if($item->product->images->where('is_primary', true)->first())
+                    @if($item->product->main_image_url)
                       <img
-                        src="{{ asset('storage/' . $item->product->images->where('is_primary', true)->first()->file_path) }}"
+                        src="{{ $item->product->main_image_url }}"
                         alt="{{ $item->product->name }}"
-                        onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                        onerror="this.src='{{ asset('images/no-image.svg') }}';">
                     @else
-                      <img src="{{ asset('furni-1.0.0/images/product-1.png') }}" alt="{{ $item->product->name }}">
+                      <img src="{{ asset('images/no-image.svg') }}" alt="{{ $item->product->name }}">
                     @endif
                   </div>
                   <div class="order-item-details">

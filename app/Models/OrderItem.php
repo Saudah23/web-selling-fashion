@@ -63,7 +63,7 @@ class OrderItem extends Model
         }
 
         // Placeholder terakhir
-        return asset('furni-1.0.0/images/product-1.png');
+        return asset('images/no-image.svg');
     }
 
     public function getDiscountPercentageAttribute(): ?int

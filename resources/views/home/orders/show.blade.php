@@ -100,7 +100,7 @@
                       <div class="item-image">
                         <img src="{{ $item->image_url }}"
                              alt="{{ $item->product_name }}"
-                             onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                             onerror="this.src='{{ asset('images/no-image.svg') }}';">
                       </div>
                       <div class="item-details">
                         <h6 class="item-name">{{ $item->product_name }}</h6>
@@ -178,7 +178,7 @@
                       <div class="review-product">
                         <div class="item-image">
                           <img src="{{ $item->image_url }}" alt="{{ $item->product_name }}"
-                               onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                               onerror="this.src='{{ asset('images/no-image.svg') }}';">
                         </div>
                         <span class="review-product-name">{{ $item->product_name }}</span>
                       </div>

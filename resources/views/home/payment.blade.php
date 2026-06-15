@@ -87,14 +87,9 @@
                 @foreach($order->items as $item)
                   <div class="order-item">
                     <div class="item-image">
-                      @if($item->product_image)
-                        <img src="{{ asset('storage/' . $item->product_image) }}"
-                             alt="{{ $item->product_name }}"
-                             onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
-                      @else
-                        <img src="{{ asset('furni-1.0.0/images/product-1.png') }}"
-                             alt="{{ $item->product_name }}">
-                      @endif
+                      <img src="{{ $item->image_url }}"
+                           alt="{{ $item->product_name }}"
+                           onerror="this.src='{{ asset('images/no-image.svg') }}';">
                     </div>
                     <div class="item-details">
                       <h6 class="item-name">{{ $item->product_name }}</h6>

@@ -47,7 +47,7 @@
                      src="{{ asset($primaryImage->url) }}"
                      class="main-product-image"
                      alt="{{ $product->name }}"
-                     onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                     onerror="this.src='{{ asset('images/no-image.svg') }}';">
               </div>
 
               @if($product->images->count() > 1)
@@ -58,14 +58,14 @@
                          class="thumbnail-img {{ $image->is_primary ? 'active' : '' }}"
                          alt="{{ $product->name }}"
                          onclick="changeMainImage('{{ asset($image->url) }}', this)"
-                         onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                         onerror="this.src='{{ asset('images/no-image.svg') }}';">
                   @endforeach
                 </div>
               @endif
             @else
               <!-- Default Image -->
               <div class="main-image-container">
-                <img src="{{ asset('furni-1.0.0/images/product-1.png') }}"
+                <img src="{{ asset('images/no-image.svg') }}"
                      class="main-product-image"
                      alt="{{ $product->name }}">
               </div>
@@ -266,9 +266,9 @@
                     @if($relatedProduct->images->isNotEmpty())
                       <img src="{{ asset($relatedProduct->images->first()->url) }}"
                            alt="{{ $relatedProduct->name }}"
-                           onerror="this.src='{{ asset('furni-1.0.0/images/product-1.png') }}';">
+                           onerror="this.src='{{ asset('images/no-image.svg') }}';">
                     @else
-                      <img src="{{ asset('furni-1.0.0/images/product-1.png') }}"
+                      <img src="{{ asset('images/no-image.svg') }}"
                            alt="{{ $relatedProduct->name }}">
                     @endif
                   </div>
