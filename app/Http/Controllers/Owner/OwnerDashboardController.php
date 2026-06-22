@@ -632,6 +632,78 @@ class OwnerDashboardController extends Controller
         ];
     }
 
+    /**
+     * Helper SQL date functions yang kompatibel lintas driver (MySQL untuk dev, SQLite untuk produksi).
+     * SQLite tidak punya fungsi HOUR/WEEK/DAYNAME/DAYOFWEEK/TIMESTAMPDIFF, jadi diterjemahkan ke strftime/julianday.
+     */
+    private function isSqlite()
+    {
+        return DB::connection()->getDriverName() === 'sqlite';
+    }
+
+    private function sqlHour($column)
+    {
+        return $this->isSqlite()
+            ? "CAST(strftime('%H', $column) AS INTEGER)"
+            : "HOUR($column)";
+    }
+
+    private function sqlMonth($column)
+    {
+        return $this->isSqlite()
+            ? "CAST(strftime('%m', $column) AS INTEGER)"
+            : "MONTH($column)";
+    }
+
+    private function sqlYear($column)
+    {
+        return $this->isSqlite()
+            ? "CAST(strftime('%Y', $column) AS INTEGER)"
+            : "YEAR($column)";
+    }
+
+    private function sqlWeek($column)
+    {
+        return $this->isSqlite()
+            ? "CAST(strftime('%W', $column) AS INTEGER)"
+            : "WEEK($column)";
+    }
+
+    // Mengikuti MySQL DAYOFWEEK: 1=Minggu ... 7=Sabtu
+    private function sqlDayOfWeek($column)
+    {
+        return $this->isSqlite()
+            ? "(CAST(strftime('%w', $column) AS INTEGER) + 1)"
+            : "DAYOFWEEK($column)";
+    }
+
+    private function sqlDayName($column)
+    {
+        if (! $this->isSqlite()) {
+            return "DAYNAME($column)";
+        }
+
+        return "CASE CAST(strftime('%w', $column) AS INTEGER)"
+            . " WHEN 0 THEN 'Sunday' WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday'"
+            . " WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday'"
+            . " WHEN 6 THEN 'Saturday' END";
+    }
+
+    private function sqlHoursDiff($start, $end)
+    {
+        return $this->isSqlite()
+            ? "((julianday($end) - julianday($start)) * 24)"
+            : "TIMESTAMPDIFF(HOUR, $start, $end)";
+    }
+
+    // Selisih hari dari $column sampai sekarang (MySQL DATEDIFF(NOW(), col))
+    private function sqlDaysSince($column)
+    {
+        return $this->isSqlite()
+            ? "CAST((julianday('now') - julianday($column)) AS INTEGER)"
+            : "DATEDIFF(NOW(), $column)";
+    }
+
     private function getBusinessReportsData($period, $year)
     {
         // Calculate date ranges
@@ -839,7 +911,7 @@ class OwnerDashboardController extends Controller
         ];
 
         // Average order processing time
-        $avgProcessingTime = Order::select(DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, updated_at)) as avg_hours'))
+        $avgProcessingTime = Order::select(DB::raw('AVG(' . $this->sqlHoursDiff('created_at', 'updated_at') . ') as avg_hours'))
             ->where('status', 'delivered')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->first();
@@ -855,33 +927,33 @@ class OwnerDashboardController extends Controller
     {
         // Peak order times
         $peakTimes = Order::select(
-                DB::raw('HOUR(created_at) as hour'),
+                DB::raw($this->sqlHour('created_at') . ' as hour'),
                 DB::raw('COUNT(*) as order_count')
             )
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy(DB::raw('HOUR(created_at)'))
+            ->groupBy(DB::raw($this->sqlHour('created_at')))
             ->orderBy('order_count', 'desc')
             ->limit(5)
             ->get();
 
         // Peak order days
         $peakDays = Order::select(
-                DB::raw('DAYNAME(created_at) as day_name'),
+                DB::raw($this->sqlDayName('created_at') . ' as day_name'),
                 DB::raw('COUNT(*) as order_count')
             )
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy(DB::raw('DAYNAME(created_at)'))
+            ->groupBy(DB::raw($this->sqlDayName('created_at')))
             ->orderBy('order_count', 'desc')
             ->get();
 
         // Seasonal trends
         $seasonalTrends = Order::select(
-                DB::raw('WEEK(created_at) as week_number'),
+                DB::raw($this->sqlWeek('created_at') . ' as week_number'),
                 DB::raw('COUNT(*) as order_count'),
                 DB::raw('SUM(total_amount) as total_revenue')
             )
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy(DB::raw('WEEK(created_at)'))
+            ->groupBy(DB::raw($this->sqlWeek('created_at')))
             ->orderBy('week_number')
             ->get();
 
@@ -1074,14 +1146,14 @@ class OwnerDashboardController extends Controller
     {
         // Revenue by hour of day
         $revenueByHour = PaymentTransaction::whereIn('status', ['settlement', 'capture'])
-            ->select(DB::raw('HOUR(settlement_time) as hour'), DB::raw('SUM(gross_amount) as revenue'))
+            ->select(DB::raw($this->sqlHour('settlement_time') . ' as hour'), DB::raw('SUM(gross_amount) as revenue'))
             ->groupBy('hour')
             ->orderBy('hour')
             ->get();
 
         // Revenue by day of week
         $revenueByDayOfWeek = PaymentTransaction::whereIn('status', ['settlement', 'capture'])
-            ->select(DB::raw('DAYOFWEEK(settlement_time) as day_of_week'), DB::raw('SUM(gross_amount) as revenue'))
+            ->select(DB::raw($this->sqlDayOfWeek('settlement_time') . ' as day_of_week'), DB::raw('SUM(gross_amount) as revenue'))
             ->groupBy('day_of_week')
             ->orderBy('day_of_week')
             ->get()
@@ -1153,7 +1225,7 @@ class OwnerDashboardController extends Controller
 
         // Purchase patterns by time
         $purchasePatterns = Order::select(
-                DB::raw('HOUR(created_at) as hour'),
+                DB::raw($this->sqlHour('created_at') . ' as hour'),
                 DB::raw('COUNT(*) as order_count'),
                 DB::raw('AVG(total_amount) as avg_amount')
             )
@@ -1177,7 +1249,7 @@ class OwnerDashboardController extends Controller
                 'products.name',
                 'products.created_at as launch_date',
                 DB::raw('SUM(order_items.quantity) as total_sold'),
-                DB::raw('DATEDIFF(NOW(), products.created_at) as days_since_launch')
+                DB::raw($this->sqlDaysSince('products.created_at') . ' as days_since_launch')
             )
             ->where('orders.status', '!=', 'cancelled')
             ->groupBy('products.id', 'products.name', 'products.created_at')
@@ -1229,8 +1301,8 @@ class OwnerDashboardController extends Controller
     {
         // Sales by month across years
         $monthlyTrends = Order::select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('YEAR(created_at) as year'),
+                DB::raw($this->sqlMonth('created_at') . ' as month'),
+                DB::raw($this->sqlYear('created_at') . ' as year'),
                 DB::raw('COUNT(*) as order_count'),
                 DB::raw('SUM(total_amount) as revenue')
             )
