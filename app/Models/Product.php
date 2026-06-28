@@ -14,7 +14,6 @@ class Product extends Model
         'short_description',
         'sku',
         'price',
-        'compare_price',
         'stock_quantity',
         'min_stock_level',
         'weight',
@@ -28,7 +27,6 @@ class Product extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
-        'compare_price' => 'decimal:2',
         'weight' => 'decimal:2',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
@@ -78,19 +76,6 @@ class Product extends Model
     public function getFormattedPriceAttribute()
     {
         return 'Rp ' . number_format($this->price, 0, ',', '.');
-    }
-
-    public function getFormattedComparePriceAttribute()
-    {
-        return $this->compare_price ? 'Rp ' . number_format($this->compare_price, 0, ',', '.') : null;
-    }
-
-    public function getDiscountPercentageAttribute()
-    {
-        if ($this->compare_price && $this->compare_price > $this->price) {
-            return round((($this->compare_price - $this->price) / $this->compare_price) * 100);
-        }
-        return 0;
     }
 
     public function getMainImageAttribute()

@@ -81,38 +81,30 @@
 
                     <!-- Pricing & Stock -->
                     <div class="row">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="price" class="form-label">Harga <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
-                                <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>
+                                <input type="text" inputmode="numeric" class="form-control" id="price" name="price" placeholder="0" required>
                             </div>
                             <div class="invalid-feedback" id="priceError"></div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="compare_price" class="form-label">Harga Banding</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Rp</span>
-                                <input type="number" class="form-control" id="compare_price" name="compare_price" min="0" step="0.01">
-                            </div>
-                            <div class="invalid-feedback" id="comparePriceError"></div>
-                        </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="stock_quantity" class="form-label">Jumlah Stok <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" min="0" required>
-                            <div class="invalid-feedback" id="stockQuantityError"></div>
+                            <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" min="0" step="1" required>
+                            <div class="invalid-feedback" id="stock_quantityError"></div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="min_stock_level" class="form-label">Level Stok Min <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="min_stock_level" name="min_stock_level" min="0" required>
-                            <div class="invalid-feedback" id="minStockLevelError"></div>
+                            <input type="number" class="form-control" id="min_stock_level" name="min_stock_level" min="0" step="1" required>
+                            <div class="invalid-feedback" id="min_stock_levelError"></div>
                         </div>
                     </div>
 
                     <!-- Physical Properties -->
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="weight" class="form-label">Berat (kg)</label>
+                            <label for="weight" class="form-label">Berat (g)</label>
                             <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.01">
                             <div class="invalid-feedback" id="weightError"></div>
                         </div>
@@ -614,6 +606,21 @@ $(document).ready(function() {
         ]
     });
 
+    // Format harga otomatis (ribuan) & hanya angka
+    $('#price').on('input', function() {
+        const digits = $(this).val().replace(/\D/g, '');
+        $(this).val(digits ? Number(digits).toLocaleString('id-ID') : '');
+    });
+
+    // Stok hanya angka bulat positif (blok huruf, minus, titik/koma, e)
+    $('#stock_quantity, #min_stock_level').on('keydown', function(e) {
+        if (['e', 'E', '+', '-', '.', ','].includes(e.key)) {
+            e.preventDefault();
+        }
+    }).on('input', function() {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
     // Form submission
     $('#productForm').on('submit', function(e) {
         e.preventDefault();
@@ -685,8 +692,7 @@ function editProduct(id) {
                 $('#category_id').val(product.category_id);
                 $('#description').val(product.description);
                 $('#short_description').val(product.short_description);
-                $('#price').val(product.price);
-                $('#compare_price').val(product.compare_price);
+                $('#price').val(product.price ? Number(Math.round(product.price)).toLocaleString('id-ID') : '');
                 $('#stock_quantity').val(product.stock_quantity);
                 $('#min_stock_level').val(product.min_stock_level);
                 $('#weight').val(product.weight);
@@ -734,10 +740,9 @@ function viewProduct(id) {
                             <h6><i class="fas fa-dollar-sign me-2"></i>Pricing & Stock</h6>
                             <table class="table table-sm">
                                 <tr><td><strong>Price:</strong></td><td>Rp ${product.price ? Number(product.price).toLocaleString('id-ID') : '0'}</td></tr>
-                                <tr><td><strong>Compare Price:</strong></td><td>${product.compare_price ? 'Rp ' + Number(product.compare_price).toLocaleString('id-ID') : '-'}</td></tr>
                                 <tr><td><strong>Stock:</strong></td><td>${product.stock_quantity}</td></tr>
                                 <tr><td><strong>Min Stock:</strong></td><td>${product.min_stock_level}</td></tr>
-                                <tr><td><strong>Weight:</strong></td><td>${product.weight ? product.weight + ' kg' : '-'}</td></tr>
+                                <tr><td><strong>Weight:</strong></td><td>${product.weight ? product.weight + ' g' : '-'}</td></tr>
                                 <tr><td><strong>Dimensions:</strong></td><td>${product.dimensions || '-'}</td></tr>
                             </table>
                         </div>
@@ -981,10 +986,9 @@ function submitForm() {
         category_id: $('#category_id').val(),
         description: $('#description').val().trim(),
         short_description: $('#short_description').val().trim(),
-        price: parseFloat($('#price').val()) || 0,
-        compare_price: parseFloat($('#compare_price').val()) || null,
-        stock_quantity: parseInt($('#stock_quantity').val()) || 0,
-        min_stock_level: parseInt($('#min_stock_level').val()) || 0,
+        price: parseInt($('#price').val().replace(/\D/g, ''), 10) || 0,
+        stock_quantity: parseInt($('#stock_quantity').val(), 10),
+        min_stock_level: parseInt($('#min_stock_level').val(), 10),
         weight: parseFloat($('#weight').val()) || null,
         dimensions: $('#dimensions').val().trim(),
         sort_order: parseInt($('#sort_order').val()) || 0,
@@ -1003,6 +1007,18 @@ function submitForm() {
     }
     if (!formData.category_id) {
         showValidationErrors({category_id: ['Category is required']});
+        return;
+    }
+    if (!formData.price || formData.price <= 0) {
+        showValidationErrors({price: ['Harga harus diisi dan lebih dari 0']});
+        return;
+    }
+    if (isNaN(formData.stock_quantity) || formData.stock_quantity < 0) {
+        showValidationErrors({stock_quantity: ['Jumlah stok harus diisi dan tidak boleh negatif']});
+        return;
+    }
+    if (isNaN(formData.min_stock_level) || formData.min_stock_level < 0) {
+        showValidationErrors({min_stock_level: ['Level stok minimum harus diisi dan tidak boleh negatif']});
         return;
     }
 
@@ -1084,13 +1100,13 @@ function showValidationErrors(errors) {
         const errorDiv = $(`#${field}Error`);
 
         input.addClass('is-invalid');
-        errorDiv.text(errors[field][0]);
+        errorDiv.addClass('d-block').text(errors[field][0]);
     }
 }
 
 function clearValidationErrors() {
     $('.form-control, .form-select').removeClass('is-invalid');
-    $('.invalid-feedback').text('');
+    $('.invalid-feedback').removeClass('d-block').text('');
 }
 
 // Notiflix is configured globally in layout template

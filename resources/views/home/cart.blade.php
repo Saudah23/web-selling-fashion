@@ -35,8 +35,19 @@
           <!-- Cart Items -->
           <div class="col-lg-9">
             <div class="cart-items-container">
+              @php $cartHasStockIssue = false; @endphp
               @foreach($cartItems as $item)
-                <div class="cart-item" data-cart-id="{{ $item->id }}">
+                @php
+                  $availableStock = $item->product->stock_quantity;
+                  $stockIssue = null;
+                  if ($availableStock <= 0) {
+                      $stockIssue = 'Stok produk habis';
+                  } elseif ($item->quantity > $availableStock) {
+                      $stockIssue = 'Jumlah produk melebihi stok yang tersedia (tersisa ' . $availableStock . ')';
+                  }
+                  if ($stockIssue) { $cartHasStockIssue = true; }
+                @endphp
+                <div class="cart-item {{ $stockIssue ? 'has-stock-issue' : '' }}" data-cart-id="{{ $item->id }}">
                   <div class="cart-item-image">
                     @if($item->product->images->isNotEmpty())
                       <img src="{{ asset($item->product->images->first()->url) }}" alt="{{ $item->product->name }}"
@@ -54,13 +65,19 @@
                     </h6>
                     <small class="cart-item-sku">{{ $item->product->sku }}</small>
                     <p class="cart-item-price">Rp{{ number_format($item->product->price, 0, ',', '.') }}</p>
+                    @if($stockIssue)
+                      <p class="cart-item-stock-warning">
+                        <i class="fas fa-exclamation-triangle"></i> {{ $stockIssue }}
+                      </p>
+                    @endif
                   </div>
 
                   <div class="cart-item-quantity">
                     <div class="quantity-controls">
                       <button type="button" class="quantity-btn" onclick="updateCartQuantity({{ $item->id }}, -1)">-</button>
-                      <input type="number" class="quantity-input" value="{{ $item->quantity }}" min="1"
+                      <input type="number" class="quantity-input" value="{{ $item->quantity }}" min="1" step="1"
                         max="{{ $item->product->stock_quantity }}"
+                        onkeydown="if(['e','E','+','-','.',','].includes(event.key))event.preventDefault();"
                         onchange="updateCartQuantity({{ $item->id }}, 0, this.value)">
                       <button type="button" class="quantity-btn" onclick="updateCartQuantity({{ $item->id }}, 1)">+</button>
                     </div>
@@ -96,11 +113,23 @@
                 <span>Subtotal ({{ $cartItems->sum('quantity') }} produk)</span>
                 <strong id="cart-total">Rp{{ number_format($total, 0, ',', '.') }}</strong>
               </div>
+              @if($cartHasStockIssue)
+                <div class="cart-stock-alert">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Beberapa produk melebihi stok yang tersedia. Sesuaikan jumlah produk sebelum checkout.
+                </div>
+              @endif
               <div class="checkout-actions-inline">
                 @auth
-                  <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-sm">
-                    Checkout
-                  </a>
+                  @if($cartHasStockIssue)
+                    <button type="button" class="btn btn-primary btn-sm" disabled>
+                      Checkout
+                    </button>
+                  @else
+                    <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-sm">
+                      Checkout
+                    </a>
+                  @endif
                 @else
                   <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
                     Login untuk Checkout
@@ -447,6 +476,34 @@
 
     .checkout-actions-inline {
       text-align: right;
+    }
+
+    .checkout-actions-inline .btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Stock warning */
+    .cart-item.has-stock-issue {
+      border: 1px solid #f5c6cb;
+      background: #fff5f5;
+    }
+
+    .cart-item-stock-warning {
+      margin: 6px 0 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #c0392b;
+    }
+
+    .cart-stock-alert {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 13px;
+      margin-bottom: 12px;
     }
 
     /* Recommendations */

@@ -145,6 +145,20 @@ $(document).ready(function() {
 
         fields: [
             {
+                title: "No",
+                width: 50,
+                minWidth: 40,
+                filtering: false,
+                sorting: false,
+                css: "order-column text-center",
+                headerCss: "text-center",
+                itemTemplate: function(value, item) {
+                    var grid = this._grid;
+                    var idx = grid.data.indexOf(item);
+                    return idx >= 0 ? idx + 1 : "";
+                }
+            },
+            {
                 name: "name",
                 title: "Nama",
                 type: "text",
@@ -212,16 +226,6 @@ $(document).ready(function() {
                         '<span class="badge bg-success badge-sm">Aktif</span>' :
                         '<span class="badge bg-danger badge-sm">Tidak Aktif</span>';
                 }
-            },
-            {
-                name: "sort_order",
-                title: "Urutan",
-                type: "number",
-                width: 60,
-                minWidth: 50,
-                filtering: false,
-                css: "order-column text-center",
-                headerCss: "text-center"
             },
             {
                 type: "control",

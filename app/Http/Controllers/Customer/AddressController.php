@@ -34,7 +34,7 @@ class AddressController extends Controller
         $validated = $request->validate([
             'label' => 'required|string|max:50',
             'recipient_name' => 'required|string|max:100',
-            'recipient_phone' => 'required|string|max:20',
+            'recipient_phone' => 'required|digits_between:10,15',
             'province_id' => 'required|exists:provinces,id',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',
@@ -99,7 +99,7 @@ class AddressController extends Controller
         $validated = $request->validate([
             'label' => 'required|string|max:50',
             'recipient_name' => 'required|string|max:100',
-            'recipient_phone' => 'required|string|max:20',
+            'recipient_phone' => 'required|digits_between:10,15',
             'province_id' => 'required|exists:provinces,id',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',

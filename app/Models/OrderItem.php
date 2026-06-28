@@ -13,7 +13,6 @@ class OrderItem extends Model
         'product_name',
         'product_sku',
         'product_price',
-        'product_compare_price',
         'product_image',
         'quantity',
         'subtotal',
@@ -22,7 +21,6 @@ class OrderItem extends Model
 
     protected $casts = [
         'product_price' => 'decimal:2',
-        'product_compare_price' => 'decimal:2',
         'subtotal' => 'decimal:2',
         'quantity' => 'integer',
         'product_attributes' => 'array'
@@ -64,14 +62,6 @@ class OrderItem extends Model
 
         // Placeholder terakhir
         return asset('images/no-image.svg');
-    }
-
-    public function getDiscountPercentageAttribute(): ?int
-    {
-        if ($this->product_compare_price && $this->product_compare_price > $this->product_price) {
-            return round((($this->product_compare_price - $this->product_price) / $this->product_compare_price) * 100);
-        }
-        return null;
     }
 
     // Methods

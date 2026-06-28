@@ -72,16 +72,6 @@
           <!-- Product {{ $loop->iteration }} -->
           <div class="col-6 col-md-4 col-lg-3 mb-4">
             <div class="product-card">
-              <!-- Discount Badge -->
-              @if($product->compare_price && $product->compare_price > $product->price)
-                @php
-                  $discount = round((($product->compare_price - $product->price) / $product->compare_price) * 100);
-                @endphp
-                <div class="discount-badge">{{ $discount }}%</div>
-              @else
-                <div class="discount-badge">50%</div>
-              @endif
-
               <!-- Wishlist Button -->
               <button class="wishlist-btn" type="button" data-product-id="{{ $product->id }}">
                 <i class="far fa-heart" id="heart-{{ $product->id }}"></i>
@@ -112,22 +102,21 @@
                 </h5>
 
                 <div class="product-price">
-                  @if($product->compare_price && $product->compare_price > $product->price)
-                    <span class="original-price">Rp{{ number_format($product->compare_price, 0, ',', '.') }}</span>
-                  @else
-                    <span class="original-price">Rp{{ number_format($product->price * 2, 0, ',', '.') }}</span>
-                  @endif
                   <span class="current-price">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
                 </div>
 
                 <!-- Stock Status -->
-                @if($product->stock_quantity <= $product->low_stock_threshold && $product->stock_quantity > 0)
-                  <div class="stock-status low-stock">
-                    <small>Stok Terbatas</small>
-                  </div>
-                @elseif($product->stock_quantity == 0)
+                @if($product->stock_quantity == 0)
                   <div class="stock-status out-of-stock">
                     <small>Stok Habis</small>
+                  </div>
+                @elseif($product->stock_quantity <= $product->min_stock_level)
+                  <div class="stock-status low-stock">
+                    <small>Stok Terbatas ({{ $product->stock_quantity }} tersedia)</small>
+                  </div>
+                @else
+                  <div class="stock-status in-stock">
+                    <small>{{ $product->stock_quantity }} tersedia</small>
                   </div>
                 @endif
 
@@ -800,6 +789,15 @@
 
     .stock-status.out-of-stock small {
       background: #dc3545;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .stock-status.in-stock small {
+      background: #198754;
       color: white;
       padding: 3px 8px;
       border-radius: 12px;

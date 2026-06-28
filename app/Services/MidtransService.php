@@ -234,19 +234,37 @@ class MidtransService
                 Log::info('Order kept as pending', ['order_number' => $order->order_number]);
                 break;
 
-            case 'deny':
-            case 'cancel':
             case 'expire':
-                $order->update(['status' => 'cancelled']);
-                Log::info('Order cancelled', [
-                    'order_number' => $order->order_number,
-                    'reason' => $transactionStatus
-                ]);
+                // Hanya proses jika order masih menunggu pembayaran
+                if ($order->status === 'pending') {
+                    $order->markAsExpired(); // set status 'expired' + kembalikan stok
+                    Log::info('Order expired & stock restored', [
+                        'order_number' => $order->order_number
+                    ]);
+                } else {
+                    Log::info('Expire notification ignored (order not pending)', [
+                        'order_number' => $order->order_number,
+                        'current_status' => $order->status
+                    ]);
+                }
                 break;
 
+            case 'deny':
+            case 'cancel':
             case 'failure':
-                $order->update(['status' => 'cancelled']);
-                Log::info('Order cancelled due to failure', ['order_number' => $order->order_number]);
+                if ($order->status === 'pending') {
+                    $order->markAsCancelled(); // set status 'cancelled' + kembalikan stok
+                    Log::info('Order cancelled & stock restored', [
+                        'order_number' => $order->order_number,
+                        'reason' => $transactionStatus
+                    ]);
+                } else {
+                    Log::info('Cancel/deny/failure notification ignored (order not pending)', [
+                        'order_number' => $order->order_number,
+                        'current_status' => $order->status,
+                        'reason' => $transactionStatus
+                    ]);
+                }
                 break;
 
             default:

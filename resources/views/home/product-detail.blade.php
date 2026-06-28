@@ -106,14 +106,6 @@
               <div class="price-main">
                 Rp{{ number_format($product->price, 0, ',', '.') }}
               </div>
-              @if($product->compare_price && $product->compare_price > $product->price)
-                <div class="price-compare">
-                  <span class="original-price">Rp{{ number_format($product->compare_price, 0, ',', '.') }}</span>
-                  <span class="discount-badge">
-                    {{ round((($product->compare_price - $product->price) / $product->compare_price) * 100) }}% OFF
-                  </span>
-                </div>
-              @endif
             </div>
 
             <!-- Stock Status -->
@@ -149,8 +141,10 @@
                            name="quantity"
                            value="1"
                            min="1"
+                           step="1"
                            max="{{ $product->stock_quantity }}"
-                           class="quantity-input">
+                           class="quantity-input"
+                           onkeydown="if(['e','E','+','-','.',','].includes(event.key))event.preventDefault();">
                     <button type="button" class="quantity-btn quantity-plus" onclick="changeQuantity(1)">+</button>
                   </div>
                   <small class="quantity-note">{{ $product->stock_quantity }} tersedia</small>
@@ -275,9 +269,6 @@
                   <div class="related-info">
                     <h4>{{ $relatedProduct->name }}</h4>
                     <div class="related-price">
-                      @if($relatedProduct->compare_price && $relatedProduct->compare_price > $relatedProduct->price)
-                        <span class="original-price">Rp{{ number_format($relatedProduct->compare_price, 0, ',', '.') }}</span>
-                      @endif
                       <span class="current-price">Rp{{ number_format($relatedProduct->price, 0, ',', '.') }}</span>
                     </div>
                   </div>

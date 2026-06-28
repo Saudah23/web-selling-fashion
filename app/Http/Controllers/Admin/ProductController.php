@@ -78,7 +78,6 @@ class ProductController extends Controller
             'sku' => 'required|string|max:100|unique:products,sku',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
-            'compare_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'min_stock_level' => 'required|integer|min:0',
             'description' => 'nullable|string',
@@ -106,9 +105,6 @@ class ProductController extends Controller
             // Handle price conversion
             if (isset($productData['price'])) {
                 $productData['price'] = str_replace(['Rp', '.', ' '], '', $productData['price']);
-            }
-            if (isset($productData['compare_price'])) {
-                $productData['compare_price'] = str_replace(['Rp', '.', ' '], '', $productData['compare_price']);
             }
 
             $product = Product::create($productData);
@@ -147,7 +143,6 @@ class ProductController extends Controller
             'sku' => 'required|string|max:100|unique:products,sku,' . $product->id,
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
-            'compare_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'min_stock_level' => 'required|integer|min:0',
             'description' => 'nullable|string',
@@ -175,9 +170,6 @@ class ProductController extends Controller
             // Handle price conversion
             if (isset($productData['price'])) {
                 $productData['price'] = str_replace(['Rp', '.', ' '], '', $productData['price']);
-            }
-            if (isset($productData['compare_price'])) {
-                $productData['compare_price'] = str_replace(['Rp', '.', ' '], '', $productData['compare_price']);
             }
 
             $product->update($productData);

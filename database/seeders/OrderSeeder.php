@@ -93,7 +93,6 @@ class OrderSeeder extends Seeder
                     'product_name' => $item['product']->name,
                     'product_sku' => $item['product']->sku,
                     'product_price' => $item['product']->price,
-                    'product_compare_price' => $item['product']->compare_price,
                     'product_image' => null,
                     'quantity' => $item['qty'],
                     'subtotal' => $item['subtotal'],

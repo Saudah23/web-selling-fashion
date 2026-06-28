@@ -455,27 +455,23 @@
           </li>
           @if(isset($globalCategories))
             @foreach($globalCategories as $parentCategory)
+              {{-- Hanya tampilkan kategori induk yang memiliki subkategori --}}
+              @continue($parentCategory->children->count() === 0)
               <li
                 class="nav-item dropdown {{ collect($parentCategory->children)->pluck('id')->contains(request('category')) ? 'active' : '' }}">
-                @if($parentCategory->children->count() > 0)
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ $parentCategory->name }}
-                  </a>
-                  <ul class="dropdown-menu">
-                    @foreach($parentCategory->children as $subCategory)
-                      <li>
-                        <a class="dropdown-item {{ request('category') == $subCategory->id ? 'active' : '' }}"
-                          href="{{ route('shop', ['category' => $subCategory->id]) }}">
-                          {{ $subCategory->name }}
-                        </a>
-                      </li>
-                    @endforeach
-                  </ul>
-                @else
-                  <a class="nav-link" href="{{ route('shop', ['category' => $parentCategory->id]) }}">
-                    {{ $parentCategory->name }}
-                  </a>
-                @endif
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ $parentCategory->name }}
+                </a>
+                <ul class="dropdown-menu">
+                  @foreach($parentCategory->children as $subCategory)
+                    <li>
+                      <a class="dropdown-item {{ request('category') == $subCategory->id ? 'active' : '' }}"
+                        href="{{ route('shop', ['category' => $subCategory->id]) }}">
+                        {{ $subCategory->name }}
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
               </li>
             @endforeach
           @endif

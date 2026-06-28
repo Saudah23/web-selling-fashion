@@ -130,10 +130,6 @@
                         </div>
                         <div class="item-price-info">
                           <span class="item-price">{{ $item->formatted_product_price }}</span>
-                          @if($item->product_compare_price && $item->discount_percentage)
-                            <span class="item-compare-price">{{ 'Rp ' . number_format($item->product_compare_price, 0, ',', '.') }}</span>
-                            <span class="discount-badge">-{{ $item->discount_percentage }}%</span>
-                          @endif
                         </div>
                       </div>
                       <div class="item-quantity">

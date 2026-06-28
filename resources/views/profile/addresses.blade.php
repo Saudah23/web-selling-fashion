@@ -331,7 +331,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Phone Number *</label>
-                                <input type="text" name="recipient_phone" id="recipient_phone" class="form-control" required>
+                                <input type="text" inputmode="numeric" name="recipient_phone" id="recipient_phone"
+                                    class="form-control" maxlength="15" placeholder="081234567890"
+                                    oninput="this.value=this.value.replace(/\D/g,'')" required>
+                                <small class="text-muted">Hanya angka, 10–15 digit. Contoh: 081234567890</small>
                             </div>
                         </div>
                     </div>
@@ -765,6 +768,13 @@ function loadVillagesForEdit(districtId, villages, selectedVillageId) {
 // Form submission
 document.getElementById('addressForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    // Validasi nomor telepon: hanya angka, 10-15 digit
+    const phone = document.getElementById('recipient_phone').value.trim();
+    if (!/^[0-9]{10,15}$/.test(phone)) {
+        Notiflix.Notify.failure('Nomor telepon harus berupa angka 10–15 digit. Contoh: 081234567890');
+        return;
+    }
 
     const formData = new FormData(this);
     const addressId = document.getElementById('addressId').value;

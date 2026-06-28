@@ -283,7 +283,6 @@ class CheckoutController extends Controller
                     'product_name' => $item->product->name,
                     'product_sku' => $item->product->sku,
                     'product_price' => $item->product->price,
-                    'product_compare_price' => $item->product->compare_price,
                     'product_image' => $item->product->images->where('is_primary', true)->first()?->file_path,
                     'quantity' => $item->quantity,
                     'subtotal' => $item->subtotal,

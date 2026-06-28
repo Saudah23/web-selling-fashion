@@ -88,6 +88,7 @@ class Order extends Model
             'shipped' => '<span class="badge bg-secondary">Dikirim</span>',
             'delivered' => '<span class="badge bg-success">Selesai</span>',
             'cancelled' => '<span class="badge bg-danger">Dibatalkan</span>',
+            'expired' => '<span class="badge bg-danger">Kedaluwarsa</span>',
             'refunded' => '<span class="badge bg-dark">Dikembalikan</span>',
             default => '<span class="badge bg-light">Tidak Diketahui</span>'
         };
@@ -126,6 +127,41 @@ class Order extends Model
             'status' => 'paid',
             'paid_at' => now()
         ]);
+    }
+
+    /**
+     * Kembalikan stok produk dari order ini (idempotent).
+     * Stok dikurangi saat order dibuat, jadi saat dibatalkan/kedaluwarsa
+     * stok perlu dikembalikan. Flag metadata mencegah pengembalian ganda.
+     */
+    public function restoreStock(): void
+    {
+        $metadata = $this->metadata ?? [];
+
+        if (!empty($metadata['stock_restored'])) {
+            return;
+        }
+
+        foreach ($this->items as $item) {
+            if ($item->product) {
+                $item->product->increment('stock_quantity', $item->quantity);
+            }
+        }
+
+        $metadata['stock_restored'] = true;
+        $this->update(['metadata' => $metadata]);
+    }
+
+    public function markAsExpired(): void
+    {
+        $this->restoreStock();
+        $this->update(['status' => 'expired']);
+    }
+
+    public function markAsCancelled(): void
+    {
+        $this->restoreStock();
+        $this->update(['status' => 'cancelled']);
     }
 
     public function markAsShipped(?string $trackingNumber = null): void

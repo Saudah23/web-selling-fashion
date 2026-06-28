@@ -113,7 +113,6 @@ class NewProductSeeder extends Seeder
                 'description'       => $data['name'] . ' berkualitas tinggi dari FASHION SAAZZ. Bahan pilihan, nyaman dipakai sehari-hari.',
                 'short_description' => $data['name'] . ' - pilihan terbaik.',
                 'price'             => $data['price'],
-                'compare_price'     => null,
                 'stock_quantity'    => $data['stok'],
                 'min_stock_level'   => 3,
                 'weight'            => 0.3,
