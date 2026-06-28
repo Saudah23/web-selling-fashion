@@ -526,7 +526,7 @@ $(document).ready(function() {
             },
             {
                 name: "stock_quantity",
-                title: "Stok",
+                title: "Total Stok",
                 type: "number",
                 width: 70,
                 minWidth: 60,
